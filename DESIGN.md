@@ -1,7 +1,7 @@
 # Design
 
 ## Overview
-Loamly is a restrained cyberpunk company site and project hub. The page uses a near-black architectural surface, oxblood red as the brand anchor, cold cyan as the signal accent, and a cinematic CEO portrait to make the company feel premium and deliberate. The reference direction is a high-claim AI company landing page with long narrative sections, but Loamly should keep its own quieter future-media identity.
+Loamly is a restrained cyberpunk company site and project hub. The page uses a near-black architectural surface, oxblood red as the brand anchor, cold cyan as the signal accent, and cinematic CEO/CTO portraits to make the company feel premium and deliberate. The reference direction is a high-claim AI company landing page with long narrative sections, but Loamly should keep its own quieter future-media identity.
 
 ## Color
 Use OKLCH tokens only.
@@ -25,18 +25,18 @@ Use OKLCH tokens only.
 Primary color carries identity through rules, project labels, and small surface highlights. Accent color is reserved for active links, language state, focus states, and the animated signal field.
 
 ## Typography
-Use system UI for the main voice with Japanese system fallbacks. Monospace is reserved only for compact domain labels, numerical markers, and operational labels. Display headings use tight but readable spacing, never below `-0.04em`. Body copy stays below 75ch.
+Use system UI for the main voice with Chinese and Japanese system fallbacks. Monospace is reserved only for compact domain labels, numerical markers, and operational labels. Display headings use tight but readable spacing, never below `-0.04em`. Body copy stays below 75ch.
 
 ## Layout
-The first viewport communicates company ambition, not only project access. It pairs a large thesis headline with the CEO portrait. Lower sections follow a one-page company-site structure: doctrine, capabilities, projects, founder, career, contact. Cards are used only for project and contact affordances; capability sections use rule-based columns.
+The first viewport communicates company ambition, not only project access. It pairs a large thesis headline with the CEO portrait. Lower sections follow a one-page company-site structure: doctrine, capabilities, projects, leadership, career, contact. The second leadership image is the CTO portrait. Cards are used only for project and contact affordances; capability sections use rule-based columns.
 
 ## Components
-- Header: compact brand mark, anchor navigation, English/Japanese language switch.
+- Header: compact brand mark, anchor navigation, English/Japanese/Chinese language switch.
 - Hero: strong thesis, primary Anime CTA, CEO contact CTA, cinematic portrait.
 - Doctrine: long-form narrative blocks inspired by high-claim company sites.
 - Capabilities: four operational layers for Loamly's company story.
 - Project launch: one active Anime anchor and non-clickable reserved slots.
-- Founder: CEO image, quote, direct email.
+- Leadership: CEO narrative, CTO portrait, quote, direct email.
 - Career: invitation for like-minded collaborators.
 - Contact: CEO, support, and live project routes.
 
@@ -44,4 +44,4 @@ The first viewport communicates company ambition, not only project access. It pa
 Canvas motion should be subtle and non-blocking. Page-load movement is limited to hero copy and visual entrance. `prefers-reduced-motion: reduce` freezes animated canvas drift and disables decorative transitions.
 
 ## Accessibility
-Keep link labels explicit, preserve visible focus rings, use semantic regions, and ensure reserved project slots are not keyboard-focusable. The language switch uses buttons with `aria-pressed`; JavaScript updates `document.documentElement.lang`, title, and meta description.
+Keep link labels explicit, preserve visible focus rings, use semantic regions, and ensure reserved project slots are not keyboard-focusable. The language switch uses buttons with `aria-pressed`; JavaScript updates `document.documentElement.lang`, title, and meta description for English, Japanese, and Chinese.
