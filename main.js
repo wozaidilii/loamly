@@ -7,6 +7,152 @@ let height = 0;
 let nodes = [];
 let animationFrame = 0;
 
+const translations = {
+  en: {
+    pageTitle: "Loamly | Living Internet Worlds",
+    pageDescription: "Loamly builds living internet worlds across anime, AI, community, and future media.",
+    skip: "Skip to projects",
+    navMission: "Mission",
+    navProjects: "Projects",
+    navFounder: "CEO",
+    navCareers: "Career",
+    navContact: "Contact",
+    heroTitle: "Loamly builds living internet worlds.",
+    heroText:
+      "We design media systems where stories, characters, communities, and software behave less like pages and more like places people return to.",
+    heroPrimary: "Enter Anime",
+    heroSecondary: "Talk to Kai",
+    heroPhotoLabel: "CEO / Founder",
+    missionTitle: "Media is no longer a file. It is an environment.",
+    missionCopy1:
+      "Loamly is building a new operating layer for fan culture: an interface where anime, AI agents, community memory, and creator workflows converge into one persistent world.",
+    missionCopy2:
+      "We are not trying to make another content feed. Feeds are disposable. Worlds compound. Characters gain history, communities gain language, and every launch becomes infrastructure for the next mythology.",
+    missionCopy3:
+      "The first public signal is Anime. The larger ambition is a network of cultural software: precise, multilingual, emotionally charged, and built for people who think the internet should still feel dangerous in the best way.",
+    capabilitiesTitle: "A company for worlds that need software, taste, and velocity.",
+    capabilitiesLead:
+      "The public surface is simple. Behind it is a studio model for shipping cultural products fast: story, product, growth, and technical operations moving as one.",
+    cap1Title: "Narrative infrastructure",
+    cap1Copy: "World bibles, character systems, lore loops, and launch surfaces designed to survive beyond a single campaign.",
+    cap2Title: "AI-native interaction",
+    cap2Copy:
+      "Agents, memory, multilingual response, and automation patterns that make a project feel alive without burying users in machinery.",
+    cap3Title: "Community signal design",
+    cap3Copy:
+      "Systems for conversation, moderation, identity, and high-context fandom where people do not feel like traffic.",
+    cap4Title: "Launch operations",
+    cap4Copy:
+      "The unromantic work: speed, analytics, support, documentation, and the boring reliability that makes strange ideas real.",
+    projectsTitle: "The first world is live. The next ones are being prepared.",
+    projectsLead:
+      "Loamly projects share a single spine: cinematic presentation, technical discipline, and communities that can grow into their own language.",
+    projectLive: "Live channel",
+    animeCopy:
+      "The first Loamly world: an anime-focused destination built for discovery, immersion, and the next generation of fan-native interfaces.",
+    animeAction: "Open Anime",
+    reserved: "Reserved slot",
+    nextProject: "Next Project",
+    futureChannel: "Future Channel",
+    pending: "Pending signal",
+    reservedCopy1: "A future Loamly channel is being shaped here. It will not appear until it earns the slot.",
+    reservedCopy2:
+      "Additional worlds will join the network when the mythology, product, and operation are ready.",
+    founderTitle: "Led by people who prefer building worlds to explaining decks.",
+    founderCopy:
+      "Loamly is directed by Kai, with a bias toward fast prototypes, cinematic product taste, and systems that feel slightly too ambitious until they ship.",
+    founderQuote:
+      "We do not want a polite internet. We want worlds with memory, pressure, beauty, and users who feel like they found a signal before everyone else.",
+    careersTitle: "We are looking for people who recognize the signal.",
+    careersLead:
+      "Loamly is not hiring for ordinary resumes. We are looking for collaborators who can build, ship, write, design, operate, and obsess with unusual intensity.",
+    careerRole1: "World builders",
+    careerCopy1:
+      "Product-minded engineers, AI tinkerers, designers, writers, operators, and growth people who can move between taste and execution.",
+    careerRole2: "Co-conspirators",
+    careerCopy2:
+      "People who care about anime, internet culture, multilingual communities, and products that feel like they were not approved by committee.",
+    careerAction: "Send a signal",
+    contactTitle: "For partnerships, support, and unusual proposals.",
+    contactCeo: "CEO / Partnerships",
+    contactSupport: "Technical support",
+    contactAnime: "Live project",
+    footerLeft: "Loamly / Living Internet Worlds",
+    footerRight: "© 2026 Loamly. All signal reserved.",
+  },
+  ja: {
+    pageTitle: "Loamly | 生きているインターネット世界",
+    pageDescription: "Loamly は、アニメ、AI、コミュニティ、未来のメディアを横断する生きたインターネット世界を構築しています。",
+    skip: "プロジェクトへ移動",
+    navMission: "ミッション",
+    navProjects: "プロジェクト",
+    navFounder: "CEO",
+    navCareers: "採用",
+    navContact: "連絡先",
+    heroTitle: "Loamly は、生きているインターネット世界をつくる。",
+    heroText:
+      "物語、キャラクター、コミュニティ、ソフトウェアが、ただのページではなく、人が戻ってくる場所として振る舞うメディアシステムを設計しています。",
+    heroPrimary: "Anime に入る",
+    heroSecondary: "Kai に連絡",
+    heroPhotoLabel: "CEO / Founder",
+    missionTitle: "メディアはもうファイルではない。環境である。",
+    missionCopy1:
+      "Loamly は、ファンカルチャーのための新しいオペレーティングレイヤーを構築しています。アニメ、AI エージェント、コミュニティの記憶、クリエイターのワークフローが、ひとつの持続する世界へ収束するインターフェースです。",
+    missionCopy2:
+      "私たちは、またひとつのコンテンツフィードを作りたいわけではありません。フィードは消費されます。世界は蓄積されます。キャラクターは履歴を持ち、コミュニティは言語を持ち、すべてのローンチは次の神話のインフラになります。",
+    missionCopy3:
+      "最初の公開シグナルは Anime です。より大きな野心は、精密で、多言語で、感情を帯びた文化ソフトウェアのネットワークをつくること。インターネットは、まだ良い意味で危険であるべきだと信じる人のために。",
+    capabilitiesTitle: "ソフトウェア、審美眼、速度を必要とする世界のための会社。",
+    capabilitiesLead:
+      "公開されている表面はシンプルです。その裏側には、物語、プロダクト、成長、技術運用を一体で動かすカルチャープロダクトのスタジオモデルがあります。",
+    cap1Title: "物語インフラ",
+    cap1Copy: "世界観設計、キャラクターシステム、ロアループ、単発キャンペーンで終わらないローンチ面を構築します。",
+    cap2Title: "AI ネイティブな対話",
+    cap2Copy:
+      "エージェント、記憶、多言語応答、自動化パターンにより、機械を前面に出しすぎず、プロジェクトが生きている感覚をつくります。",
+    cap3Title: "コミュニティ信号設計",
+    cap3Copy:
+      "会話、モデレーション、アイデンティティ、高文脈なファンダムのための仕組み。人をトラフィックとして扱わない設計です。",
+    cap4Title: "ローンチ運用",
+    cap4Copy:
+      "速度、分析、サポート、ドキュメント、そして奇妙なアイデアを現実にするための退屈な信頼性を担います。",
+    projectsTitle: "最初の世界は公開済み。次の世界は準備中。",
+    projectsLead:
+      "Loamly のプロジェクトは、映画的な表現、技術的な規律、そして独自の言語へ育つコミュニティという同じ背骨を持っています。",
+    projectLive: "公開中",
+    animeCopy:
+      "Loamly 最初の世界。発見、没入、そして次世代のファンネイティブなインターフェースのために作られた Anime プロジェクトです。",
+    animeAction: "Anime を開く",
+    reserved: "予約枠",
+    nextProject: "次のプロジェクト",
+    futureChannel: "未来のチャンネル",
+    pending: "準備中",
+    reservedCopy1: "未来の Loamly チャンネルをここで形成しています。ふさわしい状態になるまで公開されません。",
+    reservedCopy2: "神話、プロダクト、運用がそろったとき、次の世界がネットワークに接続されます。",
+    founderTitle: "資料を説明するより、世界を作ることを好む人間が率いる。",
+    founderCopy:
+      "Loamly は Kai によって率いられています。高速な試作、映画的なプロダクト感覚、そして出荷されるまでは少し野心的すぎるように見えるシステムを重視します。",
+    founderQuote:
+      "礼儀正しいだけのインターネットはいらない。記憶、圧力、美しさがあり、誰よりも早く信号を見つけたと感じられる世界をつくりたい。",
+    careersTitle: "私たちは、信号を認識できる仲間を探しています。",
+    careersLead:
+      "Loamly は普通の履歴書のために採用していません。作り、出荷し、書き、設計し、運用し、異常な密度で執着できる協力者を探しています。",
+    careerRole1: "世界を作る人",
+    careerCopy1:
+      "プロダクト志向のエンジニア、AI の実験者、デザイナー、ライター、オペレーター、グロース担当。審美眼と実行の間を移動できる人。",
+    careerRole2: "共犯者",
+    careerCopy2:
+      "アニメ、インターネット文化、多言語コミュニティ、そして委員会で承認されたようには見えないプロダクトを愛する人。",
+    careerAction: "シグナルを送る",
+    contactTitle: "提携、サポート、そして普通ではない提案のために。",
+    contactCeo: "CEO / Partnership",
+    contactSupport: "技術サポート",
+    contactAnime: "公開プロジェクト",
+    footerLeft: "Loamly / Living Internet Worlds",
+    footerRight: "© 2026 Loamly. All signal reserved.",
+  },
+};
+
 function cssColor(name, fallback) {
   const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   return value || fallback;
@@ -24,7 +170,7 @@ function resizeCanvas() {
   canvas.style.height = `${height}px`;
   context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
-  const count = Math.max(30, Math.min(72, Math.floor((width * height) / 18000)));
+  const count = Math.max(34, Math.min(82, Math.floor((width * height) / 17000)));
   nodes = Array.from({ length: count }, (_, index) => {
     const band = index % 4;
     return {
@@ -94,10 +240,58 @@ function restart() {
   }
 }
 
+function setLanguage(language) {
+  const lang = translations[language] ? language : "en";
+  const dictionary = translations[lang];
+
+  document.documentElement.lang = lang;
+  document.title = dictionary.pageTitle;
+  const description = document.querySelector('meta[name="description"]');
+  if (description) {
+    description.setAttribute("content", dictionary.pageDescription);
+  }
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const key = element.getAttribute("data-i18n");
+    if (key && dictionary[key]) {
+      element.textContent = dictionary[key];
+    }
+  });
+
+  document.querySelectorAll("[data-lang-option]").forEach((button) => {
+    const selected = button.getAttribute("data-lang-option") === lang;
+    button.setAttribute("aria-pressed", String(selected));
+  });
+
+  try {
+    window.localStorage.setItem("loamly-language", lang);
+  } catch {
+    // Language still switches; persistence is only a convenience.
+  }
+}
+
+function initialLanguage() {
+  try {
+    const saved = window.localStorage.getItem("loamly-language");
+    if (saved && translations[saved]) return saved;
+  } catch {
+    // Ignore storage access failures.
+  }
+  return navigator.language.toLowerCase().startsWith("ja") ? "ja" : "en";
+}
+
+document.querySelectorAll("[data-lang-option]").forEach((button) => {
+  button.addEventListener("click", () => {
+    setLanguage(button.getAttribute("data-lang-option"));
+  });
+});
+
 window.addEventListener("resize", restart, { passive: true });
 if (typeof reducedMotion.addEventListener === "function") {
   reducedMotion.addEventListener("change", restart);
 } else if (typeof reducedMotion.addListener === "function") {
   reducedMotion.addListener(restart);
 }
+
+setLanguage(initialLanguage());
 restart();

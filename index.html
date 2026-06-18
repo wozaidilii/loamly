@@ -3,18 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Loamly | Project Hub</title>
+    <title>Loamly | Living Internet Worlds</title>
     <meta
       name="description"
-      content="Loamly is the official project hub for Loamly worlds, starting with Anime."
+      content="Loamly builds living internet worlds across anime, AI, community, and future media."
     />
     <meta name="theme-color" content="oklch(0.085 0 0)" />
     <link rel="canonical" href="https://www.loamly.net/" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Loamly | Project Hub" />
+    <meta property="og:title" content="Loamly | Living Internet Worlds" />
     <meta
       property="og:description"
-      content="The official Loamly project hub. Enter Anime and future Loamly projects from one place."
+      content="The official Loamly company site and project hub."
     />
     <meta property="og:url" content="https://www.loamly.net/" />
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
@@ -25,7 +25,7 @@
     <script src="main.js" defer></script>
   </head>
   <body>
-    <a class="skip-link" href="#projects">Skip to projects</a>
+    <a class="skip-link" href="#projects" data-i18n="skip">Skip to projects</a>
     <canvas id="signal-canvas" class="signal-canvas" aria-hidden="true"></canvas>
 
     <header class="site-header" aria-label="Site header">
@@ -34,96 +34,224 @@
         <span>Loamly</span>
       </a>
       <nav class="top-nav" aria-label="Primary">
-        <a href="#projects">Projects</a>
-        <a href="https://anime.loamly.net/">Anime</a>
+        <a href="#mission" data-i18n="navMission">Mission</a>
+        <a href="#projects" data-i18n="navProjects">Projects</a>
+        <a href="#founder" data-i18n="navFounder">CEO</a>
+        <a href="#careers" data-i18n="navCareers">Career</a>
+        <a href="#contact" data-i18n="navContact">Contact</a>
       </nav>
+      <div class="language-switch" aria-label="Language">
+        <button type="button" data-lang-option="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang-option="ja" aria-pressed="false">JP</button>
+      </div>
     </header>
 
     <main>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="domain-line">www.loamly.net</p>
-          <h1 id="hero-title">Project access for the Loamly network.</h1>
-          <p class="hero-text">
-            One official entry point for Loamly projects. Anime is live now;
-            the next project channels are reserved here.
+          <p class="domain-line">www.loamly.net / operating signal</p>
+          <h1 id="hero-title" data-i18n="heroTitle">Loamly builds living internet worlds.</h1>
+          <p class="hero-text" data-i18n="heroText">
+            We design media systems where stories, characters, communities, and
+            software behave less like pages and more like places people return to.
           </p>
           <div class="hero-actions" aria-label="Primary actions">
-            <a class="button primary" href="https://anime.loamly.net/">
+            <a class="button primary" href="https://anime.loamly.net/" data-i18n="heroPrimary">
               Enter Anime
-              <span aria-hidden="true">/</span>
             </a>
-            <a class="button secondary" href="#projects">View project slots</a>
+            <a class="button secondary" href="mailto:kai@loamly.net" data-i18n="heroSecondary">
+              Talk to Kai
+            </a>
           </div>
         </div>
 
-        <aside class="signal-panel" aria-label="Loamly signal status">
-          <div class="signal-panel__header">
-            <span>Signal</span>
-            <strong>Online</strong>
-          </div>
-          <dl class="signal-list">
-            <div>
-              <dt>Origin</dt>
-              <dd>www.loamly.net</dd>
-            </div>
-            <div>
-              <dt>Active route</dt>
-              <dd>anime.loamly.net</dd>
-            </div>
-            <div>
-              <dt>Project slots</dt>
-              <dd>1 live / 2 reserved</dd>
-            </div>
-          </dl>
-        </aside>
+        <figure class="founder-visual">
+          <img
+            src="assets/ceo-kai.jpg"
+            width="788"
+            height="1400"
+            alt="Kai, CEO of Loamly, seated in a dark suit against a white backlight."
+          />
+          <figcaption>
+            <span data-i18n="heroPhotoLabel">CEO / Founder</span>
+            <strong>Kai</strong>
+          </figcaption>
+        </figure>
       </section>
 
-      <section id="projects" class="projects" aria-labelledby="projects-title">
+      <section id="mission" class="section manifesto" aria-labelledby="mission-title">
         <div class="section-heading">
-          <p class="section-kicker">Project Directory</p>
-          <h2 id="projects-title">Choose an active Loamly world.</h2>
-          <p>
-            The directory keeps live projects clear and future launches visible
-            without turning placeholders into dead links.
+          <p class="section-kicker">Loamly doctrine</p>
+          <h2 id="mission-title" data-i18n="missionTitle">Media is no longer a file. It is an environment.</h2>
+        </div>
+        <div class="manifesto-grid">
+          <p data-i18n="missionCopy1">
+            Loamly is building a new operating layer for fan culture: an interface where
+            anime, AI agents, community memory, and creator workflows converge into one
+            persistent world.
+          </p>
+          <p data-i18n="missionCopy2">
+            We are not trying to make another content feed. Feeds are disposable. Worlds
+            compound. Characters gain history, communities gain language, and every launch
+            becomes infrastructure for the next mythology.
+          </p>
+          <p data-i18n="missionCopy3">
+            The first public signal is Anime. The larger ambition is a network of cultural
+            software: precise, multilingual, emotionally charged, and built for people who
+            think the internet should still feel dangerous in the best way.
+          </p>
+        </div>
+      </section>
+
+      <section class="section capabilities" aria-labelledby="capabilities-title">
+        <div class="section-heading split">
+          <p class="section-kicker">System layers</p>
+          <h2 id="capabilities-title" data-i18n="capabilitiesTitle">A company for worlds that need software, taste, and velocity.</h2>
+          <p data-i18n="capabilitiesLead">
+            The public surface is simple. Behind it is a studio model for shipping cultural
+            products fast: story, product, growth, and technical operations moving as one.
+          </p>
+        </div>
+        <div class="capability-list">
+          <article class="capability">
+            <span>01</span>
+            <h3 data-i18n="cap1Title">Narrative infrastructure</h3>
+            <p data-i18n="cap1Copy">World bibles, character systems, lore loops, and launch surfaces designed to survive beyond a single campaign.</p>
+          </article>
+          <article class="capability">
+            <span>02</span>
+            <h3 data-i18n="cap2Title">AI-native interaction</h3>
+            <p data-i18n="cap2Copy">Agents, memory, multilingual response, and automation patterns that make a project feel alive without burying users in machinery.</p>
+          </article>
+          <article class="capability">
+            <span>03</span>
+            <h3 data-i18n="cap3Title">Community signal design</h3>
+            <p data-i18n="cap3Copy">Systems for conversation, moderation, identity, and high-context fandom where people do not feel like traffic.</p>
+          </article>
+          <article class="capability">
+            <span>04</span>
+            <h3 data-i18n="cap4Title">Launch operations</h3>
+            <p data-i18n="cap4Copy">The unromantic work: speed, analytics, support, documentation, and the boring reliability that makes strange ideas real.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="projects" class="section projects" aria-labelledby="projects-title">
+        <div class="section-heading split">
+          <p class="section-kicker">Project directory</p>
+          <h2 id="projects-title" data-i18n="projectsTitle">The first world is live. The next ones are being prepared.</h2>
+          <p data-i18n="projectsLead">
+            Loamly projects share a single spine: cinematic presentation, technical
+            discipline, and communities that can grow into their own language.
           </p>
         </div>
 
         <div class="project-grid">
           <a class="project-card project-card--active" href="https://anime.loamly.net/">
-            <span class="project-status">Live channel</span>
+            <span class="project-status" data-i18n="projectLive">Live channel</span>
             <span class="project-name">Anime</span>
             <span class="project-domain">anime.loamly.net</span>
-            <span class="project-copy">
-              Enter the Loamly anime project from the official hub.
+            <span class="project-copy" data-i18n="animeCopy">
+              The first Loamly world: an anime-focused destination built for discovery,
+              immersion, and the next generation of fan-native interfaces.
             </span>
-            <span class="project-action" aria-hidden="true">Open Anime</span>
+            <span class="project-action" aria-hidden="true" data-i18n="animeAction">Open Anime</span>
           </a>
 
           <article class="project-card project-card--reserved" aria-label="Reserved project slot">
-            <span class="project-status">Reserved slot</span>
-            <span class="project-name">Next Project</span>
-            <span class="project-domain">Pending signal</span>
-            <span class="project-copy">
-              This position is held for the next Loamly destination.
+            <span class="project-status" data-i18n="reserved">Reserved slot</span>
+            <span class="project-name" data-i18n="nextProject">Next Project</span>
+            <span class="project-domain" data-i18n="pending">Pending signal</span>
+            <span class="project-copy" data-i18n="reservedCopy1">
+              A future Loamly channel is being shaped here. It will not appear until it earns the slot.
             </span>
           </article>
 
           <article class="project-card project-card--reserved" aria-label="Reserved project slot">
-            <span class="project-status">Reserved slot</span>
-            <span class="project-name">Future Channel</span>
-            <span class="project-domain">Pending signal</span>
-            <span class="project-copy">
-              Additional project routes will appear here when they are live.
+            <span class="project-status" data-i18n="reserved">Reserved slot</span>
+            <span class="project-name" data-i18n="futureChannel">Future Channel</span>
+            <span class="project-domain" data-i18n="pending">Pending signal</span>
+            <span class="project-copy" data-i18n="reservedCopy2">
+              Additional worlds will join the network when the mythology, product, and operation are ready.
             </span>
           </article>
+        </div>
+      </section>
+
+      <section id="founder" class="section founder" aria-labelledby="founder-title">
+        <div class="founder-card">
+          <div>
+            <p class="section-kicker">Founder signal</p>
+            <h2 id="founder-title" data-i18n="founderTitle">Led by people who prefer building worlds to explaining decks.</h2>
+            <p data-i18n="founderCopy">
+              Loamly is directed by Kai, with a bias toward fast prototypes, cinematic
+              product taste, and systems that feel slightly too ambitious until they ship.
+            </p>
+            <blockquote data-i18n="founderQuote">
+              We do not want a polite internet. We want worlds with memory, pressure,
+              beauty, and users who feel like they found a signal before everyone else.
+            </blockquote>
+            <a class="button secondary" href="mailto:kai@loamly.net">kai@loamly.net</a>
+          </div>
+          <img
+            src="assets/ceo-kai.jpg"
+            width="788"
+            height="1400"
+            loading="lazy"
+            alt="Portrait of Kai, CEO of Loamly."
+          />
+        </div>
+      </section>
+
+      <section id="careers" class="section careers" aria-labelledby="careers-title">
+        <div class="section-heading split">
+          <p class="section-kicker">Career</p>
+          <h2 id="careers-title" data-i18n="careersTitle">We are looking for people who recognize the signal.</h2>
+          <p data-i18n="careersLead">
+            Loamly is not hiring for ordinary resumes. We are looking for collaborators
+            who can build, ship, write, design, operate, and obsess with unusual intensity.
+          </p>
+        </div>
+        <div class="career-panel">
+          <div>
+            <h3 data-i18n="careerRole1">World builders</h3>
+            <p data-i18n="careerCopy1">Product-minded engineers, AI tinkerers, designers, writers, operators, and growth people who can move between taste and execution.</p>
+          </div>
+          <div>
+            <h3 data-i18n="careerRole2">Co-conspirators</h3>
+            <p data-i18n="careerCopy2">People who care about anime, internet culture, multilingual communities, and products that feel like they were not approved by committee.</p>
+          </div>
+          <a class="button primary" href="mailto:kai@loamly.net?subject=Loamly%20Career" data-i18n="careerAction">
+            Send a signal
+          </a>
+        </div>
+      </section>
+
+      <section id="contact" class="section contact" aria-labelledby="contact-title">
+        <div class="section-heading">
+          <p class="section-kicker">Contact matrix</p>
+          <h2 id="contact-title" data-i18n="contactTitle">For partnerships, support, and unusual proposals.</h2>
+        </div>
+        <div class="contact-grid">
+          <a href="mailto:kai@loamly.net">
+            <span data-i18n="contactCeo">CEO / Partnerships</span>
+            <strong>kai@loamly.net</strong>
+          </a>
+          <a href="mailto:support@loamly.net">
+            <span data-i18n="contactSupport">Technical support</span>
+            <strong>support@loamly.net</strong>
+          </a>
+          <a href="https://anime.loamly.net/">
+            <span data-i18n="contactAnime">Live project</span>
+            <strong>anime.loamly.net</strong>
+          </a>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <span>Loamly project hub</span>
-      <a href="https://anime.loamly.net/">anime.loamly.net</a>
+      <span data-i18n="footerLeft">Loamly / Living Internet Worlds</span>
+      <span data-i18n="footerRight">© 2026 Loamly. All signal reserved.</span>
     </footer>
   </body>
 </html>
