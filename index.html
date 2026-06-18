@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Loamly | Project Hub</title>
+    <meta
+      name="description"
+      content="Loamly is the official project hub for Loamly worlds, starting with Anime."
+    />
+    <meta name="theme-color" content="oklch(0.085 0 0)" />
+    <link rel="canonical" href="https://www.loamly.net/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Loamly | Project Hub" />
+    <meta
+      property="og:description"
+      content="The official Loamly project hub. Enter Anime and future Loamly projects from one place."
+    />
+    <meta property="og:url" content="https://www.loamly.net/" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#projects">Skip to projects</a>
+    <canvas id="signal-canvas" class="signal-canvas" aria-hidden="true"></canvas>
+
+    <header class="site-header" aria-label="Site header">
+      <a class="brand-lockup" href="https://www.loamly.net/" aria-label="Loamly home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Loamly</span>
+      </a>
+      <nav class="top-nav" aria-label="Primary">
+        <a href="#projects">Projects</a>
+        <a href="https://anime.loamly.net/">Anime</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="domain-line">www.loamly.net</p>
+          <h1 id="hero-title">Project access for the Loamly network.</h1>
+          <p class="hero-text">
+            One official entry point for Loamly projects. Anime is live now;
+            the next project channels are reserved here.
+          </p>
+          <div class="hero-actions" aria-label="Primary actions">
+            <a class="button primary" href="https://anime.loamly.net/">
+              Enter Anime
+              <span aria-hidden="true">/</span>
+            </a>
+            <a class="button secondary" href="#projects">View project slots</a>
+          </div>
+        </div>
+
+        <aside class="signal-panel" aria-label="Loamly signal status">
+          <div class="signal-panel__header">
+            <span>Signal</span>
+            <strong>Online</strong>
+          </div>
+          <dl class="signal-list">
+            <div>
+              <dt>Origin</dt>
+              <dd>www.loamly.net</dd>
+            </div>
+            <div>
+              <dt>Active route</dt>
+              <dd>anime.loamly.net</dd>
+            </div>
+            <div>
+              <dt>Project slots</dt>
+              <dd>1 live / 2 reserved</dd>
+            </div>
+          </dl>
+        </aside>
+      </section>
+
+      <section id="projects" class="projects" aria-labelledby="projects-title">
+        <div class="section-heading">
+          <p class="section-kicker">Project Directory</p>
+          <h2 id="projects-title">Choose an active Loamly world.</h2>
+          <p>
+            The directory keeps live projects clear and future launches visible
+            without turning placeholders into dead links.
+          </p>
+        </div>
+
+        <div class="project-grid">
+          <a class="project-card project-card--active" href="https://anime.loamly.net/">
+            <span class="project-status">Live channel</span>
+            <span class="project-name">Anime</span>
+            <span class="project-domain">anime.loamly.net</span>
+            <span class="project-copy">
+              Enter the Loamly anime project from the official hub.
+            </span>
+            <span class="project-action" aria-hidden="true">Open Anime</span>
+          </a>
+
+          <article class="project-card project-card--reserved" aria-label="Reserved project slot">
+            <span class="project-status">Reserved slot</span>
+            <span class="project-name">Next Project</span>
+            <span class="project-domain">Pending signal</span>
+            <span class="project-copy">
+              This position is held for the next Loamly destination.
+            </span>
+          </article>
+
+          <article class="project-card project-card--reserved" aria-label="Reserved project slot">
+            <span class="project-status">Reserved slot</span>
+            <span class="project-name">Future Channel</span>
+            <span class="project-domain">Pending signal</span>
+            <span class="project-copy">
+              Additional project routes will appear here when they are live.
+            </span>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Loamly project hub</span>
+      <a href="https://anime.loamly.net/">anime.loamly.net</a>
+    </footer>
+  </body>
+</html>
