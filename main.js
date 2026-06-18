@@ -22,7 +22,7 @@ const translations = {
     heroText:
       "We design media systems where stories, characters, communities, and software behave less like pages and more like places people return to.",
     heroPrimary: "Enter Anime",
-    heroSecondary: "Talk to Kai",
+    heroSecondary: "Talk to Kris Kai",
     heroPhotoLabel: "CEO / Founder",
     missionKicker: "Loamly doctrine",
     missionTitle: "Media is no longer a file. It is an environment.",
@@ -65,7 +65,7 @@ const translations = {
     leadershipKicker: "Leadership signal",
     founderTitle: "Led by people who prefer building worlds to explaining decks.",
     founderCopy:
-      "Loamly is directed by Kai, with a bias toward fast prototypes, cinematic product taste, and systems that feel slightly too ambitious until they ship.",
+      "Loamly is directed by Kris Kai, with a bias toward fast prototypes, cinematic product taste, and systems that feel slightly too ambitious until they ship.",
     founderQuote:
       "We do not want a polite internet. We want worlds with memory, pressure, beauty, and users who feel like they found a signal before everyone else.",
     careerKicker: "Career",
@@ -101,7 +101,7 @@ const translations = {
     heroText:
       "物語、キャラクター、コミュニティ、ソフトウェアが、ただのページではなく、人が戻ってくる場所として振る舞うメディアシステムを設計しています。",
     heroPrimary: "Anime に入る",
-    heroSecondary: "Kai に連絡",
+    heroSecondary: "Kris Kai に連絡",
     heroPhotoLabel: "CEO / Founder",
     missionKicker: "Loamly の思想",
     missionTitle: "メディアはもうファイルではない。環境である。",
@@ -143,7 +143,7 @@ const translations = {
     leadershipKicker: "リーダーシップ",
     founderTitle: "資料を説明するより、世界を作ることを好む人間が率いる。",
     founderCopy:
-      "Loamly は Kai によって率いられています。高速な試作、映画的なプロダクト感覚、そして出荷されるまでは少し野心的すぎるように見えるシステムを重視します。",
+      "Loamly は Kris Kai によって率いられています。高速な試作、映画的なプロダクト感覚、そして出荷されるまでは少し野心的すぎるように見えるシステムを重視します。",
     founderQuote:
       "礼儀正しいだけのインターネットはいらない。記憶、圧力、美しさがあり、誰よりも早く信号を見つけたと感じられる世界をつくりたい。",
     careerKicker: "採用",
@@ -179,7 +179,7 @@ const translations = {
     heroText:
       "我们设计的媒体系统，让故事、角色、社区与软件不再像一次性页面，而更像人们会反复返回的场所。",
     heroPrimary: "进入 Anime",
-    heroSecondary: "联系 Kai",
+    heroSecondary: "联系 Kris Kai",
     heroPhotoLabel: "CEO / Founder",
     missionKicker: "Loamly 信条",
     missionTitle: "媒体不再是文件。它是一种环境。",
@@ -221,7 +221,7 @@ const translations = {
     leadershipKicker: "领导团队",
     founderTitle: "由更喜欢构建世界、而不是解释 PPT 的人来带队。",
     founderCopy:
-      "Loamly 由 Kai 主导方向，并由 CTO 驱动技术系统。我们偏好快速原型、电影化产品审美，以及那些在发布前看起来略显过分野心的系统。",
+      "Loamly 由 Kris Kai 主导方向，并由 CTO 驱动技术系统。我们偏好快速原型、电影化产品审美，以及那些在发布前看起来略显过分野心的系统。",
     founderQuote:
       "我们不想要一个过分礼貌的互联网。我们想要有记忆、有压迫感、有美感的世界，让用户觉得自己比所有人更早发现了信号。",
     careerKicker: "招聘",
