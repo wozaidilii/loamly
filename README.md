@@ -6,6 +6,7 @@ The page is a trilingual English/Japanese/Chinese company site and project hub f
 
 - Anime project link: `https://anime.loamly.net/`
 - CEO contact: `kris@loamly.net`
+- CTO contact: `lewis@loamly.net`
 - Leadership imagery for CEO Kris Kai and CTO Lewis Luo
 - Technical support: `support@loamly.net`
 - Career section for like-minded collaborators

@@ -38,7 +38,7 @@ The first viewport communicates company ambition, not only project access. It pa
 - Project launch: one active Anime anchor and non-clickable reserved slots.
 - Leadership: CEO narrative, Lewis Luo CTO portrait, quote, direct email.
 - Career: invitation for like-minded collaborators.
-- Contact: CEO, support, and live project routes.
+- Contact: CEO, CTO, support, and live project routes.
 
 ## Motion
 Canvas motion should be subtle and non-blocking. Page-load movement is limited to hero copy and visual entrance. `prefers-reduced-motion: reduce` freezes animated canvas drift and disables decorative transitions.
