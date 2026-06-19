@@ -69,6 +69,8 @@ const translations = {
     founderQuote:
       "We do not want a polite internet. We want worlds with memory, pressure, beauty, and users who feel like they found a signal before everyone else.",
     ctoRole: "CTO / Technology",
+    ctoVision:
+      "If the future internet is a black sea, Lewis Luo is not building a ship. He is building the reactor that lights the routes: characters, memory, and communities linked in the dark until the world begins to glow on its own.",
     careerKicker: "Career",
     careersTitle: "We are looking for people who recognize the signal.",
     careersLead:
@@ -148,6 +150,8 @@ const translations = {
     founderQuote:
       "礼儀正しいだけのインターネットはいらない。記憶、圧力、美しさがあり、誰よりも早く信号を見つけたと感じられる世界をつくりたい。",
     ctoRole: "CTO / 技術責任者",
+    ctoVision:
+      "未来のインターネットが黒い海なら、Lewis Luo が作るのは船ではない。航路を灯す炉心です。キャラクター、記憶、コミュニティを暗闇で接続し、世界が自ら発光し始めるまで。",
     careerKicker: "採用",
     careersTitle: "私たちは、信号を認識できる仲間を探しています。",
     careersLead:
@@ -227,6 +231,8 @@ const translations = {
     founderQuote:
       "我们不想要一个过分礼貌的互联网。我们想要有记忆、有压迫感、有美感的世界，让用户觉得自己比所有人更早发现了信号。",
     ctoRole: "CTO / 技术负责人",
+    ctoVision:
+      "如果未来互联网是一片黑海，Lewis Luo 想铸造的不是船，而是能点燃航道的反应堆：让每个角色、记忆与社区在暗处连接，直到世界自己开始发光。",
     careerKicker: "招聘",
     careersTitle: "我们在寻找能识别信号的伙伴。",
     careersLead:
