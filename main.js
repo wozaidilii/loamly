@@ -21,7 +21,7 @@ const translations = {
     heroTitle: "Loamly builds living internet worlds.",
     heroText:
       "We design media systems where stories, characters, communities, and software behave less like pages and more like places people return to.",
-    heroPrimary: "Enter Anime",
+    heroPrimary: "Enter Aniguessr",
     heroSecondary: "Talk to Kris Kai",
     heroPhotoLabel: "CEO / Founder",
     missionKicker: "Loamly doctrine",
@@ -31,7 +31,7 @@ const translations = {
     missionCopy2:
       "We are not trying to make another content feed. Feeds are disposable. Worlds compound. Characters gain history, communities gain language, and every launch becomes infrastructure for the next mythology.",
     missionCopy3:
-      "The first public signal is Anime. The larger ambition is a network of cultural software: precise, multilingual, emotionally charged, and built for people who think the internet should still feel dangerous in the best way.",
+      "The first public signal is Aniguessr. The larger ambition is a network of cultural software: precise, multilingual, emotionally charged, and built for people who think the internet should still feel dangerous in the best way.",
     capabilitiesKicker: "System layers",
     capabilitiesTitle: "A company for worlds that need software, taste, and velocity.",
     capabilitiesLead:
@@ -53,8 +53,8 @@ const translations = {
       "Loamly projects share a single spine: cinematic presentation, technical discipline, and communities that can grow into their own language.",
     projectLive: "Live channel",
     animeCopy:
-      "The first Loamly world: an anime-focused destination built for discovery, immersion, and the next generation of fan-native interfaces.",
-    animeAction: "Open Anime",
+      "The first Loamly world: an anime guessing destination built for discovery, memory, and the next generation of fan-native interfaces.",
+    animeAction: "Open Aniguessr",
     reserved: "Reserved slot",
     nextProject: "Next Project",
     futureChannel: "Future Channel",
@@ -102,7 +102,7 @@ const translations = {
     heroTitle: "Loamly は、生きているインターネット世界をつくる。",
     heroText:
       "物語、キャラクター、コミュニティ、ソフトウェアが、ただのページではなく、人が戻ってくる場所として振る舞うメディアシステムを設計しています。",
-    heroPrimary: "Anime に入る",
+    heroPrimary: "Aniguessr に入る",
     heroSecondary: "Kris Kai に連絡",
     heroPhotoLabel: "CEO / Founder",
     missionKicker: "Loamly の思想",
@@ -112,7 +112,7 @@ const translations = {
     missionCopy2:
       "私たちは、またひとつのコンテンツフィードを作りたいわけではありません。フィードは消費されます。世界は蓄積されます。キャラクターは履歴を持ち、コミュニティは言語を持ち、すべてのローンチは次の神話のインフラになります。",
     missionCopy3:
-      "最初の公開シグナルは Anime です。より大きな野心は、精密で、多言語で、感情を帯びた文化ソフトウェアのネットワークをつくること。インターネットは、まだ良い意味で危険であるべきだと信じる人のために。",
+      "最初の公開シグナルは Aniguessr です。より大きな野心は、精密で、多言語で、感情を帯びた文化ソフトウェアのネットワークをつくること。インターネットは、まだ良い意味で危険であるべきだと信じる人のために。",
     capabilitiesKicker: "システムレイヤー",
     capabilitiesTitle: "ソフトウェア、審美眼、速度を必要とする世界のための会社。",
     capabilitiesLead:
@@ -134,8 +134,8 @@ const translations = {
       "Loamly のプロジェクトは、映画的な表現、技術的な規律、そして独自の言語へ育つコミュニティという同じ背骨を持っています。",
     projectLive: "公開中",
     animeCopy:
-      "Loamly 最初の世界。発見、没入、そして次世代のファンネイティブなインターフェースのために作られた Anime プロジェクトです。",
-    animeAction: "Anime を開く",
+      "Loamly 最初の世界。発見、記憶、そして次世代のファンネイティブなインターフェースのために作られた anime guessing プロジェクト、Aniguessr です。",
+    animeAction: "Aniguessr を開く",
     reserved: "予約枠",
     nextProject: "次のプロジェクト",
     futureChannel: "未来のチャンネル",
@@ -182,7 +182,7 @@ const translations = {
     heroTitle: "Loamly 构建活着的互联网世界。",
     heroText:
       "我们设计的媒体系统，让故事、角色、社区与软件不再像一次性页面，而更像人们会反复返回的场所。",
-    heroPrimary: "进入 Anime",
+    heroPrimary: "进入 Aniguessr",
     heroSecondary: "联系 Kris Kai",
     heroPhotoLabel: "CEO / Founder",
     missionKicker: "Loamly 信条",
@@ -192,7 +192,7 @@ const translations = {
     missionCopy2:
       "我们不是要再做一个内容信息流。信息流会被消费，世界会积累。角色会拥有历史，社区会生成语言，每一次发布都会成为下一个神话的基础设施。",
     missionCopy3:
-      "第一个公开信号是 Anime。更大的野心，是构建一个精准、多语言、带有情绪张力的文化软件网络，为仍然相信互联网应该保留一点危险魅力的人而建。",
+      "第一个公开信号是 Aniguessr。更大的野心，是构建一个精准、多语言、带有情绪张力的文化软件网络，为仍然相信互联网应该保留一点危险魅力的人而建。",
     capabilitiesKicker: "系统层",
     capabilitiesTitle: "一家为世界构建软件、审美与速度的公司。",
     capabilitiesLead:
@@ -214,8 +214,8 @@ const translations = {
       "Loamly 项目共享同一条脊柱：电影感呈现、技术纪律，以及能成长出自己语言的社区。",
     projectLive: "已上线",
     animeCopy:
-      "Loamly 的第一个世界：一个围绕动漫、发现、沉浸与下一代粉丝原生界面构建的目的地。",
-    animeAction: "打开 Anime",
+      "Loamly 的第一个世界：一个围绕动漫猜谜、发现、记忆与下一代粉丝原生界面构建的目的地 Aniguessr。",
+    animeAction: "打开 Aniguessr",
     reserved: "预留位置",
     nextProject: "下一个项目",
     futureChannel: "未来频道",

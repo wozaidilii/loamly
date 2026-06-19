@@ -32,10 +32,10 @@ The first viewport communicates company ambition, not only project access. It pa
 
 ## Components
 - Header: compact brand mark, anchor navigation, English/Japanese/Chinese language switch.
-- Hero: strong thesis, primary Anime CTA, CEO contact CTA, cinematic portrait.
+- Hero: strong thesis, primary Aniguessr CTA, CEO contact CTA, cinematic portrait.
 - Doctrine: long-form narrative blocks inspired by high-claim company sites.
 - Capabilities: four operational layers for Loamly's company story.
-- Project launch: one active Anime anchor and non-clickable reserved slots.
+- Project launch: one active Aniguessr anchor and non-clickable reserved slots.
 - Leadership: Lewis Luo CTO narrative, portrait, vision quote, direct email.
 - Career: invitation for like-minded collaborators.
 - Contact: CEO, CTO, support, and live project routes.
