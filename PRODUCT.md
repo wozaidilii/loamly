@@ -8,7 +8,7 @@ brand
 Visitors who arrive at `www.loamly.net` and need to understand what Loamly is before entering a project. They may be anime fans, collaborators, creators, technical partners, investors, or candidates who want a credible signal that Loamly is more than a single subdomain.
 
 ## Product Purpose
-Loamly is the official company site and project hub for a network of living internet worlds. The homepage should make Anime immediately reachable, explain the broader company ambition in a polished way, show the CEO and CTO as leadership signals, provide contact paths, and invite like-minded collaborators through a Career section.
+Loamly is the official company site and project hub for a network of living internet worlds. The homepage should make Anime immediately reachable, explain the broader company ambition in a polished way, show CEO Kris Kai and CTO Lewis Luo as leadership signals, provide contact paths, and invite like-minded collaborators through a Career section.
 
 ## Brand Personality
 Controlled, cinematic, precise. The interface should feel like a private future-media company operating from a dark signal room: premium, restrained, slightly dangerous, and not generic SaaS.
