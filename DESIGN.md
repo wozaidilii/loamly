@@ -36,7 +36,7 @@ The first viewport communicates company ambition, not only project access. It pa
 - Doctrine: long-form narrative blocks inspired by high-claim company sites.
 - Capabilities: four operational layers for Loamly's company story.
 - Project launch: one active Anime anchor and non-clickable reserved slots.
-- Leadership: CEO narrative, Lewis Luo CTO portrait, quote, direct email.
+- Leadership: Lewis Luo CTO narrative, portrait, vision quote, direct email.
 - Career: invitation for like-minded collaborators.
 - Contact: CEO, CTO, support, and live project routes.
 

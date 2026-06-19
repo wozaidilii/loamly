@@ -63,11 +63,9 @@ const translations = {
     reservedCopy2:
       "Additional worlds will join the network when the mythology, product, and operation are ready.",
     leadershipKicker: "Leadership signal",
-    founderTitle: "Led by people who prefer building worlds to explaining decks.",
+    founderTitle: "Lewis Luo builds the engine room for living internet worlds.",
     founderCopy:
-      "Loamly is directed by Kris Kai, with Lewis Luo leading the technical systems behind the network. The team keeps a bias toward fast prototypes, cinematic product taste, and systems that feel slightly too ambitious until they ship.",
-    founderQuote:
-      "We do not want a polite internet. We want worlds with memory, pressure, beauty, and users who feel like they found a signal before everyone else.",
+      "As Loamly's CTO, Lewis Luo turns cinematic product ambition into systems that can remember, respond, scale, and stay alive after launch.",
     ctoRole: "CTO / Technology",
     ctoVision:
       "If the future internet is a black sea, Lewis Luo is not building a ship. He is building the reactor that lights the routes: characters, memory, and communities linked in the dark until the world begins to glow on its own.",
@@ -145,11 +143,9 @@ const translations = {
     reservedCopy1: "未来の Loamly チャンネルをここで形成しています。ふさわしい状態になるまで公開されません。",
     reservedCopy2: "神話、プロダクト、運用がそろったとき、次の世界がネットワークに接続されます。",
     leadershipKicker: "リーダーシップ",
-    founderTitle: "資料を説明するより、世界を作ることを好む人間が率いる。",
+    founderTitle: "Lewis Luo は、生きているインターネット世界の機関室をつくる。",
     founderCopy:
-      "Loamly は Kris Kai が方向性を担い、Lewis Luo がネットワークを支える技術システムを率いています。高速な試作、映画的なプロダクト感覚、そして出荷されるまでは少し野心的すぎるように見えるシステムを重視します。",
-    founderQuote:
-      "礼儀正しいだけのインターネットはいらない。記憶、圧力、美しさがあり、誰よりも早く信号を見つけたと感じられる世界をつくりたい。",
+      "Loamly の CTO として、Lewis Luo は映画的なプロダクトの野心を、記憶し、応答し、拡張し、ローンチ後も生き続けるシステムへ変換します。",
     ctoRole: "CTO / 技術責任者",
     ctoVision:
       "未来のインターネットが黒い海なら、Lewis Luo が作るのは船ではない。航路を灯す炉心です。キャラクター、記憶、コミュニティを暗闇で接続し、世界が自ら発光し始めるまで。",
@@ -227,11 +223,9 @@ const translations = {
     reservedCopy1: "未来的 Loamly 频道正在这里成形。只有当它配得上这个位置时才会出现。",
     reservedCopy2: "当神话、产品和运营都准备好，更多世界会接入这个网络。",
     leadershipKicker: "领导团队",
-    founderTitle: "由更喜欢构建世界、而不是解释 PPT 的人来带队。",
+    founderTitle: "Lewis Luo 构建活着的互联网世界的引擎室。",
     founderCopy:
-      "Loamly 由 Kris Kai 主导方向，Lewis Luo 作为 CTO 负责支撑网络的技术系统。我们偏好快速原型、电影化产品审美，以及那些在发布前看起来略显过分野心的系统。",
-    founderQuote:
-      "我们不想要一个过分礼貌的互联网。我们想要有记忆、有压迫感、有美感的世界，让用户觉得自己比所有人更早发现了信号。",
+      "作为 Loamly 的 CTO，Lewis Luo 把电影感的产品野心转译成能记忆、能回应、能扩展，并在发布后继续生长的技术系统。",
     ctoRole: "CTO / 技术负责人",
     ctoVision:
       "如果未来互联网是一片黑海，Lewis Luo 想铸造的不是船，而是能点燃航道的反应堆：让每个角色、记忆与社区在暗处连接，直到世界自己开始发光。",

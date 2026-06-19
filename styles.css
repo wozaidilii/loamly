@@ -673,7 +673,7 @@ h3 {
 .leadership-portrait::after {
   position: absolute;
   inset: auto 0 0;
-  height: 58%;
+  height: 42%;
   content: "";
   background: linear-gradient(180deg, transparent, oklch(0.08 0 0 / 0.86));
   pointer-events: none;
@@ -685,16 +685,11 @@ h3 {
   bottom: 1rem;
   left: 1rem;
   z-index: 1;
-  display: grid;
-  gap: 0.7rem;
-  color: var(--muted);
-}
-
-.leadership-portrait figcaption > div {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 1rem;
+  color: var(--muted);
   font-size: 0.82rem;
   text-transform: uppercase;
 }
@@ -704,29 +699,6 @@ h3 {
   font-size: 0.95rem;
   letter-spacing: 0;
   text-transform: none;
-}
-
-.leadership-portrait p {
-  max-width: 28rem;
-  margin: 0;
-  color: oklch(0.82 0.018 250);
-  font-size: clamp(0.84rem, 1.4vw, 0.94rem);
-  line-height: 1.55;
-  text-wrap: pretty;
-}
-
-.leadership-portrait figcaption > a {
-  width: fit-content;
-  color: var(--ink);
-  font-size: 0.92rem;
-  font-weight: 760;
-  text-decoration: underline;
-  text-decoration-color: oklch(0.78 0.14 205 / 0.48);
-  text-underline-offset: 0.26em;
-}
-
-.leadership-portrait figcaption > a:hover {
-  color: var(--accent);
 }
 
 .career-panel {
