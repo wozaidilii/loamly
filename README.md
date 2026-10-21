@@ -2,7 +2,7 @@
 
 Static homepage for `www.loamly.net`.
 
-A single-page English company site for Loamly (栖于垄上, Shanghai): a full-screen hero, an About section (content, tools, partnerships) and a Contact section (contact details coming soon). Everything is in `index.html` with inline CSS and a small inline script; there is no build step.
+A single-page English company site for Loamly (栖于垄上, Shanghai): a full-screen hero, an About section (content, tools, partnerships) and a Contact section (contact@loamly.net). Everything is in `index.html` with inline CSS and a small inline script; there is no build step.
 
 - `assets/*.webp` — hero and section photos (Unsplash License; credits in an HTML comment in `index.html`)
 - `assets/ddin*.woff2` — D-DIN subsets (SIL OFL 1.1) for all Latin text
