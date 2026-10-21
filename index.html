@@ -1,273 +1,212 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Loamly | Living Internet Worlds</title>
-    <meta
-      name="description"
-      content="Loamly builds living internet worlds across anime, AI, community, and future media."
-    />
-    <meta name="theme-color" content="oklch(0.085 0 0)" />
-    <link rel="canonical" href="https://www.loamly.net/" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Loamly | Living Internet Worlds" />
-    <meta
-      property="og:description"
-      content="The official Loamly company site and project hub."
-    />
-    <meta property="og:url" content="https://www.loamly.net/" />
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png" />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="main.js" defer></script>
-  </head>
-  <body>
-    <a class="skip-link" href="#projects" data-i18n="skip">Skip to projects</a>
-    <canvas id="signal-canvas" class="signal-canvas" aria-hidden="true"></canvas>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Loamly · Content and Tools, Built in Shanghai</title>
+<meta name="description" content="Loamly is a Shanghai-based company making content and software tools for users in China.">
+<link rel="canonical" href="https://www.loamly.net/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Loamly · Content and Tools, Built in Shanghai">
+<meta property="og:description" content="Loamly is a Shanghai-based company making content and software tools for users in China.">
+<meta property="og:url" content="https://www.loamly.net/">
+<meta name="theme-color" content="#14120F">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png">
+<!-- Photos: Willian Justen de Vasconcellos / Unsplash (06QpKIYxWe4), wang binghua / Unsplash (Hf1SVeHgNgg) — Unsplash License.
+     Fonts: D-DIN (SIL OFL 1.1), Noto Sans SC (SIL OFL 1.1, logo tag only), subset in assets/. -->
+<link rel="preload" href="assets/ddin-bold.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"DDIN";font-weight:700;src:url(assets/ddin-bold.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"DDIN";font-weight:400;src:url(assets/ddin.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"LSC";font-weight:400;src:url(assets/notosc-logo.woff2) format("woff2");font-display:swap}
+:root{--earth:#C8873A;--moss:#3F6B4F;--w:#fff;--w2:rgba(255,255,255,.8);--w3:rgba(255,255,255,.58);--ink:#14120F;
+ --lat:"DDIN","Arial Narrow",Arial,sans-serif;--txt:"DDIN",Arial,"Helvetica Neue",sans-serif;--cjk:"LSC","Noto Sans SC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+ --pad:clamp(20px,3.4vw,48px)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--ink);color:var(--w);scroll-behavior:smooth}
+body{font-family:var(--lat);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.sec{position:relative;min-height:100vh;min-height:100svh;overflow:hidden;display:flex;flex-direction:column}
+.bg{position:absolute;inset:0;z-index:0}
+.bg img{width:100%;height:100%;object-fit:cover;display:block}
+.shade{position:absolute;inset:0;z-index:1;pointer-events:none}
+.inner{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;padding:96px var(--pad) 0}
+/* header */
+header{position:fixed;z-index:10;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--pad)*.75) var(--pad);transition:background .4s,padding .4s}
+header.solid{background:rgba(20,18,15,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding-top:16px;padding-bottom:16px}
+.logo{display:flex;align-items:baseline;gap:14px}
+.logo b{font-weight:700;font-size:22px;letter-spacing:.32em;margin-right:-.32em}
+.logo span{font-family:var(--cjk);font-weight:400;font-size:13px;letter-spacing:.35em;color:var(--w2);padding-left:14px;border-left:1px solid rgba(255,255,255,.4)}
+nav{display:flex;gap:32px}
+nav a{font-weight:700;font-size:13px;letter-spacing:.2em;padding:6px 0;border-bottom:1px solid transparent;transition:border-color .3s}
+nav a:hover{border-color:var(--w)}
+nav a small{font-family:var(--txt);font-weight:400;letter-spacing:.2em;margin-left:8px;font-size:12px;color:var(--w2)}
+/* type */
+.eyebrow{font-weight:700;font-size:13px;letter-spacing:.3em;color:var(--w2);display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:8px;height:8px;background:var(--earth)}
+.eyebrow .cj{font-family:var(--txt);font-weight:400}
+h1,h2{font-weight:700;text-transform:uppercase;line-height:.92;text-shadow:0 2px 30px rgba(0,0,0,.18)}
+.sub{font-weight:700;letter-spacing:.42em;text-transform:uppercase}
+.cn{font-family:var(--txt);font-weight:400;letter-spacing:.12em;color:rgba(255,255,255,.92);display:flex;align-items:center;gap:14px;text-shadow:0 1px 14px rgba(0,0,0,.55),0 0 2px rgba(0,0,0,.35)}
+.tmp{font-family:var(--txt);font-weight:400;font-size:11px;letter-spacing:.1em;border:1px solid rgba(255,255,255,.45);padding:1px 6px;color:var(--w3);line-height:1.5;white-space:nowrap;text-shadow:none}
+.tmp.e{border-color:rgba(200,135,58,.75);color:#E7B47A}
+.cta{display:inline-flex;align-items:center;gap:12px;border:2px solid var(--w);padding:15px 34px;font-weight:700;font-size:14px;letter-spacing:.24em;position:relative;overflow:hidden;isolation:isolate;background:rgba(10,8,5,.18);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);transition:color .35s}
+.cta::after{content:"";position:absolute;inset:0;background:var(--w);transform:scaleY(0);transform-origin:bottom;transition:transform .35s;z-index:-1}
+.cta:hover{color:#111}.cta:hover::after{transform:scaleY(1)}
+.cta small{font-family:var(--txt);font-weight:400;font-size:13px;letter-spacing:.24em}
+/* S1 hero */
+#top .bg img{object-position:50% 60%;transform-origin:50% 60%;animation:kb 40s ease-in-out infinite alternate}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.07)}}
+#top .shade{background:radial-gradient(ellipse 80% 55% at 50% 46%,rgba(10,8,5,.34),rgba(10,8,5,0) 70%),linear-gradient(180deg,rgba(10,8,5,.55) 0%,rgba(10,8,5,.1) 22%,rgba(10,8,5,.05) 50%,rgba(10,8,5,.45) 88%,rgba(10,8,5,.7) 100%)}
+#top .inner{align-items:center;justify-content:center;text-align:center;padding-bottom:8vh}
+#top h1{font-size:clamp(64px,16.5vw,250px);letter-spacing:.2em;margin-right:-.2em;line-height:.85;margin-top:22px}
+#top .sub{font-size:clamp(13px,1.35vw,20px);margin:26px -.42em 0 0}
+#top .cn{font-size:clamp(15px,1.35vw,20px);margin-top:16px;justify-content:center;margin-right:-.12em}
+#top .cta{margin-top:40px}
+.scroll{position:absolute;z-index:2;left:50%;bottom:26px;transform:translateX(-50%);font-size:11px;font-weight:700;letter-spacing:.3em;color:var(--w3);display:flex;flex-direction:column;align-items:center;gap:10px;margin-right:-.3em}
+.scroll i{width:1px;height:34px;background:linear-gradient(var(--w2),transparent)}
+/* S2 about */
+#about .bg img{object-position:50% 62%}
+#about .shade{background:linear-gradient(90deg,rgba(10,8,5,.72) 0%,rgba(10,8,5,.5) 34%,rgba(10,8,5,.08) 64%,rgba(10,8,5,0) 100%),linear-gradient(180deg,rgba(10,8,5,.35) 0%,rgba(10,8,5,0) 25%,rgba(10,8,5,0) 60%,rgba(10,8,5,.55) 100%)}
+#about .inner{justify-content:center;padding-bottom:6vh}
+#about .block{max-width:640px}
+#about h2{font-size:clamp(50px,6.6vw,108px);letter-spacing:.04em;margin-top:20px}
+.intro{margin-top:30px;font-family:var(--txt);font-weight:400;font-size:18px;line-height:1.75;letter-spacing:.02em;color:rgba(255,255,255,.9);max-width:32em;text-shadow:0 1px 12px rgba(0,0,0,.5)}
+.intro p+p{margin-top:12px}
+.intro .tmp{display:inline-block;margin-top:12px}
+.dirs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:40px;max-width:600px;border-top:1px solid rgba(255,255,255,.28)}
+.dirs li{list-style:none;padding:18px 18px 4px 0}
+.dirs li+li{padding-left:20px;border-left:1px solid rgba(255,255,255,.18)}
+.dirs b{display:block;font-weight:700;font-size:12px;letter-spacing:.28em;color:var(--w3)}
+.dirs strong{display:flex;align-items:center;gap:8px;font-family:var(--txt);font-weight:700;font-size:21px;letter-spacing:.04em;margin-top:8px}
+.dirs span{display:block;font-family:var(--txt);font-weight:400;font-size:14px;line-height:1.5;letter-spacing:.02em;color:var(--w2);margin-top:6px}
+/* S3 contact */
+#contact{min-height:60vh;min-height:60svh;background:var(--ink)}
+#contact .bg img{object-position:50% 80%;opacity:.22;filter:grayscale(.35)}
+#contact .shade{background:linear-gradient(180deg,var(--ink) 0%,rgba(20,18,15,.55) 35%,rgba(20,18,15,.75) 100%)}
+#contact .inner{justify-content:center;align-items:flex-start;padding-top:80px;padding-bottom:56px}
+#contact h2{font-size:clamp(46px,6vw,96px);letter-spacing:.06em;margin-top:20px;display:flex;align-items:baseline;gap:.35em;flex-wrap:wrap}
+#contact h2 small{font-family:var(--txt);font-weight:400;font-size:.34em;letter-spacing:.12em;text-transform:none;color:var(--w2)}
+.mailrow{display:flex;align-items:center;gap:28px;flex-wrap:wrap;margin-top:34px}
+.mail{font-family:var(--txt);font-size:20px;letter-spacing:.1em;color:var(--w);padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.35)}
+.note{margin-top:18px;font-family:var(--txt);font-weight:400;font-size:16px;letter-spacing:.04em;color:var(--w3)}
+footer{position:relative;z-index:2;padding:16px var(--pad) calc(18px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;align-items:center;gap:8px 24px;flex-wrap:wrap;font-family:var(--txt);font-size:12px;letter-spacing:.06em;color:var(--w3);border-top:1px solid rgba(255,255,255,.14)}
+footer .l,footer .r{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:center}
+footer .dot{opacity:.5}
+footer a:hover{color:var(--w)}
+footer .lat{font-family:var(--lat);letter-spacing:.12em}
+/* fade-in */
+.js .rv{opacity:0;transform:translateY(24px);transition:opacity 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+.js .rv.d1{transition-delay:.12s}.js .rv.d2{transition-delay:.24s}.js .rv.d3{transition-delay:.36s}
+@media (prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ #top .bg img{animation:none}
+ .js .rv{opacity:1;transform:none;transition:none}
+ header,.cta,.cta::after{transition:none}
+}
+@media (max-width:760px){
+ .logo b{font-size:18px}.logo span{font-size:11px;padding-left:10px}.logo{gap:10px}
+ nav{gap:18px} nav a{font-size:12px} nav a small{display:none}
+ .eyebrow{font-size:11px;letter-spacing:.24em}
+ .cn{letter-spacing:.1em;font-size:15px;gap:10px;font-weight:400}
+ .cta{padding:14px 26px;font-size:13px}
+ #top .bg img{object-position:50% 50%}
+ #top .shade{background:linear-gradient(180deg,rgba(10,8,5,.55) 0%,rgba(10,8,5,.12) 18%,rgba(10,8,5,.3) 40%,rgba(10,8,5,.42) 62%,rgba(10,8,5,.6) 100%)}
+ #top h1{font-size:clamp(56px,19vw,120px);letter-spacing:.12em;margin-right:-.12em}
+ #top .sub{font-size:12px;letter-spacing:.34em;margin-right:-.34em}
+ #top .cn{margin-right:-.1em}
+ #about .bg img{object-position:50% 50%}
+ #about .shade{background:linear-gradient(180deg,rgba(10,8,5,.5) 0%,rgba(10,8,5,.35) 30%,rgba(10,8,5,.55) 55%,rgba(10,8,5,.82) 100%)}
+ #about .inner{justify-content:flex-end;padding-bottom:48px}
+ #about h2{font-size:clamp(44px,13vw,72px)}
+ .intro{font-size:16px;line-height:1.65;margin-top:22px}
+ .dirs{margin-top:28px}
+ .dirs li{padding:14px 8px 2px 0}.dirs li+li{padding-left:12px}
+ .dirs strong{font-size:17px;letter-spacing:.02em;flex-wrap:wrap;gap:4px 6px}
+ .dirs span{font-size:12.5px}
+ #contact .inner{padding-top:72px;padding-bottom:44px}
+ #contact h2{font-size:clamp(44px,13vw,72px)}
+ .mail{font-size:17px}
+ footer{font-size:11px;flex-direction:column;align-items:flex-start;gap:4px;padding-top:12px;letter-spacing:.03em}
+ footer .md{display:none} footer .mailf{flex-basis:100%}
+}
+</style>
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<header id="hdr">
+ <a class="logo" href="#top" aria-label="Loamly 栖于垄上"><b>LOAMLY</b><span lang="zh-CN">栖于垄上</span></a>
+ <nav><a href="#about">ABOUT</a><a href="#contact">CONTACT</a></nav>
+</header>
 
-    <header class="site-header" aria-label="Site header">
-      <a class="brand-lockup" href="https://www.loamly.net/" aria-label="Loamly home">
-        <span class="brand-mark" aria-hidden="true"></span>
-        <span>Loamly</span>
-      </a>
-      <nav class="top-nav" aria-label="Primary">
-        <a href="#mission" data-i18n="navMission">Mission</a>
-        <a href="#projects" data-i18n="navProjects">Projects</a>
-        <a href="#founder" data-i18n="navFounder">Leadership</a>
-        <a href="#careers" data-i18n="navCareers">Career</a>
-        <a href="#contact" data-i18n="navContact">Contact</a>
-      </nav>
-      <div class="language-switch" aria-label="Language">
-        <button type="button" data-lang-option="en" aria-pressed="true">EN</button>
-        <button type="button" data-lang-option="ja" aria-pressed="false">JP</button>
-        <button type="button" data-lang-option="zh" aria-pressed="false">CN</button>
-      </div>
-    </header>
+<section class="sec" id="top">
+ <div class="bg"><picture>
+  <source media="(max-aspect-ratio:1/1)" srcset="assets/terraces-m.webp" type="image/webp">
+  <img src="assets/terraces-2400.webp" srcset="assets/terraces-1200.webp 1200w, assets/terraces-2400.webp 2400w" sizes="100vw" alt="Longji rice terraces in Guangxi, China" fetchpriority="high">
+ </picture></div>
+ <div class="shade"></div>
+ <div class="inner">
+  <div class="eyebrow rv">SHANGHAI · CHINA</div>
+  <h1 class="rv d1" aria-label="Loamly">LOAMLY</h1>
+  <p class="sub rv d2">ROOTED IN THE LAND</p>
+  <p class="cn rv d2">Growing steadily, row by row</p>
+  <a class="cta rv d3" href="#contact">WORK WITH US</a>
+ </div>
+ <a class="scroll" href="#about" aria-label="Scroll down">SCROLL<i></i></a>
+</section>
 
-    <main>
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="domain-line" data-i18n="domainLine">www.loamly.net / operating signal</p>
-          <h1 id="hero-title" data-i18n="heroTitle">Loamly builds living internet worlds.</h1>
-          <p class="hero-text" data-i18n="heroText">
-            We design media systems where stories, characters, communities, and
-            software behave less like pages and more like places people return to.
-          </p>
-          <div class="hero-actions" aria-label="Primary actions">
-            <a class="button primary" href="https://aniguessr.loamly.net/" data-i18n="heroPrimary">
-              Enter Aniguessr
-            </a>
-            <a class="button secondary" href="mailto:kris@loamly.net" data-i18n="heroSecondary">
-              Talk to Kris Kai
-            </a>
-          </div>
-        </div>
+<section class="sec" id="about">
+ <div class="bg"><picture>
+  <source media="(max-aspect-ratio:1/1)" srcset="assets/village-m.webp" type="image/webp">
+  <img src="assets/village-2400.webp" srcset="assets/village-1200.webp 1200w, assets/village-2400.webp 2400w" sizes="100vw" alt="A village and fields among karst hills" loading="lazy">
+ </picture></div>
+ <div class="shade"></div>
+ <div class="inner"><div class="block">
+  <div class="eyebrow rv">ABOUT US</div>
+  <h2 class="rv d1">FROM THE<br>GROUND UP</h2>
+  <div class="intro rv d2">
+   <p>Loamly is an internet technology company based in Jinshan, Shanghai.</p>
+   <p>We make content and software tools for users in China. We start with small, specific problems and do each one properly — row by row, the way you’d work a field.</p>
+  </div>
+  <ul class="dirs rv d3">
+   <li><b>01</b><strong>Content</strong><span>Knowledge and learning products</span></li>
+   <li><b>02</b><strong>Tools</strong><span>Lightweight mini-apps and productivity tools</span></li>
+   <li><b>03</b><strong>Partnerships</strong><span>Projects co-created with brands and institutions</span></li>
+  </ul>
+ </div></div>
+</section>
 
-        <figure class="founder-visual">
-          <img
-            src="assets/ceo-kai.jpg"
-            width="788"
-            height="1400"
-            alt="Kris Kai, CEO of Loamly, seated in a dark suit against a white backlight."
-          />
-          <figcaption>
-            <span data-i18n="heroPhotoLabel">CEO / Founder</span>
-            <strong>Kris Kai</strong>
-          </figcaption>
-        </figure>
-      </section>
+<section class="sec" id="contact">
+ <div class="bg"><picture>
+  <source media="(max-aspect-ratio:1/1)" srcset="assets/terraces-m.webp" type="image/webp">
+  <img src="assets/terraces-2400.webp" srcset="assets/terraces-1200.webp 1200w, assets/terraces-2400.webp 2400w" sizes="100vw" alt="" loading="lazy">
+ </picture></div>
+ <div class="shade"></div>
+ <div class="inner">
+  <div class="eyebrow rv">GET IN TOUCH</div>
+  <h2 class="rv d1">CONTACT<small>Let’s work together</small></h2>
+  <p class="note rv d3">For partnerships, product and media inquiries — contact details coming soon.</p>
+ </div>
+ <footer>
+  <div class="l"><span>Loamly · Shanghai</span><span class="dot">·</span><span>Jinshan District, Shanghai, China</span></div>
+  <div class="r"><span class="lat">© 2026 Loamly. All rights reserved.</span></div>
+ </footer>
+</section>
 
-      <section id="mission" class="section manifesto" aria-labelledby="mission-title">
-        <div class="section-heading">
-          <p class="section-kicker" data-i18n="missionKicker">Loamly doctrine</p>
-          <h2 id="mission-title" data-i18n="missionTitle">Media is no longer a file. It is an environment.</h2>
-        </div>
-        <div class="manifesto-grid">
-          <p data-i18n="missionCopy1">
-            Loamly is building a new operating layer for fan culture: an interface where
-            anime, AI agents, community memory, and creator workflows converge into one
-            persistent world.
-          </p>
-          <p data-i18n="missionCopy2">
-            We are not trying to make another content feed. Feeds are disposable. Worlds
-            compound. Characters gain history, communities gain language, and every launch
-            becomes infrastructure for the next mythology.
-          </p>
-          <p data-i18n="missionCopy3">
-            The first public signal is Aniguessr. The larger ambition is a network of cultural
-            software: precise, multilingual, emotionally charged, and built for people who
-            think the internet should still feel dangerous in the best way.
-          </p>
-        </div>
-      </section>
-
-      <section class="section capabilities" aria-labelledby="capabilities-title">
-        <div class="section-heading split">
-          <p class="section-kicker" data-i18n="capabilitiesKicker">System layers</p>
-          <h2 id="capabilities-title" data-i18n="capabilitiesTitle">A company for worlds that need software, taste, and velocity.</h2>
-          <p data-i18n="capabilitiesLead">
-            The public surface is simple. Behind it is a studio model for shipping cultural
-            products fast: story, product, growth, and technical operations moving as one.
-          </p>
-        </div>
-        <div class="capability-list">
-          <article class="capability">
-            <span>01</span>
-            <h3 data-i18n="cap1Title">Narrative infrastructure</h3>
-            <p data-i18n="cap1Copy">World bibles, character systems, lore loops, and launch surfaces designed to survive beyond a single campaign.</p>
-          </article>
-          <article class="capability">
-            <span>02</span>
-            <h3 data-i18n="cap2Title">AI-native interaction</h3>
-            <p data-i18n="cap2Copy">Agents, memory, multilingual response, and automation patterns that make a project feel alive without burying users in machinery.</p>
-          </article>
-          <article class="capability">
-            <span>03</span>
-            <h3 data-i18n="cap3Title">Community signal design</h3>
-            <p data-i18n="cap3Copy">Systems for conversation, moderation, identity, and high-context fandom where people do not feel like traffic.</p>
-          </article>
-          <article class="capability">
-            <span>04</span>
-            <h3 data-i18n="cap4Title">Launch operations</h3>
-            <p data-i18n="cap4Copy">The unromantic work: speed, analytics, support, documentation, and the boring reliability that makes strange ideas real.</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="projects" class="section projects" aria-labelledby="projects-title">
-        <div class="section-heading split">
-          <p class="section-kicker" data-i18n="projectsKicker">Project directory</p>
-          <h2 id="projects-title" data-i18n="projectsTitle">The first world is live. The next ones are being prepared.</h2>
-          <p data-i18n="projectsLead">
-            Loamly projects share a single spine: cinematic presentation, technical
-            discipline, and communities that can grow into their own language.
-          </p>
-        </div>
-
-        <div class="project-grid">
-          <a class="project-card project-card--active" href="https://aniguessr.loamly.net/">
-            <span class="project-status" data-i18n="projectLive">Live channel</span>
-            <span class="project-name">Aniguessr</span>
-            <span class="project-domain">aniguessr.loamly.net</span>
-            <span class="project-copy" data-i18n="animeCopy">
-              The first Loamly world: an anime guessing destination built for discovery,
-              memory, and the next generation of fan-native interfaces.
-            </span>
-            <span class="project-action" aria-hidden="true" data-i18n="animeAction">Open Aniguessr</span>
-          </a>
-
-          <article class="project-card project-card--reserved" aria-label="Reserved project slot">
-            <span class="project-status" data-i18n="reserved">Reserved slot</span>
-            <span class="project-name" data-i18n="nextProject">Next Project</span>
-            <span class="project-domain" data-i18n="pending">Pending signal</span>
-            <span class="project-copy" data-i18n="reservedCopy1">
-              A future Loamly channel is being shaped here. It will not appear until it earns the slot.
-            </span>
-          </article>
-
-          <article class="project-card project-card--reserved" aria-label="Reserved project slot">
-            <span class="project-status" data-i18n="reserved">Reserved slot</span>
-            <span class="project-name" data-i18n="futureChannel">Future Channel</span>
-            <span class="project-domain" data-i18n="pending">Pending signal</span>
-            <span class="project-copy" data-i18n="reservedCopy2">
-              Additional worlds will join the network when the mythology, product, and operation are ready.
-            </span>
-          </article>
-        </div>
-      </section>
-
-      <section id="founder" class="section founder" aria-labelledby="founder-title">
-        <div class="founder-card">
-          <div>
-            <p class="section-kicker" data-i18n="leadershipKicker">Leadership signal</p>
-            <h2 id="founder-title" data-i18n="founderTitle">Lewis Luo builds the engine room for living internet worlds.</h2>
-            <p data-i18n="founderCopy">
-              As Loamly's CTO, Lewis Luo turns cinematic product ambition into systems that
-              can remember, respond, scale, and stay alive after launch.
-            </p>
-            <blockquote data-i18n="ctoVision">
-              If the future internet is a black sea, Lewis Luo is not building a ship. He is building
-              the reactor that lights the routes: characters, memory, and communities linked in the dark
-              until the world begins to glow on its own.
-            </blockquote>
-            <a class="button secondary" href="mailto:lewis@loamly.net">lewis@loamly.net</a>
-          </div>
-          <figure class="leadership-portrait">
-            <img
-              src="assets/cto.jpg"
-              width="788"
-              height="1400"
-              loading="lazy"
-              alt="Portrait of Lewis Luo, CTO of Loamly."
-            />
-            <figcaption>
-              <span data-i18n="ctoRole">CTO / Technology</span>
-              <strong>Lewis Luo</strong>
-            </figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <section id="careers" class="section careers" aria-labelledby="careers-title">
-        <div class="section-heading split">
-          <p class="section-kicker" data-i18n="careerKicker">Career</p>
-          <h2 id="careers-title" data-i18n="careersTitle">We are looking for people who recognize the signal.</h2>
-          <p data-i18n="careersLead">
-            Loamly is not hiring for ordinary resumes. We are looking for collaborators
-            who can build, ship, write, design, operate, and obsess with unusual intensity.
-          </p>
-        </div>
-        <div class="career-panel">
-          <div>
-            <h3 data-i18n="careerRole1">World builders</h3>
-            <p data-i18n="careerCopy1">Product-minded engineers, AI tinkerers, designers, writers, operators, and growth people who can move between taste and execution.</p>
-          </div>
-          <div>
-            <h3 data-i18n="careerRole2">Co-conspirators</h3>
-            <p data-i18n="careerCopy2">People who care about anime, internet culture, multilingual communities, and products that feel like they were not approved by committee.</p>
-          </div>
-          <a class="button primary" href="mailto:kris@loamly.net?subject=Loamly%20Career" data-i18n="careerAction">
-            Send a signal
-          </a>
-        </div>
-      </section>
-
-      <section id="contact" class="section contact" aria-labelledby="contact-title">
-        <div class="section-heading">
-          <p class="section-kicker" data-i18n="contactKicker">Contact matrix</p>
-          <h2 id="contact-title" data-i18n="contactTitle">For partnerships, support, and unusual proposals.</h2>
-        </div>
-        <div class="contact-grid">
-          <a href="mailto:kris@loamly.net">
-            <span data-i18n="contactCeo">CEO / Partnerships</span>
-            <strong>kris@loamly.net</strong>
-          </a>
-          <a href="mailto:lewis@loamly.net">
-            <span data-i18n="contactCto">CTO / Technology</span>
-            <strong>lewis@loamly.net</strong>
-          </a>
-          <a href="mailto:support@loamly.net">
-            <span data-i18n="contactSupport">Technical support</span>
-            <strong>support@loamly.net</strong>
-          </a>
-          <a href="https://aniguessr.loamly.net/">
-            <span data-i18n="contactAnime">Live project</span>
-            <strong>aniguessr.loamly.net</strong>
-          </a>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <span data-i18n="footerLeft">Loamly / Living Internet Worlds</span>
-      <span data-i18n="footerRight">© 2026 Loamly. All signal reserved.</span>
-    </footer>
-    <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
-  </body>
-</html>
+<script>
+(function(){
+ var h=document.getElementById('hdr'),t=document.getElementById('top');
+ function s(){h.classList.toggle('solid',window.scrollY>t.offsetHeight-80)}
+ window.addEventListener('scroll',s,{passive:true});s();
+ var els=document.querySelectorAll('.rv');
+ if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches){els.forEach(function(e){e.classList.add('in')});return}
+ var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
+ els.forEach(function(e){io.observe(e)});
+})();
+</script>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>
