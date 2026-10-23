@@ -1,5 +1,15 @@
 # Loamly
 
+## Repository layout
+
+| Path | Site | Deployed to |
+| --- | --- | --- |
+| `/` | `www.loamly.net` | Vercel (static). Root `.vercelignore` excludes `watch/` and `cn/` so neither is published under `loamly.net`. |
+| `cn/` | `www.loamly.cn` | Aliyun ECS, document root `/var/www/loamly` |
+| `watch/` | `watch.loamly.cn` | Aliyun ECS, document root `/var/www/watch` |
+
+## www.loamly.net
+
 Static homepage for `www.loamly.net`.
 
 A single-page English company site for Loamly (栖于垄上, Shanghai): a full-screen hero, an About section (content, tools, partnerships) and a Contact section (contact@loamly.net). Everything is in `index.html` with inline CSS and a small inline script; there is no build step.

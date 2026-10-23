@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Loamly 栖于垄上 · 栖于垄上（上海）网络科技有限公司</title>
+<meta name="description" content="栖于垄上（上海）网络科技有限公司，位于上海市金山区。">
+<!-- Photos: Willian Justen de Vasconcellos / Unsplash (06QpKIYxWe4), wang binghua / Unsplash (Hf1SVeHgNgg) — Unsplash License.
+     Fonts: D-DIN (SIL OFL 1.1), Noto Sans SC (SIL OFL 1.1), subset in assets/. -->
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png">
+<link rel="preload" href="assets/ddin-bold.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"DDIN";font-weight:700;src:url(assets/ddin-bold.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"DDIN";font-weight:400;src:url(assets/ddin.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"LSC";font-weight:300;src:url(assets/notosc-300.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"LSC";font-weight:400;src:url(assets/notosc-400.woff2) format("woff2");font-display:swap}
+:root{--earth:#C8873A;--moss:#3F6B4F;--w:#fff;--w2:rgba(255,255,255,.8);--w3:rgba(255,255,255,.58);--ink:#14120F;
+ --lat:"DDIN","Arial Narrow",Arial,sans-serif;--cjk:"LSC","Noto Sans SC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+ --pad:clamp(20px,3.4vw,48px)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--ink);color:var(--w);scroll-behavior:smooth}
+body{font-family:var(--lat);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.sec{position:relative;min-height:100vh;min-height:100svh;overflow:hidden;display:flex;flex-direction:column}
+.bg{position:absolute;inset:0;z-index:0}
+.bg img{width:100%;height:100%;object-fit:cover;display:block}
+.shade{position:absolute;inset:0;z-index:1;pointer-events:none}
+.inner{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;padding:96px var(--pad) 0}
+/* header */
+header{position:fixed;z-index:10;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--pad)*.75) var(--pad);transition:background .4s,padding .4s}
+header.solid{background:rgba(20,18,15,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding-top:16px;padding-bottom:16px}
+.logo{display:flex;align-items:baseline;gap:14px}
+.logo b{font-weight:700;font-size:22px;letter-spacing:.32em;margin-right:-.32em}
+.logo span{font-family:var(--cjk);font-size:13px;letter-spacing:.35em;color:var(--w2);padding-left:14px;border-left:1px solid rgba(255,255,255,.4)}
+nav{display:flex;gap:32px}
+nav a{font-weight:700;font-size:13px;letter-spacing:.2em;padding:6px 0;border-bottom:1px solid transparent;transition:border-color .3s}
+nav a:hover{border-color:var(--w)}
+nav a small{font-family:var(--cjk);font-weight:400;letter-spacing:.2em;margin-left:8px;font-size:12px;color:var(--w2)}
+/* type */
+.eyebrow{font-weight:700;font-size:13px;letter-spacing:.3em;color:var(--w2);display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:8px;height:8px;background:var(--earth)}
+.eyebrow .cj{font-family:var(--cjk);font-weight:400}
+h1,h2{font-weight:700;text-transform:uppercase;line-height:.92;text-shadow:0 2px 30px rgba(0,0,0,.18)}
+.sub{font-weight:700;letter-spacing:.42em;text-transform:uppercase}
+.cn{font-family:var(--cjk);font-weight:300;letter-spacing:.42em;color:rgba(255,255,255,.92);display:flex;align-items:center;gap:14px;text-shadow:0 1px 14px rgba(0,0,0,.55),0 0 2px rgba(0,0,0,.35)}
+.tmp{font-family:var(--cjk);font-weight:400;font-size:11px;letter-spacing:.1em;border:1px solid rgba(255,255,255,.45);padding:1px 6px;color:var(--w3);line-height:1.5;white-space:nowrap;text-shadow:none}
+.tmp.e{border-color:rgba(200,135,58,.75);color:#E7B47A}
+.cta{display:inline-flex;align-items:center;gap:12px;border:2px solid var(--w);padding:15px 34px;font-weight:700;font-size:14px;letter-spacing:.24em;position:relative;overflow:hidden;isolation:isolate;background:rgba(10,8,5,.18);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);transition:color .35s}
+.cta::after{content:"";position:absolute;inset:0;background:var(--w);transform:scaleY(0);transform-origin:bottom;transition:transform .35s;z-index:-1}
+.cta:hover{color:#111}.cta:hover::after{transform:scaleY(1)}
+.cta small{font-family:var(--cjk);font-weight:400;font-size:13px;letter-spacing:.24em}
+/* S1 hero */
+#top .bg img{object-position:50% 60%;transform-origin:50% 60%;animation:kb 40s ease-in-out infinite alternate}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.07)}}
+#top .shade{background:radial-gradient(ellipse 80% 55% at 50% 46%,rgba(10,8,5,.34),rgba(10,8,5,0) 70%),linear-gradient(180deg,rgba(10,8,5,.55) 0%,rgba(10,8,5,.1) 22%,rgba(10,8,5,.05) 50%,rgba(10,8,5,.45) 88%,rgba(10,8,5,.7) 100%)}
+#top .inner{align-items:center;justify-content:center;text-align:center;padding-bottom:8vh}
+#top h1{font-size:clamp(64px,16.5vw,250px);letter-spacing:.2em;margin-right:-.2em;line-height:.85;margin-top:22px}
+#top .sub{font-size:clamp(13px,1.35vw,20px);margin:26px -.42em 0 0}
+#top .cn{font-size:clamp(14px,1.25vw,18px);margin-top:16px;justify-content:center;margin-right:-.42em}
+#top .cta{margin-top:40px}
+.scroll{position:absolute;z-index:2;left:50%;bottom:26px;transform:translateX(-50%);font-size:11px;font-weight:700;letter-spacing:.3em;color:var(--w3);display:flex;flex-direction:column;align-items:center;gap:10px;margin-right:-.3em}
+.scroll i{width:1px;height:34px;background:linear-gradient(var(--w2),transparent)}
+/* S2 about */
+#about .bg img{object-position:50% 62%}
+#about .shade{background:linear-gradient(90deg,rgba(10,8,5,.72) 0%,rgba(10,8,5,.5) 34%,rgba(10,8,5,.08) 64%,rgba(10,8,5,0) 100%),linear-gradient(180deg,rgba(10,8,5,.35) 0%,rgba(10,8,5,0) 25%,rgba(10,8,5,0) 60%,rgba(10,8,5,.55) 100%)}
+#about .inner{justify-content:center;padding-bottom:6vh}
+#about .block{max-width:640px}
+#about h2{font-size:clamp(50px,6.6vw,108px);letter-spacing:.04em;margin-top:20px}
+.intro{margin-top:30px;font-family:var(--cjk);font-weight:300;font-size:17px;line-height:2;letter-spacing:.08em;color:rgba(255,255,255,.9);max-width:34em;text-shadow:0 1px 12px rgba(0,0,0,.5)}
+.intro p+p{margin-top:6px}
+.intro .tmp{display:inline-block;margin-top:12px}
+.dirs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:40px;max-width:600px;border-top:1px solid rgba(255,255,255,.28)}
+.dirs li{list-style:none;padding:18px 18px 4px 0}
+.dirs li+li{padding-left:20px;border-left:1px solid rgba(255,255,255,.18)}
+.dirs b{display:block;font-weight:700;font-size:12px;letter-spacing:.28em;color:var(--w3)}
+.dirs strong{display:flex;align-items:center;gap:8px;font-family:var(--cjk);font-weight:400;font-size:22px;letter-spacing:.2em;margin-top:8px}
+.dirs span{display:block;font-family:var(--cjk);font-weight:300;font-size:13px;line-height:1.7;letter-spacing:.06em;color:var(--w2);margin-top:6px}
+/* S3 contact */
+#contact{min-height:60vh;min-height:60svh;background:var(--ink)}
+#contact .bg img{object-position:50% 80%;opacity:.22;filter:grayscale(.35)}
+#contact .shade{background:linear-gradient(180deg,var(--ink) 0%,rgba(20,18,15,.55) 35%,rgba(20,18,15,.75) 100%)}
+#contact .inner{justify-content:center;align-items:flex-start;padding-top:80px;padding-bottom:56px}
+#contact h2{font-size:clamp(46px,6vw,96px);letter-spacing:.06em;margin-top:20px;display:flex;align-items:baseline;gap:.35em;flex-wrap:wrap}
+#contact h2 small{font-family:var(--cjk);font-weight:300;font-size:.36em;letter-spacing:.3em;text-transform:none;color:var(--w2)}
+.mailrow{display:flex;align-items:center;gap:28px;flex-wrap:wrap;margin-top:34px}
+.mail{font-family:var(--lat);font-size:20px;letter-spacing:.1em;color:var(--w);padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.35)}
+.note{margin-top:18px;font-family:var(--cjk);font-weight:300;font-size:14px;letter-spacing:.1em;color:var(--w3)}
+footer{position:relative;z-index:2;padding:16px var(--pad) calc(18px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;align-items:center;gap:8px 24px;flex-wrap:wrap;font-family:var(--cjk);font-size:12px;letter-spacing:.06em;color:var(--w3);border-top:1px solid rgba(255,255,255,.14)}
+footer .l,footer .r{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:center}
+footer .dot{opacity:.5}
+footer a:hover{color:var(--w)}
+footer .lat{font-family:var(--lat);letter-spacing:.12em}
+/* fade-in */
+.js .rv{opacity:0;transform:translateY(24px);transition:opacity 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+.js .rv.d1{transition-delay:.12s}.js .rv.d2{transition-delay:.24s}.js .rv.d3{transition-delay:.36s}
+@media (prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ #top .bg img{animation:none}
+ .js .rv{opacity:1;transform:none;transition:none}
+ header,.cta,.cta::after{transition:none}
+}
+@media (max-width:760px){
+ .logo b{font-size:18px}.logo span{font-size:11px;padding-left:10px}.logo{gap:10px}
+ nav{gap:18px} nav a{font-size:12px} nav a small{display:none}
+ .eyebrow{font-size:11px;letter-spacing:.24em}
+ .cn{letter-spacing:.32em;font-size:15px;gap:10px;font-weight:400}
+ .cta{padding:14px 26px;font-size:13px}
+ #top .bg img{object-position:50% 50%}
+ #top .shade{background:linear-gradient(180deg,rgba(10,8,5,.55) 0%,rgba(10,8,5,.12) 18%,rgba(10,8,5,.3) 40%,rgba(10,8,5,.42) 62%,rgba(10,8,5,.6) 100%)}
+ #top h1{font-size:clamp(56px,19vw,120px);letter-spacing:.12em;margin-right:-.12em}
+ #top .sub{font-size:12px;letter-spacing:.34em;margin-right:-.34em}
+ #top .cn{margin-right:-.32em}
+ #about .bg img{object-position:50% 50%}
+ #about .shade{background:linear-gradient(180deg,rgba(10,8,5,.5) 0%,rgba(10,8,5,.35) 30%,rgba(10,8,5,.55) 55%,rgba(10,8,5,.82) 100%)}
+ #about .inner{justify-content:flex-end;padding-bottom:48px}
+ #about h2{font-size:clamp(44px,13vw,72px)}
+ .intro{font-size:15px;line-height:1.9;margin-top:22px}
+ .dirs{margin-top:28px}
+ .dirs li{padding:14px 8px 2px 0}.dirs li+li{padding-left:12px}
+ .dirs strong{font-size:18px;letter-spacing:.12em;flex-wrap:wrap;gap:4px 6px}
+ .dirs span{font-size:12px}
+ #contact .inner{padding-top:72px;padding-bottom:44px}
+ #contact h2{font-size:clamp(44px,13vw,72px)}
+ .mail{font-size:17px}
+ footer{font-size:10.5px;flex-direction:column;align-items:flex-start;gap:4px;padding-top:12px;letter-spacing:.03em}
+ footer .md{display:none} footer .mailf{flex-basis:100%}
+}
+</style>
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<header id="hdr">
+ <a class="logo" href="#top" aria-label="Loamly 栖于垄上"><b>LOAMLY</b><span>栖于垄上</span></a>
+ <nav><a href="#about">ABOUT<small>关于</small></a><a href="#contact">CONTACT<small>联系</small></a></nav>
+</header>
+
+<section class="sec" id="top">
+ <div class="bg"><picture>
+  <source media="(max-aspect-ratio:1/1)" srcset="assets/terraces-m.webp" type="image/webp">
+  <img src="assets/terraces-2400.webp" srcset="assets/terraces-1200.webp 1200w, assets/terraces-2400.webp 2400w" sizes="100vw" alt="广西龙脊梯田" fetchpriority="high">
+ </picture></div>
+ <div class="shade"></div>
+ <div class="inner">
+  <div class="eyebrow rv">SHANGHAI · CHINA</div>
+  <h1 class="rv d1" aria-label="Loamly">LOAMLY</h1>
+  <p class="sub rv d2">ROOTED IN THE LAND</p>
+  <p class="cn rv d2">在垄上，慢慢生长</p>
+  <a class="cta rv d3" href="#contact">CONTACT<small>联系合作</small></a>
+ </div>
+ <a class="scroll" href="#about" aria-label="向下滚动">SCROLL<i></i></a>
+</section>
+
+<section class="sec" id="about">
+ <div class="bg"><picture>
+  <source media="(max-aspect-ratio:1/1)" srcset="assets/village-m.webp" type="image/webp">
+  <img src="assets/village-2400.webp" srcset="assets/village-1200.webp 1200w, assets/village-2400.webp 2400w" sizes="100vw" alt="喀斯特山间的村落与田野" loading="lazy">
+ </picture></div>
+ <div class="shade"></div>
+ <div class="inner"><div class="block">
+  <div class="eyebrow rv">ABOUT<span class="cj">· 关于我们</span></div>
+  <h2 class="rv d1">FROM THE<br>GROUND UP</h2>
+  <div class="intro rv d2">
+   <p>栖于垄上（上海）网络科技有限公司，<span style="white-space:nowrap">扎根上海金山。</span></p>
+   <p>我们做面向中国用户的内容与工具产品，从一个个具体的小问题做起，像种地一样，一垄一垄做扎实。</p>
+  </div>
+  <ul class="dirs rv d3">
+   <li><b>CONTENT</b><strong>内容</strong><span>知识与学习类内容产品</span></li>
+   <li><b>TOOLS</b><strong>工具</strong><span>轻量的小程序与效率工具</span></li>
+   <li><b>PARTNERS</b><strong>合作</strong><span>与品牌及机构共创项目</span></li>
+  </ul>
+ </div></div>
+</section>
+
+<section class="sec" id="contact">
+ <div class="bg"><picture>
+  <source media="(max-aspect-ratio:1/1)" srcset="assets/terraces-m.webp" type="image/webp">
+  <img src="assets/terraces-2400.webp" srcset="assets/terraces-1200.webp 1200w, assets/terraces-2400.webp 2400w" sizes="100vw" alt="" loading="lazy">
+ </picture></div>
+ <div class="shade"></div>
+ <div class="inner">
+  <div class="eyebrow rv">GET IN TOUCH</div>
+  <h2 class="rv d1">CONTACT<small>联系合作</small></h2>
+  <div class="mailrow rv d2"><a class="mail" href="mailto:contact@loamly.net">contact@loamly.net</a><a class="cta" href="mailto:contact@loamly.net">EMAIL US<small>发送邮件</small></a></div>
+  <p class="note rv d3">合作、产品与媒体垂询，欢迎来信。</p>
+ </div>
+ <footer>
+  <div class="l"><span>栖于垄上（上海）网络科技有限公司</span><span class="dot">·</span><span>上海市金山区</span><span class="dot md">·</span><a class="mailf lat" href="mailto:contact@loamly.net">contact@loamly.net</a></div>
+  <div class="r"><span class="lat">© 2026</span><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">沪ICP备2026030604号</a><span class="dot">·</span><span>公安备案【待补】</span></div>
+ </footer>
+</section>
+
+<script>
+(function(){
+ var h=document.getElementById('hdr'),t=document.getElementById('top');
+ function s(){h.classList.toggle('solid',window.scrollY>t.offsetHeight-80)}
+ window.addEventListener('scroll',s,{passive:true});s();
+ var els=document.querySelectorAll('.rv');
+ if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches){els.forEach(function(e){e.classList.add('in')});return}
+ var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
+ els.forEach(function(e){io.observe(e)});
+})();
+</script>
+</body></html>
