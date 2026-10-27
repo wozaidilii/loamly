@@ -4,9 +4,10 @@
 
 | Path | Site | Deployed to |
 | --- | --- | --- |
-| `/` | `www.loamly.net` | Vercel (static). Root `.vercelignore` excludes `watch/` and `cn/` so neither is published under `loamly.net`. |
+| `/` | `www.loamly.net` | Vercel (static). Root `.vercelignore` excludes `watch/`, `cn/`, and `convert/` so none is published under `loamly.net`. |
 | `cn/` | `www.loamly.cn` | Aliyun ECS, document root `/var/www/loamly` |
 | `watch/` | `watch.loamly.cn` | Aliyun ECS, document root `/var/www/watch` |
+| `convert/` | `convert.loamly.cn` | Aliyun ECS, document root `/var/www/convert` |
 
 ## www.loamly.net
 

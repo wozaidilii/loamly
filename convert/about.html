@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="./logo.svg" type="image/svg+xml" />
+    <title>关于与许可证 · 文件转换</title>
+  <link rel="stylesheet" href="./css/app.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="./">
+        <img class="brand-icon" src="./logo.svg" alt="" />
+        <span class="brand-name" id="brand-name">文件转换</span>
+      </a>
+      <nav class="topbar-nav"><a href="./">返回</a></nav>
+    </header>
+
+    <main class="main about-body" style="max-width:720px">
+      <div class="title-block">
+        <h1>关于与许可证</h1>
+        <p class="subtitle">基于开源项目 <a href="https://github.com/KnifeLemon/Filee" target="_blank" rel="noopener">Filee</a>（MIT）。本站是独立实现的网页版：转换在浏览器内完成，文件不上传到服务器。</p>
+      </div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:20px;line-height:1.6">
+        Filee 本身是桌面软件（C#）。本站没有移植其 C# 代码，只借鉴「离线、不上传」的产品思路，用浏览器端库重新实现常用格式转换。
+      </p>
+
+      <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:24px">
+        <thead>
+          <tr>
+            <th style="border:1px solid var(--divider);padding:8px;text-align:left;background:var(--bg-section)">组件</th>
+            <th style="border:1px solid var(--divider);padding:8px;text-align:left;background:var(--bg-section)">用途</th>
+            <th style="border:1px solid var(--divider);padding:8px;text-align:left;background:var(--bg-section)">许可证</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="border:1px solid var(--divider);padding:8px">pdf.js</td><td style="border:1px solid var(--divider);padding:8px">PDF → 图片</td><td style="border:1px solid var(--divider);padding:8px">Apache-2.0</td></tr>
+          <tr><td style="border:1px solid var(--divider);padding:8px">pdf-lib</td><td style="border:1px solid var(--divider);padding:8px">图片 → PDF</td><td style="border:1px solid var(--divider);padding:8px">MIT</td></tr>
+          <tr><td style="border:1px solid var(--divider);padding:8px">JSZip</td><td style="border:1px solid var(--divider);padding:8px">多页打包</td><td style="border:1px solid var(--divider);padding:8px">MIT</td></tr>
+          <tr>
+            <td style="border:1px solid var(--divider);padding:8px">heic2any</td>
+            <td style="border:1px solid var(--divider);padding:8px">HEIC → JPG</td>
+            <td style="border:1px solid var(--divider);padding:8px">LGPL-3.0 · <a href="https://github.com/alexcorvi/heic2any" target="_blank" rel="noopener">源码</a> · <a href="./notices/heic2any-LICENSE">许可证</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="font-size:13px;color:var(--text-secondary)">文件只在你的浏览器里处理，不会上传。</p>
+
+      <footer class="footer">
+        基于开源项目 Filee（MIT）<span class="sep">·</span>栖于垄上（上海）网络科技有限公司<span class="sep">·</span><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">沪ICP备2026030604号</a>
+      </footer>
+    </main>
+  </div>
+  <script src="./js/config.js"></script>
+  <script>
+    const cfg = window.LOAMLY_CONVERT;
+    if (cfg) {
+      document.getElementById('brand-name').textContent = cfg.name;
+      document.title = '关于与许可证 · ' + cfg.name;
+      if (cfg.ADS_ENABLED) document.body.classList.add('ads-on');
+    }
+  </script>
+</body>
+</html>

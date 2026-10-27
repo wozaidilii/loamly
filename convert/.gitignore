@@ -1,0 +1,13 @@
+node_modules/
+shots/desktop-*.png
+shots/mobile-*.png
+*.log
+.DS_Store
+node_modules/
+shots/
+samples/*.mp4
+samples/*.mp3
+samples/*.wav
+*.log
+.DS_Store
+LICENSE-AUDIT.md

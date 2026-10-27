@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Loamly 双人同屏室 · 两个人的私人放映厅</title>
-  <meta name="description" content="落座 · 选片 · 说话时银幕声自动轻落" />
+  <meta name="description" content="两个人的私人放映厅" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Loamly 双人同屏室 · 两个人的私人放映厅" />
-  <meta property="og:description" content="落座 · 选片 · 说话时银幕声自动轻落" />
+  <meta property="og:description" content="两个人的私人放映厅" />
   <meta property="og:url" content="https://watch.loamly.cn/" />
   <meta property="og:image" content="https://watch.loamly.cn/apple-touch-icon.png" />
   <meta name="theme-color" content="#070709" />
@@ -15,13 +15,13 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/styles.css?v=0.7" />
 </head>
 <body>
   <!-- 微信内置浏览器引导浮层 (仅在 MicroMessenger UA 时自动显现) -->
   <div id="wxGuideBanner" class="wx-guide-banner hidden" role="alert">
     <div>
-      请轻触右上角 <span class="wx-dots-badge">···</span> 选择「<strong>在默认浏览器 / Safari 中打开</strong>」以开启私人放映厅连麦与选片
+      请点击右上角 <span class="wx-dots-badge">···</span> 选择「<strong>在浏览器中打开</strong>」，即可正常选片与开启语音
     </div>
     <button id="wxGuideCloseBtn" class="wx-guide-close" type="button">知道了</button>
   </div>
@@ -36,11 +36,11 @@
 
       <div class="topbar-right">
         <!-- 首屏安静副标 -->
-        <span id="lobbyEditionLabel" class="private-edition-label">PRIVATE SCREENING</span>
+        <span id="lobbyEditionLabel" class="private-edition-label"></span>
 
         <!-- 放映厅内页场次与入场券链接按钮 -->
         <div id="roomHeaderActions" class="room-header-actions hidden">
-          <button id="copyInviteLinkBtn" class="screening-pass-chip" type="button" title="复制双人放映厅入场券链接">
+          <button id="copyInviteLinkBtn" class="screening-pass-chip" type="button" title="复制房间邀请链接">
             <span id="roomCodeBadge">NO. 3G6H</span>
             <span class="divider-dot">·</span>
             <span class="copy-text" id="copyInviteText">复制入场券链接</span>
@@ -58,13 +58,12 @@
       <div class="lobby-curtain-lines" aria-hidden="true"></div>
 
       <div class="lobby-hero-header">
-        <div class="cinema-crest">PRIVATE SCREENING ROOM</div>
+        <div class="cinema-crest"></div>
         <h1 class="lobby-serif-title">两个人的私人放映厅</h1>
-        <p class="lobby-champagne-subtitle">落座 · 选片 · 说话时银幕声自动轻落</p>
       </div>
 
       <!-- 高定纸质/金属质感「双人放映厅入场券 Screening Pass」 -->
-      <section class="screening-pass-card" aria-label="双人放映厅入场券">
+      <section class="screening-pass-card" aria-label="入场">
         <input
           type="file"
           id="localVideoFileInput"
@@ -73,22 +72,19 @@
         />
 
         <!-- 票面上半部（开场） -->
-        <div class="pass-upper">
-          <div class="pass-meta-row">
-            <span>TONIGHT'S FEATURE · PRIVATE FOR TWO</span>
-            <span>SCREENING PASS</span>
-          </div>
+        <div class="pass-upper pass-upper-v07">
+          <div class="pass-meta-row pass-meta-row-empty" aria-hidden="true"></div>
 
           <button id="selectVideoCreateBtn" class="pass-primary-btn" type="button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="6 4 20 12 6 20 6 4" fill="currentColor"></polygon>
             </svg>
-            <span>选择本地影片 · 开启放映厅</span>
+            <span>选视频开场</span>
           </button>
 
           <div>
             <button id="quickDemoRoomBtn" class="pass-preview-link" type="button">
-              <span>先看试映片段 · 体验双人包厢</span>
+              <span>先试一段</span>
               <span aria-hidden="true">-&gt;</span>
             </button>
           </div>
@@ -101,27 +97,28 @@
           <span class="pass-notch right"></span>
         </div>
 
-        <!-- 票面下半部（副券 · 凭码入座） -->
+        <!-- 票面下半部（副券 · 加入房间） -->
         <div class="pass-lower">
           <div class="pass-stub-caption">
-            <span>GUEST STUB · 伴侣副券</span>
-            <span>ENTER ROOM CODE</span>
+            <span>加入房间</span>
+            <span class="hidden" hidden aria-hidden="true"></span>
           </div>
           <form id="joinRoomForm" class="pass-join-form">
             <input
               type="text"
               id="roomCodeInput"
               class="pass-code-input"
-              placeholder="输入 4 位场次码（如 3G6H）"
+              placeholder="输入 4 位房间号（如 3G6H）"
               maxlength="6"
               autocomplete="off"
             />
             <button id="joinRoomBtn" class="pass-ghost-btn" type="submit">
-              凭码入座
+              加入房间
             </button>
           </form>
         </div>
       </section>
+      <div class="version-tag home-version-tag" data-version-tag>v0.7 · 10-27</div>
     </main>
 
     <!-- ==================== 2. 放映厅内页 ==================== -->
@@ -139,45 +136,96 @@
               poster="/poster.jpg"
               playsinline
               webkit-playsinline
-              preload="metadata"
+              preload="auto"
               loop
             ></video>
 
-            <!-- 银幕中央：进房等待开映 / 双人同步开始浮层 -->
+            <!-- 银幕中央：进房等待开始 / 实时片源进度条 / 双人同步开始浮层 -->
             <div id="startScreeningOverlay" class="screen-curtain-overlay">
               <div class="curtain-card">
-                <div class="curtain-eyebrow" id="curtainStatusBadge">SCREENING READY · 等待开映</div>
-                <div class="curtain-film-title" id="curtainFilmTitle">暮色山谷 · 试映短片</div>
-                <p class="curtain-subtext" id="curtainSubtext">点击下方按钮，双方银幕将从同一帧同步开场</p>
+                <div class="curtain-eyebrow" id="curtainStatusBadge">等待开始</div>
+                <div class="curtain-film-title" id="curtainFilmTitle">等房主选视频…</div>
+                <p class="curtain-subtext hidden" id="curtainSubtext" hidden aria-hidden="true"></p>
+
+                <!-- 影院级细金线双端同步进度条 -->
+                <div id="curtainProgressWrap" class="curtain-progress-wrap hidden">
+                  <div class="curtain-progress-track">
+                    <div id="curtainProgressFill" class="curtain-progress-fill" style="width: 0%;"></div>
+                    <div class="curtain-progress-tick hidden" style="left: 5%;" title="装到这里就能先开映"></div>
+                  </div>
+                  <div class="curtain-progress-meta">
+                    <span id="curtainProgressMain" class="curtain-progress-main">正在装入影片 · 0%</span>
+                    <span id="curtainProgressDetail" class="curtain-progress-detail">0 MB</span>
+                  </div>
+                </div>
+
+                <!-- 画质与速度档位切换胶囊（房主端可切：原画直传 / 720p 极速流畅） -->
+                <div id="curtainQualitySwitch" class="curtain-quality-switch hidden">
+                  <div class="curtain-quality-pills" role="group" aria-label="画质与速度档位">
+                    <button id="qualityOriginalBtn" class="quality-pill-btn" type="button" data-quality="original">原画画质</button>
+                    <button id="qualityFast720Btn" class="quality-pill-btn is-active" type="button" data-quality="720p">720p 流畅优先</button>
+                  </div>
+                </div>
+
                 <button id="startScreeningBtn" class="curtain-start-btn" type="button">
                   <svg viewBox="0 0 24 24" fill="currentColor">
                     <polygon points="6 4 20 12 6 20 6 4"></polygon>
                   </svg>
-                  <span id="startScreeningBtnText">开始同步放映</span>
+                  <span id="startScreeningBtnText">一起开始放映</span>
+                </button>
+
+                <p id="versionNotice" class="curtain-version-notice hidden" role="status"></p>
+
+                <div id="curtainOtherWays" class="curtain-other-ways hidden">
+                  <button id="otherWaysLink" class="curtain-other-link" type="button" aria-expanded="false">其他方式</button>
+                  <button id="guestQuickMatchBtn" class="curtain-quick-match-btn hidden" type="button">用我自己电脑里的同一部片</button>
+                </div>
+                <div class="version-tag curtain-version-tag" data-version-tag>v0.7 · 10-27</div>
+              </div>
+            </div>
+
+
+            <!-- 银幕全屏置灰居中暂停层（对方暂停 / 本机暂停放大居中提示） -->
+            <div id="screenPauseOverlay" class="screen-pause-overlay hidden" role="status" aria-live="polite">
+              <div class="pause-overlay-center">
+                <div class="pause-overlay-icon" id="pauseOverlayIcon">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="6" y="4" width="4.5" height="16" rx="1.5"></rect>
+                    <rect x="13.5" y="4" width="4.5" height="16" rx="1.5"></rect>
+                  </svg>
+                </div>
+                <div class="pause-overlay-title" id="pauseOverlayTitle">TA 暂停了放映</div>
+                <div class="pause-overlay-sub" id="pauseOverlaySub">00:00</div>
+                <button id="resumeFromPauseBtn" class="pause-overlay-resume-btn" type="button">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="7 5 19 12 7 19 7 5"></polygon>
+                  </svg>
+                  <span>继续放映</span>
                 </button>
               </div>
             </div>
 
-            <!-- 银幕顶部正中央：说话时浮现的极精致半透明毛玻璃胶囊 -->
+            <!-- 银幕顶部正中央：说话压音 & 对方暂停/拖进度/缓冲互等 SharePlay 灵动胶囊 -->
             <div id="duckingStatusToast" class="whisper-ducking-pill silent">
               <span class="gold-soundwave" id="voiceWaveBars">
                 <i></i><i></i><i></i><i></i>
               </span>
-              <span id="duckingToastText">正在轻声交谈 · 银幕音量已自动轻落至 25%</span>
+              <span id="toastActionBadge" class="toast-action-badge hidden">⏸</span>
+              <span id="duckingToastText"></span>
             </div>
           </div>
         </div>
 
         <!-- 双人包厢坐席（视频连麦窗）：
              手机竖屏在银幕下方左右并排 2 列；桌面横屏在右下角悬浮双席位毛玻璃小窗 -->
-        <div id="pipFloatingWindow" class="private-booth-seats" aria-label="双人包厢坐席">
+        <div id="pipFloatingWindow" class="private-booth-seats" aria-label="座位">
           <!-- 左席（伴侣 · TA） -->
           <div id="partnerSeatCard" class="booth-seat-card">
-            <img id="remotePortraitImg" src="/seat-ta.jpg" alt="伴侣包厢坐席" class="seat-portrait-img" />
+            <img id="remotePortraitImg" src="/seat-ta.jpg" alt="TA" class="seat-portrait-img" />
             <video id="remoteCamVideo" class="seat-live-video hidden" playsinline autoplay></video>
             <div class="seat-vignette-overlay" aria-hidden="true"></div>
             <div class="seat-bottom-label">
-              <span class="seat-tag-text" id="pipPeerLabel">TA · 等待凭码入座</span>
+              <span class="seat-tag-text hidden" id="pipPeerLabel"></span>
               <span class="gold-soundwave hidden" id="seatPartnerWave">
                 <i></i><i></i><i></i><i></i>
               </span>
@@ -186,12 +234,12 @@
 
           <!-- 右席（我） -->
           <div id="selfSeatCard" class="booth-seat-card">
-            <img id="localPortraitImg" src="/seat-me.jpg" alt="我的包厢坐席" class="seat-portrait-img" />
+            <img id="localPortraitImg" src="/seat-me.jpg" alt="我" class="seat-portrait-img" />
             <video id="localCamVideo" class="seat-live-video mirror hidden" playsinline autoplay muted></video>
             <div class="seat-vignette-overlay" aria-hidden="true"></div>
             <div class="seat-bottom-label">
-              <span class="seat-tag-text" id="localCamFacingTag">我 · 包厢已就绪</span>
-              <span class="seat-status-dot"></span>
+              <span class="seat-tag-text hidden" id="localCamFacingTag"></span>
+              <span class="seat-status-dot hidden"></span>
             </div>
           </div>
         </div>
@@ -207,7 +255,7 @@
             </svg>
           </button>
 
-          <!-- 极细香槟金进度条与 D-DIN 时间码 -->
+          <!-- 极细香槟金进度条、双人同频光标、D-DIN 时间码与直播式「实时同频」指示器 -->
           <div class="dock-timeline-group">
             <div class="dock-slider-wrap">
               <input
@@ -220,23 +268,54 @@
                 value="0"
                 aria-label="放映进度"
               />
+              <span id="timelineLoadEdge" class="timeline-load-edge hidden" aria-hidden="true"></span>
+              <span id="peerTimelineCursor" class="peer-timeline-cursor hidden" title="TA 的播放位置"></span>
+              <span id="timelineHoverTip" class="timeline-hover-tip hidden" role="tooltip">这段还在装入 · 拖过去会稍等一会儿</span>
             </div>
-            <span class="dock-timecode" id="timeReadout">00:00 / 00:08</span>
+            <span class="dock-timecode" id="timeReadout">00:00 / 00:00</span>
+            <button id="liveSyncBadge" class="live-sync-badge is-live" type="button" title="点击与 TA 的画面对齐">
+              <span class="live-sync-dot"></span>
+              <span id="liveSyncText">已同步</span>
+            </button>
           </div>
 
-          <!-- 右侧控制：说话自动压低音量开关、麦克风开关、换片按钮 -->
+          <!-- 右侧控制：麦克风开关、全屏按钮、换片按钮 -->
           <div class="dock-right-controls">
-            <button
-              id="duckToggleBtn"
-              class="dock-duck-switch is-on"
-              type="button"
-              role="switch"
-              aria-checked="true"
-              title="开启后，任意一方说话时电影音量自动压低至 25%"
-            >
-              <span class="duck-switch-dot"></span>
-              <span class="duck-switch-label" id="duckToggleLabel">说话压音 · 开</span>
-            </button>
+            <!-- 双路独立音量控制（影片声音 + TA 的声音） -->
+            <div class="dock-volume-mixer-wrap" id="volumeMixerWrap">
+              <button id="volumeMixerBtn" class="dock-icon-btn" type="button" title="调节影片声音与 TA 的声音" aria-label="调节影片声音与 TA 的声音">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                </svg>
+                <span id="volumeMixerDot" class="volume-mixer-dot hidden" aria-hidden="true"></span>
+              </button>
+              <div id="volumeMixerPopover" class="volume-mixer-popover hidden" role="dialog" aria-label="影片声音与 TA 的声音">
+                <div class="volume-mixer-row">
+                  <div class="volume-mixer-head">
+                    <span class="volume-mixer-label-group">
+                      <button id="movieMuteBtn" class="volume-mute-btn" type="button" aria-pressed="false" aria-label="静音影片声音（M）" title="静音影片声音（M）"></button>
+                      <span class="volume-mixer-label">影片声音</span>
+                    </span>
+                    <span class="volume-mixer-val" id="movieVolVal">100%</span>
+                  </div>
+                  <input type="range" id="movieVolumeSlider" class="volume-mixer-slider" min="0" max="100" step="1" value="100" aria-label="影片声音" />
+                </div>
+                <div class="volume-mixer-row">
+                  <div class="volume-mixer-head">
+                    <span class="volume-mixer-label-group">
+                      <button id="peerMuteBtn" class="volume-mute-btn" type="button" aria-pressed="false" aria-label="静音 TA 的声音（N）" title="静音 TA 的声音（N）"></button>
+                      <span class="volume-mixer-label">TA 的声音</span>
+                    </span>
+                    <span class="volume-mixer-val" id="peerVolVal">100%</span>
+                  </div>
+                  <input type="range" id="peerVolumeSlider" class="volume-mixer-slider" min="0" max="200" step="5" value="100" aria-label="TA 的声音" />
+                  <p id="peerMuteHint" class="volume-mixer-hint hidden" hidden aria-hidden="true"></p>
+                </div>
+                <div class="version-tag panel-version-line" data-version-tag>v0.7 · 10-27</div>
+              </div>
+            </div>
 
             <button id="toggleMicBtn" class="dock-icon-btn" type="button" title="麦克风开关">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -246,13 +325,52 @@
               </svg>
             </button>
 
-            <button id="switchFileBtn" class="dock-pill-btn" type="button" title="更换本地影片">
+            <button id="queueToggleBtn" class="dock-pill-btn queue-toggle-btn" type="button" title="本场待放映" aria-expanded="false" aria-controls="queuePanel">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                <path d="m10 9 5 3-5 3V9Z"></path>
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <circle cx="3.5" cy="6" r="1"></circle>
+                <circle cx="3.5" cy="12" r="1"></circle>
+                <circle cx="3.5" cy="18" r="1"></circle>
               </svg>
-              <span>换片</span>
+              <span>待放映</span>
+              <span id="queueBadge" class="queue-badge hidden">0</span>
             </button>
+
+            <button id="fullscreenBtn" class="dock-icon-btn" type="button" title="全屏（双击画面也可）" aria-label="全屏">
+              <svg id="fullscreenSvg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3"></path>
+                <path d="M21 8V5a2 2 0 0 0-2-2h-3"></path>
+                <path d="M3 16v3a2 2 0 0 0 2 2h3"></path>
+                <path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- 本场待放映：桌面右侧抽屉 / 手机底部抽屉 -->
+      <aside id="queuePanel" class="queue-panel hidden" role="dialog" aria-label="本场待放映">
+        <div class="queue-grab" id="queueGrab" aria-hidden="true"></div>
+        <div class="queue-head">
+          <h2 class="queue-title">本场待放映<span id="queueCount" class="queue-count">0 / 3</span></h2>
+          <button id="queueCloseBtn" class="queue-close" type="button" aria-label="收起">✕</button>
+        </div>
+        <div id="queueList" class="queue-list"></div>
+        <button id="queueAddBtn" class="queue-add" type="button">＋ 加入待放映</button>
+        <p id="queueCaption" class="queue-cap hidden"></p>
+        <div class="queue-foot">仅两人可见 · 离开 15 分钟后自动清除</div>
+        <input type="file" id="queueFileInput" accept="video/mp4,video/webm,video/quicktime,video/*,.mp4,.webm,.mov,.mkv" hidden />
+      </aside>
+
+      <!-- TA 想换片 -->
+      <div id="queueAsk" class="queue-ask-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="queueAskTitle">
+        <div class="queue-ask">
+          <p id="queueAskTitle">TA 想换成《》</p>
+          <small class="hidden" id="queueAskSub" hidden aria-hidden="true"></small>
+          <div class="queue-ask-btns">
+            <button id="queueAskLater" type="button" class="queue-ask-btn">等会儿</button>
+            <button id="queueAskOk" type="button" class="queue-ask-btn is-primary">好</button>
           </div>
         </div>
       </div>
@@ -265,32 +383,27 @@
           <span class="drawer-title">放映设置</span>
           <button id="closeSettingsDrawerBtn" class="drawer-close-btn" type="button">×</button>
         </div>
-
         <div class="drawer-item">
-          <span>说话自动压低电影音量</span>
-          <button id="drawerDuckSwitchBtn" class="drawer-toggle-pill is-on" type="button" role="switch" aria-checked="true">
+          <span>耳机模式</span>
+          <button id="drawerHeadphoneSwitchBtn" class="drawer-toggle-pill" type="button" role="switch" aria-checked="false">
             <span class="drawer-toggle-knob"></span>
           </button>
         </div>
         <div class="drawer-item">
-          <span>当前放映片源</span>
-          <span class="drawer-item-val" id="currentFileName">暮色山谷 · 试映短片</span>
+          <span>正在播放</span>
+          <span class="drawer-item-val" id="currentFileName">试看短片</span>
         </div>
         <div class="drawer-item">
-          <span>双人传输与同步</span>
-          <span class="drawer-item-val" id="p2pProgressText">等待伴侣入座</span>
+          <span>状态</span>
+          <span class="drawer-item-val" id="p2pProgressText">等 TA 进来</span>
         </div>
         <div class="drawer-item">
-          <span>银幕原声音量</span>
-          <span class="drawer-item-val" id="movieVolumeText">100% (说话时自动压至 25%)</span>
-        </div>
-        <div class="drawer-item">
-          <span>屏幕常亮保护</span>
+          <span>屏幕常亮</span>
           <span class="drawer-item-val" id="wakeLockText">已开启</span>
         </div>
         <div class="drawer-item">
-          <span>放映倍速</span>
-          <select id="playbackRateSelect" class="wx-guide-close" aria-label="放映倍速">
+          <span>播放倍速</span>
+          <select id="playbackRateSelect" class="wx-guide-close" aria-label="播放倍速">
             <option value="0.75">0.75x</option>
             <option value="1" selected>1.0x</option>
             <option value="1.25">1.25x</option>
@@ -300,19 +413,29 @@
         </div>
 
         <div class="drawer-actions">
-          <button id="flipCamBtn" class="drawer-action-btn" type="button">翻转前后镜头</button>
-          <button id="simulateSpeakBtn" class="drawer-action-btn" type="button">模拟说话压音测试</button>
-          <button id="leaveRoomBtn" class="drawer-action-btn" type="button" style="grid-column: span 2;">离开放映厅 · 返回入场页</button>
+          <button id="flipCamBtn" class="drawer-action-btn" type="button" style="grid-column: span 2;">切换前后摄像头</button>
+          <button id="leaveRoomBtn" class="drawer-action-btn" type="button" style="grid-column: span 2;">退出房间</button>
         </div>
+        <div class="version-tag panel-version-line" data-version-tag>v0.7 · 10-27</div>
       </div>
     </div>
 
     <!-- 底部克制合规与备案声明 -->
     <footer class="cinema-legal-footer">
-      仅提供浏览器端到端本地视频同步与连麦技术，不提供任何影视片源 · 栖于垄上（上海）网络科技有限公司 · <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">沪ICP备2026030604号</a>
+      仅供双人本地视频同步播放与语音互动，本站不提供任何影视内容 · 栖于垄上（上海）网络科技有限公司 · <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">沪ICP备2026030604号</a>
     </footer>
   </div>
 
-  <script src="/app.js"></script>
+  <div id="switchFilmConfirm" class="switch-film-confirm hidden" role="dialog" aria-modal="true" aria-labelledby="switchFilmConfirmTitle">
+      <div class="switch-film-card">
+        <p id="switchFilmConfirmTitle" class="switch-film-title">换了之后 TA 要重新装</p>
+        <div class="switch-film-actions">
+          <button id="switchFilmConfirmCancel" type="button" class="switch-film-btn is-ghost">继续当前这部</button>
+          <button id="switchFilmConfirmOk" type="button" class="switch-film-btn is-primary">换片</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/app.js?v=0.7"></script>
 </body>
 </html>
