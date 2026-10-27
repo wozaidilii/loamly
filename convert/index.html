@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="./logo.svg" type="image/svg+xml" />
   <title>文件转换</title>
-  <link rel="stylesheet" href="./css/app.css?v=20261027f" />
+  <link rel="stylesheet" href="./css/app.css?v=20261027h" />
 </head>
 <body>
   <div class="shell">
@@ -36,40 +36,39 @@
 
       <div class="tree" id="tree" aria-live="polite">
         <svg class="tree-svg" id="tree-svg" aria-hidden="true"></svg>
-        <div class="center-node" id="center-node">
+        <button type="button" class="center-node" id="center-node" aria-label="换文件">
           <span class="ext" id="center-ext">PNG</span>
           <span class="sub" id="center-sub"></span>
-        </div>
+        </button>
         <div id="targets"></div>
+        <div class="tree-controls" id="tree-controls">
+          <div class="quality-row" id="quality-row">
+            <label for="quality">质量</label>
+            <input type="range" id="quality" min="50" max="100" value="90" />
+            <span id="quality-val" class="quality-val">90</span>
+          </div>
+          <div class="range-row" id="range-row">
+            <label for="page-range">页码</label>
+            <input type="text" id="page-range" inputmode="numeric" placeholder="如 1-3,5" autocomplete="off" />
+          </div>
+          <button class="btn-change-file" type="button" id="btn-change-file">换文件</button>
+        </div>
       </div>
 
       <p class="hint" id="hint">文件不上传</p>
-
-      <div class="quality-row" id="quality-row">
-        <label for="quality">图片质量</label>
-        <input type="range" id="quality" min="50" max="100" value="90" />
-        <span id="quality-val" class="quality-val">90</span>
-      </div>
-
-      <div class="range-row" id="range-row">
-        <label for="page-range">页码</label>
-        <input type="text" id="page-range" inputmode="numeric" placeholder="如 1-3,5" autocomplete="off" />
-      </div>
-
-      <div class="tree-actions" id="tree-actions">
-        <button class="btn btn-text" type="button" id="btn-again">再转一个</button>
-      </div>
     </div>
 
+    <button class="btn-change-file mobile-change-file" type="button" id="btn-change-file-mobile" hidden>换文件</button>
+
     <footer class="footer">
-      <span id="footer-version">v0.3</span><span class="sep">·</span>基于开源项目 <a href="https://github.com/KnifeLemon/Filee" target="_blank" rel="noopener">Filee</a>（MIT）<span class="sep">·</span>栖于垄上（上海）网络科技有限公司<span class="sep">·</span><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">沪ICP备2026030604号</a>
+      <span id="footer-version">v0.3c</span><span class="sep">·</span>基于开源项目 <a href="https://github.com/KnifeLemon/Filee" target="_blank" rel="noopener">Filee</a>（MIT）<span class="sep">·</span>栖于垄上（上海）网络科技有限公司<span class="sep">·</span><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">沪ICP备2026030604号</a>
     </footer>
   </div>
 
-  <script src="./js/config.js?v=20261027f"></script>
+  <script src="./js/config.js?v=20261027h"></script>
   <script src="./vendor/jszip/jszip.min.js"></script>
   <script src="./vendor/pdf-lib/pdf-lib.min.js"></script>
   <script src="./vendor/heic2any/heic2any.min.js"></script>
-  <script type="module" src="./js/app.js?v=20261027f"></script>
+  <script type="module" src="./js/app.js?v=20261027h"></script>
 </body>
 </html>

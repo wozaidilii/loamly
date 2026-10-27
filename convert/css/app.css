@@ -395,7 +395,7 @@ body {
   justify-content: center;
 }
 
-.tree-actions.is-visible { display: flex; }
+.tree-actions.is-visible { display: none; }
 
 .footer {
   margin-top: 16px;
@@ -452,8 +452,8 @@ body {
     left: auto !important;
     top: auto !important;
     transform: none !important;
-    width: 240px;
-    max-width: 240px;
+    width: 100%;
+    max-width: none;
     height: 48px;
     min-height: 48px;
     border-radius: 999px;
@@ -684,7 +684,7 @@ body[data-shot="tree-hover"] .target-node[data-format="WEBP"].is-active-hover {
   width: 140px;
   height: 4px;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--earth) var(--q, 90%), var(--divider) var(--q, 90%));
+  background: linear-gradient(90deg, #3F6B4F var(--q, 90%), var(--divider) var(--q, 90%));
   outline: none;
 }
 .quality-row input[type="range"]::-webkit-slider-runnable-track {
@@ -699,7 +699,7 @@ body[data-shot="tree-hover"] .target-node[data-format="WEBP"].is-active-hover {
   height: 14px;
   margin-top: -5px;
   border-radius: 50%;
-  background: var(--earth);
+  background: #3F6B4F;
   border: none;
   cursor: pointer;
   box-shadow: 0 0 0 2px #fff;
@@ -712,13 +712,13 @@ body[data-shot="tree-hover"] .target-node[data-format="WEBP"].is-active-hover {
 .quality-row input[type="range"]::-moz-range-progress {
   height: 4px;
   border-radius: 999px;
-  background: var(--earth);
+  background: #3F6B4F;
 }
 .quality-row input[type="range"]::-moz-range-thumb {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--earth);
+  background: #3F6B4F;
   border: none;
   cursor: pointer;
 }
@@ -838,11 +838,11 @@ body[data-shot="tree-hover"] .target-node[data-format="WEBP"].is-active-hover {
   .tree.is-open.mobile-list .target-node.is-done .progress-label { display: none !important; }
   .tree.is-open.mobile-list .target-node.is-done .progress-ring { display: none !important; }
   .tree.is-open.mobile-list .target-node.is-done::after { display: none !important; }
-  .tree.is-open.mobile-list .target-node.is-converting.is-done {
-    background: var(--bg) !important;
-    border-color: var(--earth) !important;
+  /* v0.3c: never keep converting styles on a done node */
+  .tree.is-open.mobile-list .target-node.is-done {
+    background: #3F6B4F !important;
+    border-color: #3F6B4F !important;
   }
-  .tree.is-open.mobile-list .target-node.is-converting.is-done .download-label { display: none !important; }
 
 }
 
@@ -913,56 +913,277 @@ body[data-shot="tree-hover"] .target-node[data-format="WEBP"].is-active-hover {
 }
 
 
-/* === v0.3 regroup: desktop second ring + done === */
-.target-node.is-second {
-  width: 64px;
-  height: 64px;
-  margin-left: -32px;
-  margin-top: -32px;
-  font-size: 13px;
-  z-index: 3;
+/* === v0.3c: stay-in-tree results, 换文件, second-layer down, mobile pills === */
+
+.center-node {
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  font: inherit;
+  padding: 0;
 }
-.target-node.is-second .progress-ring { width: 64px; height: 64px; }
+.center-node:hover {
+  border-color: var(--moss);
+  box-shadow: 0 0 0 1px rgba(63, 107, 79, 0.15);
+}
+
+.tree-controls {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + (var(--center-size) / 2) + 16px);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 4;
+  width: max-content;
+  max-width: 90%;
+}
+.tree-controls.has-quality {
+  top: calc(50% + (var(--center-size) / 2) + 24px);
+}
+.tree-controls .quality-row {
+  margin-top: 0;
+  height: auto;
+  visibility: hidden;
+  pointer-events: none;
+}
+.tree-controls .quality-row.is-visible {
+  visibility: visible;
+  pointer-events: auto;
+}
+.tree-controls .quality-row label {
+  color: var(--text);
+  font-size: 13px;
+}
+.tree-controls .quality-val {
+  color: #3F6B4F;
+  font-family: var(--font-num);
+  font-weight: 600;
+  min-width: 1.5em;
+}
+.tree-controls .range-row {
+  margin-top: 0;
+  visibility: hidden;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tree-controls .range-row.is-visible {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.btn-change-file {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 36px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid #3F6B4F;
+  background: transparent;
+  color: #3F6B4F;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background var(--motion);
+  white-space: nowrap;
+}
+.btn-change-file:hover {
+  background: rgba(63, 107, 79, 0.08);
+}
+
+/* Second layer: 52px, expand down, full opacity */
+.target-node.is-second {
+  width: 52px;
+  height: 52px;
+  margin-left: 0;
+  margin-top: 0;
+  font-size: 13px;
+  z-index: 5;
+}
+.target-node.is-second .ext {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 1;
+  color: var(--text);
+}
+.target-node.is-second .progress-ring {
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+}
 .target-node.is-second-hidden {
-  opacity: 0;
+  opacity: 0 !important;
   pointer-events: none;
   transform: translate(-50%, -50%) scale(0.6);
 }
-.tree-line-second { opacity: 0; stroke-width: 1.5; }
-.tree-line-second.is-second-visible { opacity: 0.55; }
-.target-node.is-group .ext { letter-spacing: 0.06em; }
+.tree.group-open .target-node.is-second:not(.is-second-hidden) {
+  opacity: 1 !important;
+  transform: translate(-50%, -50%) scale(1) !important;
+  transition: opacity 150ms ease-out, transform 150ms ease-out;
+  pointer-events: auto;
+  width: 52px !important;
+  height: 52px !important;
+}
+.tree-line-second {
+  opacity: 0;
+  stroke-width: 1.5;
+}
+.tree-line-second.is-second-visible {
+  opacity: 0.55;
+}
 
-/* Done: solid moss fill, white text */
+/* Done: solid moss, two-line download + format — REPLACES exclusive fade */
 .target-node.is-done:not(.is-status) {
   background: #3F6B4F !important;
   border-color: #3F6B4F !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+.target-node.is-done:not(.is-status) .ext { display: none !important; }
+.target-node.is-done:not(.is-status) .download-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  line-height: 1.15;
 }
 .target-node.is-done:not(.is-status) .download-label {
+  display: block !important;
   color: #fff !important;
   font-size: 15px !important;
   font-weight: 600 !important;
 }
-.target-node.is-done:not(.is-status) .ext { display: none; }
+.target-node.is-done:not(.is-status) .download-fmt {
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-family: var(--font-num);
+}
+.target-node .download-stack { display: none; }
+.target-node .retry-label {
+  display: none;
+  color: #B5523B;
+  font-size: 14px;
+  font-weight: 600;
+}
+.target-node.is-error {
+  border-color: #B5523B !important;
+  background: var(--bg) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+.target-node.is-error .ext { display: none !important; }
+.target-node.is-error .download-stack { display: none !important; }
+.target-node.is-error .retry-label { display: block; }
+.target-node.is-status .download-stack { display: flex; flex-direction: column; }
+.target-node.is-status .download-label {
+  display: block !important;
+  color: var(--text-secondary) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  text-align: center;
+  max-width: 72px;
+  line-height: 1.25;
+  white-space: normal;
+}
 .tree.is-open .tree-line.is-done-active {
   stroke: #3F6B4F;
   opacity: 0.4;
 }
+/* Other lines stay after convert — kill permanent fade on siblings */
+.target-node.is-faded:not(.is-converting) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Drag overlay while tree open */
+body.is-file-drag .drop {
+  /* keep drop hidden under tree; use stage overlay */
+}
+body.is-file-drag::after {
+  content: "松开以替换文件";
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 248, 244, 0.82);
+  color: #3F6B4F;
+  font-size: 18px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.mobile-change-file {
+  display: none;
+}
 
 @media (max-width: 640px) {
+  .tree-controls {
+    display: none; /* desktop controls; mobile uses bottom bar */
+  }
+  .mobile-change-file {
+    display: block;
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    z-index: 50;
+    width: auto;
+    height: 36px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid #3F6B4F;
+    background: #fff;
+    color: #3F6B4F;
+    font-size: 14px;
+    font-family: var(--font-sans);
+    text-align: center;
+    line-height: 34px;
+    box-sizing: border-box;
+  }
+  .mobile-change-file:hover {
+    background: rgba(63, 107, 79, 0.08);
+  }
+  body.tree-open-mobile .shell {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  }
+  body.tree-open-mobile .footer {
+    margin-bottom: 8px;
+  }
+
+  .tree.is-open.mobile-list {
+    align-items: stretch !important;
+  }
+  .tree.is-open.mobile-list #targets {
+    width: 100%;
+    align-self: stretch;
+  }
   .mobile-grids {
     position: relative;
-    width: 100%;
+    width: 100% !important;
+    max-width: none !important;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding: 8px 4px 12px;
+    padding: 8px 0 12px;
     z-index: 2;
+    box-sizing: border-box;
+    align-self: stretch;
   }
   .pill-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100% !important;
+    box-sizing: border-box;
   }
   .mobile-divider {
     height: 1px;
@@ -971,7 +1192,21 @@ body[data-shot="tree-hover"] .target-node[data-format="WEBP"].is-active-hover {
     border: 0;
     width: 100%;
   }
-  /* Override one-per-row list for pill grid children */
+  .tree.is-open.mobile-list {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding-bottom: 8px;
+  }
+  .tree.is-open.mobile-list .center-node {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    margin: 0 auto 16px;
+    width: 120px;
+    height: 120px;
+  }
   .tree.is-open.mobile-list .mobile-grids .target-node {
     position: relative !important;
     left: auto !important;
@@ -980,40 +1215,11 @@ body[data-shot="tree-hover"] .target-node[data-format="WEBP"].is-active-hover {
     height: 48px !important;
     margin: 0 !important;
     transform: none !important;
-    border-radius: 999px;
+    border-radius: 24px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    text-align: center !important;
-  }
-  .tree.is-open.mobile-list .mobile-grids .target-node .ext,
-  .tree.is-open.mobile-list .mobile-grids .target-node .download-label,
-  .tree.is-open.mobile-list .mobile-grids .target-node .progress-label {
-    position: static !important;
-    left: auto !important;
-    right: auto !important;
-    top: auto !important;
-    transform: none !important;
-    width: auto !important;
-    margin: 0 !important;
-    text-align: center !important;
-  }
-  .tree.is-open.mobile-list .mobile-grids .target-node:not(.is-converting):not(.is-done) .download-label,
-  .tree.is-open.mobile-list .mobile-grids .target-node:not(.is-converting):not(.is-done) .progress-label {
-    display: none !important;
-  }
-  .tree.is-open.mobile-list .mobile-grids .target-node.is-converting .progress-label {
-    position: absolute !important;
-    right: 16px !important;
-    left: auto !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-  }
-  .tree.is-open.mobile-list .mobile-grids .target-node.is-converting .ext {
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    opacity: 1 !important;
   }
   .tree.is-open.mobile-list .mobile-grids .target-node::before,
   .tree.is-open.mobile-list .mobile-grids .target-node::after {
@@ -1023,14 +1229,108 @@ body[data-shot="tree-hover"] .target-node[data-format="WEBP"].is-active-hover {
     display: none;
   }
   .tree.is-open.mobile-list .mobile-grids .target-node .ext {
+    position: static !important;
+    transform: none !important;
     font-size: 14px;
   }
-  .tree.is-open.mobile-list .mobile-grids .target-node.is-done {
+  .tree.is-open.mobile-list .mobile-grids .target-node.is-done:not(.is-status) {
     background: #3F6B4F !important;
+    border-color: #3F6B4F !important;
+  }
+  .tree.is-open.mobile-list .mobile-grids .target-node.is-done .download-stack {
+    display: flex !important;
+    flex-direction: row;
+    gap: 6px;
   }
   .tree.is-open.mobile-list .mobile-grids .target-node.is-done .download-label {
     color: #fff !important;
     font-size: 15px !important;
     font-weight: 600 !important;
   }
+  .tree.is-open.mobile-list .mobile-grids .target-node.is-done .download-fmt {
+    display: none !important;
+  }
+  .tree.is-open.mobile-list .mobile-grids .target-node.is-converting .progress-label {
+    position: absolute !important;
+    right: 16px !important;
+    left: auto !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    opacity: 1;
+  }
+  .tree.is-open.mobile-list .mobile-grids .target-node.is-error .retry-label {
+    display: block;
+    color: #B5523B;
+  }
 }
+
+
+/* v0.3c done: solid snap, never pale */
+.target-node.is-done,
+.target-node.is-done:not(.is-status) {
+  background: #3F6B4F !important;
+  border-color: #3F6B4F !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transition: none !important;
+  box-shadow: none !important;
+}
+.target-node.is-done.is-faded,
+.target-node.is-done.is-hover,
+.target-node.is-done.is-converting {
+  background: #3F6B4F !important;
+  border-color: #3F6B4F !important;
+  opacity: 1 !important;
+  transform: translate(-50%, -50%) scale(1) !important;
+}
+.target-node.is-done:not(.is-status) .download-stack {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+.target-node.is-done:not(.is-status) .download-label {
+  display: block !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  opacity: 1 !important;
+}
+.target-node.is-done:not(.is-status) .download-fmt {
+  display: block !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  opacity: 1 !important;
+  font-family: var(--font-num);
+}
+.target-node.is-done .ext { display: none !important; }
+.target-node.is-done .progress-label,
+.target-node.is-done .progress-ring,
+.target-node.is-done .retry-label { display: none !important; opacity: 0 !important; }
+
+/* Second layer hard size */
+.target-node.is-second {
+  width: 52px !important;
+  height: 52px !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+}
+.target-node.is-second .ext {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  opacity: 1 !important;
+  color: var(--text) !important;
+}
+.tree.group-open .target-node.is-second:not(.is-second-hidden) {
+  opacity: 1 !important;
+  width: 52px !important;
+  height: 52px !important;
+  transform: translate(-50%, -50%) scale(1) !important;
+  transition: opacity 150ms ease-out, transform 150ms ease-out;
+}
+
+/* Quality label moss value already; ensure label readable */
+.tree-controls .quality-row label { color: var(--text); }
+.tree-controls .quality-val { color: #3F6B4F !important; }

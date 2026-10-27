@@ -2,20 +2,20 @@ import {
   convertImage, imagesToPdf, convertPdf, mergePdfs, convertAV,
   classify, treePlanAsync, downloadBlob,
   labelFor, needsQuality, needsRange,
-} from './converters.js?v=20261027d';
+} from './converters.js?v=20261027h';
 
 const cfg = window.LOAMLY_CONVERT || {
   name: '文件转换',
   title: '文件转换',
   tagline: '图片、PDF 格式转换，在浏览器里完成，文件不上传。',
   tags: ['免费使用'],
-  version: '0.3',
+  version: '0.3c',
 };
 document.title = cfg.title || cfg.name || '文件转换';
 const brand = document.getElementById('brand-name');
 if (brand) brand.textContent = cfg.name;
 const verEl = document.getElementById('footer-version');
-if (verEl) verEl.textContent = `v${cfg.version || '0.3'}`;
+if (verEl) verEl.textContent = `v${cfg.version || '0.3c'}`;
 const taglineEl = document.getElementById('hero-tagline');
 if (taglineEl && cfg.tagline) taglineEl.textContent = cfg.tagline;
 const tagsEl = document.getElementById('hero-tags');
@@ -31,19 +31,21 @@ const drop = $('#drop');
 const fileInput = $('#file-input');
 const tree = $('#tree');
 const treeSvg = $('#tree-svg');
+const centerNode = $('#center-node');
 const centerExt = $('#center-ext');
 const centerSub = $('#center-sub');
 const targetsEl = $('#targets');
 const hint = $('#hint');
 const idleHero = $('#idle-hero');
-const actions = $('#tree-actions');
-const btnAgain = $('#btn-again');
 const dropError = $('#drop-error');
 const qualityRow = $('#quality-row');
 const qualityInput = $('#quality');
 const qualityVal = $('#quality-val');
 const rangeRow = $('#range-row');
 const rangeInput = $('#page-range');
+const btnChange = $('#btn-change-file');
+const btnChangeMobile = $('#btn-change-file-mobile');
+const treeControls = $('#tree-controls');
 
 const isMobile = () => window.matchMedia('(max-width: 640px)').matches;
 const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -53,17 +55,22 @@ const MSG_MULTI = '这几个文件没有共同可转的格式';
 const MSG_FAIL = '转换失败，再试一次';
 const MSG_TOO_LARGE = '文件太大';
 
+const SECOND_ANGLES = [100, 130, 160, 190]; // 0°=right, clockwise
+const SECOND_R_PX = 110;
+const SECOND_D_PX = 52;
+
 let files = [];
-let plan = null; // { ring, group }
-let targets = []; // flat keys for lookups
+let plan = null;
+let targets = [];
 let converting = false;
-let lastResult = null;
 let activeTarget = null;
 let convertGen = 0;
 let qualityTimer = null;
 let groupHoverTimer = null;
 let groupCollapseTimer = null;
 let groupExpanded = false;
+/** @type {Map<string, {blob?: Blob, filename?: string, url?: string, skipped?: boolean, status?: string, error?: boolean}>} */
+const results = new Map();
 
 function syncQualityFill() {
   const v = Number(qualityInput?.value || 90);
@@ -98,7 +105,16 @@ function formatSize(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-/** ~200° arc above centre, left → right; no node below horizontal midline. */
+function clearResults() {
+  for (const r of results.values()) {
+    if (r?.url) {
+      try { URL.revokeObjectURL(r.url); } catch {}
+    }
+  }
+  results.clear();
+}
+
+/** ~180° arc above centre, left → right; endpoints on horizontal midline. */
 function layoutArc(n, r = 41, startDeg = -180, endDeg = 0) {
   const cx = 50;
   const cy = 50;
@@ -111,45 +127,54 @@ function layoutArc(n, r = 41, startDeg = -180, endDeg = 0) {
   });
 }
 
-/** Second-layer arc around parent, 12° apart. */
-function layoutSecondArc(parentPos, n, r = 18) {
-  if (n <= 0) return [];
-  const cx = parentPos.x;
-  const cy = parentPos.y;
-  // outward = away from center (50,50)
-  const ang = Math.atan2(cy - 50, cx - 50);
-  const span = ((n - 1) * 12 * Math.PI) / 180;
-  const start = ang - span / 2;
-  return Array.from({ length: n }, (_, i) => {
-    const a = start + (i * 12 * Math.PI) / 180;
+/** Second layer: downward from parent.
+ * Angles 100/130/160/190° (0°=+x right, clockwise). Centres exactly SECOND_R_PX from parent.
+ * Returns pixel centres relative to .tree, plus % for lines.
+ */
+function layoutSecondDown(parentPos, n) {
+  const tw = tree.clientWidth || 640;
+  const th = tree.clientHeight || 620;
+  const px = (parentPos.x / 100) * tw;
+  const py = (parentPos.y / 100) * th;
+  return SECOND_ANGLES.slice(0, n).map((deg) => {
+    const rad = (deg * Math.PI) / 180;
+    const cx = px + SECOND_R_PX * Math.cos(rad);
+    const cy = py + SECOND_R_PX * Math.sin(rad);
     return {
-      x: cx + r * Math.cos(a),
-      y: cy + r * Math.sin(a),
+      x: (cx / tw) * 100,
+      y: (cy / th) * 100,
+      leftPx: cx,
+      topPx: cy,
     };
   });
 }
 
 function setQualityVisible(on) {
   qualityRow?.classList.toggle('is-visible', !!on);
+  treeControls?.classList.toggle('has-quality', !!on);
 }
 function setRangeVisible(on) {
   rangeRow?.classList.toggle('is-visible', !!on);
+  treeControls?.classList.toggle('has-range', !!on);
+}
+
+function openPicker() {
+  fileInput.click();
 }
 
 function showIdle() {
   converting = false;
-  lastResult = null;
   activeTarget = null;
   convertGen++;
   clearTimeout(qualityTimer);
   clearTimeout(groupHoverTimer);
   clearTimeout(groupCollapseTimer);
   groupExpanded = false;
+  clearResults();
   drop.classList.remove('hidden', 'is-dragover');
   idleHero?.classList.remove('hidden');
-  tree.classList.remove('is-open', 'mobile-list');
+  tree.classList.remove('is-open', 'mobile-list', 'group-open');
   hint.classList.remove('hidden');
-  actions.classList.remove('is-visible');
   setQualityVisible(false);
   setRangeVisible(false);
   dropError.hidden = true;
@@ -159,6 +184,8 @@ function showIdle() {
   files = [];
   plan = null;
   targets = [];
+  if (btnChangeMobile) btnChangeMobile.hidden = true;
+  document.body.classList.remove('tree-open-mobile');
 }
 
 function showDropMessage(msg) {
@@ -175,6 +202,7 @@ function showDropMessage(msg) {
 }
 
 async function openTree(fileList) {
+  clearResults();
   files = fileList;
   plan = await treePlanAsync(fileList);
   targets = plan
@@ -186,6 +214,8 @@ async function openTree(fileList) {
   dropError.hidden = true;
   tree.classList.add('is-open');
   tree.classList.toggle('mobile-list', isMobile());
+  document.body.classList.toggle('tree-open-mobile', isMobile());
+  if (btnChangeMobile) btnChangeMobile.hidden = !isMobile();
 
   if (fileList.length === 1) {
     const ext = fileList[0].name.split('.').pop()?.toUpperCase() || 'FILE';
@@ -202,25 +232,28 @@ async function openTree(fileList) {
   setQualityVisible(false);
   setRangeVisible(false);
   groupExpanded = false;
-  renderTargets();
-  actions.classList.remove('is-visible');
   converting = false;
-  lastResult = null;
   activeTarget = null;
+  renderTargets();
+}
+
+function formatLabel(key) {
+  return labelFor(key);
 }
 
 function makeNode(key, pos, opts = {}) {
-  const label = opts.label || labelFor(key);
+  const label = opts.label || formatLabel(key);
   const node = document.createElement('button');
   node.type = 'button';
-  node.className = 'target-node' + (opts.group ? ' is-group' : '') + (opts.second ? ' is-second' : '');
+  node.className = 'target-node'
+    + (opts.group ? ' is-group' : '')
+    + (opts.second ? ' is-second' : '');
   node.dataset.format = key;
   if (opts.second) node.dataset.layer = 'second';
   node.style.left = `${pos.x}%`;
   node.style.top = `${pos.y}%`;
-  if (opts.second) node.style.setProperty('--scale', '0.8');
   node.style.transitionDelay = reduceMotion() ? '0ms' : `${(opts.i || 0) * 30}ms`;
-  const r = 36;
+  const r = opts.second ? 24 : 36;
   node.innerHTML = `
     <svg class="progress-ring" viewBox="0 0 80 80" aria-hidden="true">
       <circle class="track" cx="40" cy="40" r="${r}"></circle>
@@ -229,7 +262,11 @@ function makeNode(key, pos, opts = {}) {
         stroke-dashoffset="${2 * Math.PI * r}"></circle>
     </svg>
     <span class="ext">${label}</span>
-    <span class="download-label">下载</span>
+    <span class="download-stack" aria-hidden="true">
+      <span class="download-label">下载</span>
+      <span class="download-fmt">${label}</span>
+    </span>
+    <span class="retry-label">重试</span>
     <span class="progress-label">转换中 · 0%</span>
   `;
   return node;
@@ -247,15 +284,54 @@ function addLine(fmt, x1, y1, x2, y2, cls = '') {
   return line;
 }
 
+function applyResultState(node, key) {
+  const r = results.get(key);
+  node.classList.remove('is-done', 'is-status', 'is-error', 'is-converting');
+  if (!r) return;
+  if (r.error) {
+    node.classList.add('is-error');
+    return;
+  }
+  node.classList.add('is-done');
+  if (r.skipped) {
+    node.classList.add('is-status');
+    const dl = $('.download-label', node);
+    if (dl) dl.textContent = r.status || '已经很小，不用再压缩';
+    const fmtEl = $('.download-fmt', node);
+    if (fmtEl) fmtEl.style.display = 'none';
+  } else {
+    const dl = $('.download-label', node);
+    if (dl) dl.textContent = '下载';
+    const fmtEl = $('.download-fmt', node);
+    if (fmtEl) {
+      fmtEl.style.display = '';
+      fmtEl.textContent = formatLabel(key);
+    }
+  }
+  // mobile single-line
+  if (isMobile()) {
+    const dl = $('.download-label', node);
+    if (dl && !r.skipped) dl.textContent = `下载 ${formatLabel(key)}`;
+    const fmtEl = $('.download-fmt', node);
+    if (fmtEl) fmtEl.style.display = 'none';
+  }
+}
+
 function bindLeaf(node, key) {
   node.addEventListener('pointerenter', () => setHover(key, true));
   node.addEventListener('pointerleave', () => setHover(key, false));
   node.addEventListener('click', () => {
-    if (converting && !node.classList.contains('is-done')) return;
-    if (node.classList.contains('is-done') && lastResult && activeTarget === key) {
-      if (lastResult.blob) downloadBlob(lastResult.blob, lastResult.filename);
+    const r = results.get(key);
+    if (r?.error) {
+      startConvert(key);
       return;
     }
+    if (r && !r.error && r.blob) {
+      downloadBlob(r.blob, r.filename);
+      return;
+    }
+    if (r?.skipped) return;
+    if (converting) return;
     startConvert(key);
   });
 }
@@ -284,7 +360,7 @@ function renderTargets() {
     const node = makeNode(isGroup ? plan.group.key : key, pos, {
       i,
       group: isGroup,
-      label: isGroup ? plan.group.label : labelFor(key),
+      label: isGroup ? plan.group.label : formatLabel(key),
     });
     if (isGroup) {
       node.addEventListener('pointerenter', () => scheduleExpand());
@@ -295,6 +371,7 @@ function renderTargets() {
       });
     } else {
       bindLeaf(node, key);
+      applyResultState(node, key);
     }
     targetsEl.appendChild(node);
     requestAnimationFrame(() => {
@@ -302,15 +379,18 @@ function renderTargets() {
     });
   });
 
-  // Second layer (hidden until expand)
   if (plan.group) {
     const parentPos = posByKey[plan.group.key];
     const kids = plan.group.children;
-    const secondPos = layoutSecondArc(parentPos, kids.length);
+    const secondPos = layoutSecondDown(parentPos, kids.length);
     kids.forEach((key, i) => {
       const pos = secondPos[i];
       addLine(key, parentPos.x, parentPos.y, pos.x, pos.y, 'tree-line-second');
       const node = makeNode(key, pos, { i, second: true });
+      node.style.left = `${pos.leftPx}px`;
+      node.style.top = `${pos.topPx}px`;
+      node.style.width = `${SECOND_D_PX}px`;
+      node.style.height = `${SECOND_D_PX}px`;
       node.classList.add('is-second-hidden');
       node.addEventListener('pointerenter', () => {
         clearTimeout(groupCollapseTimer);
@@ -321,13 +401,14 @@ function renderTargets() {
         scheduleCollapse();
       });
       node.addEventListener('click', () => {
-        if (converting && !node.classList.contains('is-done')) return;
-        if (node.classList.contains('is-done') && lastResult && activeTarget === key) {
-          if (lastResult.blob) downloadBlob(lastResult.blob, lastResult.filename);
-          return;
-        }
+        const r = results.get(key);
+        if (r?.error) { startConvert(key); return; }
+        if (r && !r.error && r.blob) { downloadBlob(r.blob, r.filename); return; }
+        if (r?.skipped) return;
+        if (converting) return;
         startConvert(key);
       });
+      applyResultState(node, key);
       targetsEl.appendChild(node);
     });
   }
@@ -347,6 +428,7 @@ function renderMobile() {
     node.style.left = '';
     node.style.top = '';
     bindLeaf(node, key);
+    applyResultState(node, key);
     fmtGrid.appendChild(node);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => node.classList.add('is-shown'));
@@ -365,6 +447,7 @@ function renderMobile() {
       node.style.left = '';
       node.style.top = '';
       bindLeaf(node, key);
+      applyResultState(node, key);
       opGrid.appendChild(node);
       requestAnimationFrame(() => {
         requestAnimationFrame(() => node.classList.add('is-shown'));
@@ -385,6 +468,11 @@ function scheduleExpand() {
 function scheduleCollapse() {
   clearTimeout(groupHoverTimer);
   clearTimeout(groupCollapseTimer);
+  // Keep open if a second-layer result exists or converting a child
+  const keep =
+    converting && plan?.group?.children?.includes(activeTarget)
+    || plan?.group?.children?.some((k) => results.has(k));
+  if (keep) return;
   groupCollapseTimer = setTimeout(() => expandGroup(false), 300);
 }
 
@@ -393,7 +481,7 @@ function expandGroup(on) {
   tree.classList.toggle('group-open', groupExpanded);
   $$('.target-node.is-second').forEach((n) => {
     n.classList.toggle('is-second-hidden', !groupExpanded);
-    n.classList.toggle('is-shown', groupExpanded);
+    if (groupExpanded) n.classList.add('is-shown');
   });
   $$('.tree-line-second').forEach((l) => {
     l.classList.toggle('is-second-visible', groupExpanded);
@@ -401,7 +489,9 @@ function expandGroup(on) {
 }
 
 function setHover(fmt, on) {
-  if (converting) return;
+  if (converting && fmt !== activeTarget) {
+    // still allow hover highlight on idle nodes
+  }
   $$('.target-node').forEach((n) => {
     n.classList.toggle('is-hover', on && n.dataset.format === fmt);
   });
@@ -411,12 +501,13 @@ function setHover(fmt, on) {
 }
 
 function setProgress(fmt, pct) {
-  const circumference = 2 * Math.PI * 36;
   const node = $(`.target-node[data-format="${fmt}"]`);
   if (!node) return;
   const fill = $('.fill', node);
   const label = $('.progress-label', node);
   const p = Math.max(0, Math.min(100, Math.round(pct)));
+  const r = node.classList.contains('is-second') ? 24 : 36;
+  const circumference = 2 * Math.PI * r;
   if (fill) fill.style.strokeDashoffset = String(circumference * (1 - p / 100));
   if (label) label.textContent = isMobile() ? `${p}%` : `转换中 · ${p}%`;
   node.dataset.progress = String(p);
@@ -431,9 +522,19 @@ async function convertOne(file, target, quality, onProgress, opts = {}) {
   throw new Error(MSG_FAIL);
 }
 
+function storeResult(fmt, result) {
+  const prev = results.get(fmt);
+  if (prev?.url) {
+    try { URL.revokeObjectURL(prev.url); } catch {}
+  }
+  const entry = { ...result };
+  if (result?.blob) entry.url = URL.createObjectURL(result.blob);
+  results.set(fmt, entry);
+}
+
 async function startConvert(fmt, opts = {}) {
   if (!targets.includes(fmt) && !(plan?.group && plan.group.key === fmt)) return;
-  if (plan?.group && fmt === plan.group.key) return; // group hub not convertible
+  if (plan?.group && fmt === plan.group.key) return;
   if (converting && !opts.fromQuality && !opts.fromRange) return;
 
   if (fmt === 'extract' && !opts.fromRange && !opts.fromQuality) {
@@ -442,33 +543,42 @@ async function startConvert(fmt, opts = {}) {
     setQualityVisible(false);
     if (!rangeInput.value.trim()) rangeInput.value = '1';
     rangeInput.focus();
+    // wait for Enter / explicit fromRange — still kick off if already has value from prior
   }
 
   const myGen = ++convertGen;
   converting = true;
   activeTarget = fmt;
-  lastResult = null;
+
+  // clear prior result for this fmt only
+  if (results.has(fmt)) {
+    const prev = results.get(fmt);
+    if (prev?.url) { try { URL.revokeObjectURL(prev.url); } catch {} }
+    results.delete(fmt);
+  }
+
   setQualityVisible(needsQuality(fmt));
   setRangeVisible(needsRange(fmt));
 
-  // If second-layer target, keep group open
   if (plan?.group?.children?.includes(fmt)) expandGroup(true);
 
   $$('.target-node').forEach((n) => {
     const match = n.dataset.format === fmt;
     n.classList.toggle('is-converting', match);
-    n.classList.toggle('is-faded', !match && !n.classList.contains('is-group'));
-    n.classList.remove('is-hover', 'is-done', 'is-status');
-    const dl = $('.download-label', n);
-    if (dl) dl.textContent = '下载';
+    // Do NOT fade other nodes permanently; only dim during convert for non-done
+    if (match) {
+      n.classList.remove('is-done', 'is-status', 'is-error', 'is-hover');
+    } else {
+      n.classList.remove('is-faded');
+    }
   });
+  // Lines stay: only highlight active, don't fade others away
   $$('.tree-line').forEach((l) => {
     const match = l.dataset.format === fmt;
     l.classList.toggle('is-active', match);
-    l.classList.toggle('is-faded', !match);
+    l.classList.remove('is-faded');
   });
   setProgress(fmt, 0);
-  actions.classList.remove('is-visible');
 
   const quality = Number(qualityInput?.value || 90) / 100;
   const rangeText = rangeInput?.value || '';
@@ -509,46 +619,57 @@ async function startConvert(fmt, opts = {}) {
       throw new Error(MSG_FAIL);
     }
     if (myGen !== convertGen) return;
-    lastResult = result;
+    storeResult(fmt, result);
     finishConvert(fmt, result);
   } catch (err) {
     if (myGen !== convertGen) return;
     console.error(err);
     converting = false;
-    activeTarget = null;
-    setQualityVisible(false);
-    setRangeVisible(false);
-    $$('.target-node').forEach((n) => n.classList.remove('is-converting', 'is-faded', 'is-done', 'is-status'));
-    $$('.tree-line').forEach((l) => l.classList.remove('is-active', 'is-faded'));
     let msg = MSG_FAIL;
     if (err?.code === 'TOO_LARGE' || err?.message === '文件太大') msg = MSG_TOO_LARGE;
     else if (err?.code === 'RANGE_FORMAT' || /页码格式不对/.test(err?.message || '')) msg = err.message;
     else if (err?.code === 'RANGE_MISSING' || /没有第/.test(err?.message || '')) msg = err.message;
-    showIdle();
-    showDropMessage(msg);
+
+    // Stay in tree: mark node as error/retry (except range/size messages shown as drop toast when idle)
+    if (err?.code === 'RANGE_FORMAT' || err?.code === 'RANGE_MISSING') {
+      showDropMessage(msg);
+      const node = $(`.target-node[data-format="${fmt}"]`);
+      node?.classList.remove('is-converting');
+      $$('.tree-line').forEach((l) => l.classList.remove('is-active'));
+      return;
+    }
+
+    results.set(fmt, { error: true, message: msg });
+    const node = $(`.target-node[data-format="${fmt}"]`);
+    if (node) {
+      node.classList.remove('is-converting', 'is-done', 'is-status');
+      node.classList.add('is-error');
+    }
+    $$('.tree-line').forEach((l) => l.classList.remove('is-active'));
   }
 }
 
 function finishConvert(fmt, result) {
   const node = $(`.target-node[data-format="${fmt}"]`);
   if (!node) return;
-  node.classList.remove('is-converting');
-  node.classList.add('is-done');
+  node.classList.remove('is-converting', 'is-error', 'is-faded', 'is-hover');
+  // Snap to done colors (no mid-transition pale green)
+  node.style.transition = 'none';
+  applyResultState(node, fmt);
+  requestAnimationFrame(() => { node.style.transition = ''; });
   delete node.dataset.progress;
   const label = $('.progress-label', node);
   if (label) label.textContent = '';
-  const dl = $('.download-label', node);
-  if (result && result.skipped) {
-    node.classList.add('is-status');
-    if (dl) dl.textContent = result.status || '已经很小，不用再压缩';
-  } else if (dl) {
-    dl.textContent = '下载';
-  }
   setProgress(fmt, 100);
   const line = document.querySelector(`.tree-line[data-format="${fmt}"]`);
   if (line) line.classList.add('is-done-active');
-  actions.classList.add('is-visible');
+  // Keep other lines visible (no fade wipe)
+  $$('.tree-line').forEach((l) => {
+    l.classList.remove('is-faded');
+    if (l.dataset.format !== fmt) l.classList.remove('is-active');
+  });
   converting = false;
+  // Keep quality visible for lossy so user can tweak & re-convert
   setQualityVisible(needsQuality(fmt));
   setRangeVisible(needsRange(fmt));
 }
@@ -558,19 +679,25 @@ async function ingestFiles(fileList) {
   if (!list.length) return;
   const p = await treePlanAsync(list);
   if (!p || (!p.ring.length && !p.group)) {
-    if (tree.classList.contains('is-open')) showIdle();
+    if (tree.classList.contains('is-open')) {
+      // keep tree; just toast
+      showDropMessage(list.length > 1 ? MSG_MULTI : MSG_SINGLE);
+      return;
+    }
     showDropMessage(list.length > 1 ? MSG_MULTI : MSG_SINGLE);
     return;
   }
   await openTree(list);
 }
 
-$('#btn-pick').addEventListener('click', () => fileInput.click());
+$('#btn-pick').addEventListener('click', () => openPicker());
 fileInput.addEventListener('change', () => {
   ingestFiles(fileInput.files);
   fileInput.value = '';
 });
-btnAgain.addEventListener('click', showIdle);
+btnChange?.addEventListener('click', openPicker);
+btnChangeMobile?.addEventListener('click', openPicker);
+centerNode?.addEventListener('click', openPicker);
 
 let dragDepth = 0;
 function hasFiles(e) {
@@ -581,23 +708,29 @@ window.addEventListener('dragenter', (e) => {
   if (!hasFiles(e) || converting) return;
   e.preventDefault();
   dragDepth++;
-  if (!tree.classList.contains('is-open')) drop.classList.add('is-dragover');
+  drop.classList.add('is-dragover');
+  document.body.classList.add('is-file-drag');
 });
 window.addEventListener('dragleave', (e) => {
   if (!hasFiles(e)) return;
   dragDepth = Math.max(0, dragDepth - 1);
-  if (dragDepth === 0) drop.classList.remove('is-dragover');
+  if (dragDepth === 0) {
+    drop.classList.remove('is-dragover');
+    document.body.classList.remove('is-file-drag');
+  }
 });
 window.addEventListener('dragover', (e) => {
   if (!hasFiles(e)) return;
   e.preventDefault();
   e.dataTransfer.dropEffect = 'copy';
+  document.body.classList.add('is-file-drag');
 });
 window.addEventListener('drop', async (e) => {
   if (!hasFiles(e)) return;
   e.preventDefault();
   dragDepth = 0;
   drop.classList.remove('is-dragover');
+  document.body.classList.remove('is-file-drag');
   const dropped = [...e.dataTransfer.files];
   if (!dropped.length || converting) return;
   await ingestFiles(dropped);
@@ -607,6 +740,8 @@ window.addEventListener('resize', () => {
   if (!tree.classList.contains('is-open') || converting) return;
   const was = groupExpanded;
   tree.classList.toggle('mobile-list', isMobile());
+  document.body.classList.toggle('tree-open-mobile', isMobile());
+  if (btnChangeMobile) btnChangeMobile.hidden = !isMobile();
   renderTargets();
   if (was && !isMobile()) expandGroup(true);
 });
@@ -619,10 +754,32 @@ window.ConvertTree = {
   getPlan: () => (plan ? JSON.parse(JSON.stringify(plan)) : null),
   getFiles: () => files.slice(),
   isConverting: () => converting,
-  getLastResult: () => lastResult,
+  getLastResult: () => {
+    if (activeTarget && results.has(activeTarget)) return results.get(activeTarget);
+    const last = [...results.values()].pop();
+    return last || null;
+  },
+  getResult: (fmt) => results.get(fmt) || null,
+  getResults: () => {
+    const o = {};
+    for (const [k, v] of results) o[k] = { ...v, blob: v.blob, url: v.url };
+    return o;
+  },
   getActiveTarget: () => activeTarget,
   expandGroup,
   isGroupExpanded: () => groupExpanded,
+  clearResults,
+  forceFail: (fmt) => {
+    results.set(fmt || activeTarget || 'jpg', { error: true });
+    const key = fmt || activeTarget || 'jpg';
+    const node = $(`.target-node[data-format="${key}"]`);
+    if (node) {
+      node.classList.remove('is-converting', 'is-done');
+      node.classList.add('is-error');
+    }
+    converting = false;
+  },
+  openPicker,
 };
 
 showIdle();
