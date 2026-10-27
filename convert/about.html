@@ -36,8 +36,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td style="border:1px solid var(--divider);padding:8px">pdf.js</td><td style="border:1px solid var(--divider);padding:8px">PDF → 图片</td><td style="border:1px solid var(--divider);padding:8px">Apache-2.0</td></tr>
-          <tr><td style="border:1px solid var(--divider);padding:8px">pdf-lib</td><td style="border:1px solid var(--divider);padding:8px">图片 → PDF</td><td style="border:1px solid var(--divider);padding:8px">MIT</td></tr>
+          <tr><td style="border:1px solid var(--divider);padding:8px">pdf.js</td><td style="border:1px solid var(--divider);padding:8px">PDF → 图片；压缩重绘</td><td style="border:1px solid var(--divider);padding:8px">Apache-2.0</td></tr>
+          <tr><td style="border:1px solid var(--divider);padding:8px">pdf-lib</td><td style="border:1px solid var(--divider);padding:8px">PDF 合并 / 拆页 / 抽页 / 压缩；图片 → PDF</td><td style="border:1px solid var(--divider);padding:8px">MIT</td></tr>
           <tr><td style="border:1px solid var(--divider);padding:8px">JSZip</td><td style="border:1px solid var(--divider);padding:8px">多页打包</td><td style="border:1px solid var(--divider);padding:8px">MIT</td></tr>
           <tr>
             <td style="border:1px solid var(--divider);padding:8px">heic2any</td>
@@ -47,10 +47,11 @@
         </tbody>
       </table>
 
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:20px;line-height:1.6">BMP / ICO / TIFF 编解码为本站自研小实现，无额外第三方库。</p>
       <p style="font-size:13px;color:var(--text-secondary)">文件只在你的浏览器里处理，不会上传。</p>
 
       <footer class="footer">
-        基于开源项目 Filee（MIT）<span class="sep">·</span>栖于垄上（上海）网络科技有限公司<span class="sep">·</span><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">沪ICP备2026030604号</a>
+        <span id="footer-version">v0.3</span><span class="sep">·</span>基于开源项目 Filee（MIT）<span class="sep">·</span>栖于垄上（上海）网络科技有限公司<span class="sep">·</span><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">沪ICP备2026030604号</a>
       </footer>
     </main>
   </div>
@@ -59,6 +60,8 @@
     const cfg = window.LOAMLY_CONVERT;
     if (cfg) {
       document.getElementById('brand-name').textContent = cfg.name;
+      const ve = document.getElementById('footer-version');
+      if (ve && cfg.version) ve.textContent = 'v' + cfg.version;
       document.title = '关于与许可证 · ' + cfg.name;
       if (cfg.ADS_ENABLED) document.body.classList.add('ads-on');
     }

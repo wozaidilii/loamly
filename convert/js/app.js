@@ -1,250 +1,475 @@
 import {
   convertImage, pdfToImages, imagesToPdf,
-  classify, targetsFor, downloadBlob,
-} from './converters.js';
+  convertPdf, mergePdfs,
+  classify, commonTargetsAsync, downloadBlob,
+  labelFor, needsQuality, needsRange,
+} from './converters.js?v=20261027c';
 
 const cfg = window.LOAMLY_CONVERT || {
   name: '文件转换',
   title: '文件转换',
   tagline: '图片、PDF 格式转换，在浏览器里完成，文件不上传。',
-  tags: [],
-  ADS_ENABLED: false,
+  tags: ['免费使用'],
+  version: '0.3',
 };
-
 document.title = cfg.title || cfg.name || '文件转换';
 const brand = document.getElementById('brand-name');
-const taglineEl = document.getElementById('hero-tagline');
-const tagsEl = document.getElementById('hero-tags');
 if (brand) brand.textContent = cfg.name;
-if (taglineEl) taglineEl.textContent = cfg.tagline;
+const verEl = document.getElementById('footer-version');
+if (verEl) verEl.textContent = `v${cfg.version || '0.3'}`;
+const taglineEl = document.getElementById('hero-tagline');
+if (taglineEl && cfg.tagline) taglineEl.textContent = cfg.tagline;
+const tagsEl = document.getElementById('hero-tags');
 if (tagsEl && cfg.tags?.length) {
   tagsEl.innerHTML = cfg.tags.map((t) => `<span class="tag">${t}</span>`).join('');
 }
 if (cfg.ADS_ENABLED) document.body.classList.add('ads-on');
 
-const drop = document.getElementById('drop');
-const fileInput = document.getElementById('file-input');
-const pickBtn = document.getElementById('pick-btn');
-const listEl = document.getElementById('file-list');
-const panel = document.getElementById('file-panel');
-const clearBtn = document.getElementById('clear-btn');
-const dlAll = document.getElementById('dl-all');
-const qualityRow = document.getElementById('quality-row');
-const qualityInput = document.getElementById('quality');
-const qualityVal = document.getElementById('quality-val');
+const $ = (sel, el = document) => el.querySelector(sel);
+const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 
-/** @type {Array<{id:string,file:File,kind:string,targets:string[],status:string,pct:number,target?:string,result?:{blob:Blob,filename:string},error?:string,thumbUrl?:string}>} */
-const items = [];
-let seq = 0;
+const drop = $('#drop');
+const fileInput = $('#file-input');
+const tree = $('#tree');
+const treeSvg = $('#tree-svg');
+const centerExt = $('#center-ext');
+const centerSub = $('#center-sub');
+const targetsEl = $('#targets');
+const hint = $('#hint');
+const idleHero = $('#idle-hero');
+const actions = $('#tree-actions');
+const btnAgain = $('#btn-again');
+const dropError = $('#drop-error');
+const qualityRow = $('#quality-row');
+const qualityInput = $('#quality');
+const qualityVal = $('#quality-val');
+const rangeRow = $('#range-row');
+const rangeInput = $('#page-range');
+
+const isMobile = () => window.matchMedia('(max-width: 640px)').matches;
+const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const MSG_SINGLE = '这个文件暂时转不了';
+const MSG_MULTI = '这几个文件没有共同可转的格式';
+const MSG_FAIL = '转换失败，再试一次';
+const MSG_RANGE = '页码无效';
+
+let files = [];
+let targets = []; // lowercase keys
+let converting = false;
+let lastResult = null;
+let activeTarget = null;
+let convertGen = 0;
+let qualityTimer = null;
+
+function syncQualityFill() {
+  const v = Number(qualityInput?.value || 90);
+  const min = Number(qualityInput?.min || 50);
+  const max = Number(qualityInput?.max || 100);
+  const pct = ((v - min) / (max - min)) * 100;
+  qualityInput?.style.setProperty('--q', `${pct}%`);
+  if (qualityVal) qualityVal.textContent = String(v);
+}
 
 qualityInput?.addEventListener('input', () => {
-  qualityVal.textContent = String(qualityInput.value);
+  syncQualityFill();
+  if (!activeTarget) return;
+  if (!needsQuality(activeTarget)) return;
+  clearTimeout(qualityTimer);
+  qualityTimer = setTimeout(() => {
+    if (activeTarget) startConvert(activeTarget, { fromQuality: true });
+  }, 180);
 });
+syncQualityFill();
 
-pickBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  fileInput.click();
-});
-drop.addEventListener('click', (e) => {
-  if (e.target === pickBtn || pickBtn.contains(e.target)) return;
-  fileInput.click();
-});
-drop.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
-});
-fileInput.addEventListener('change', () => {
-  addFiles(fileInput.files);
-  fileInput.value = '';
-});
-
-['dragenter', 'dragover'].forEach((ev) => {
-  drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('is-dragover'); });
-});
-['dragleave', 'drop'].forEach((ev) => {
-  drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove('is-dragover'); });
-});
-drop.addEventListener('drop', (e) => addFiles(e.dataTransfer.files));
-
-clearBtn.addEventListener('click', () => {
-  for (const it of items) {
-    if (it.thumbUrl) URL.revokeObjectURL(it.thumbUrl);
+rangeInput?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && activeTarget === 'extract') {
+    e.preventDefault();
+    startConvert('extract', { fromRange: true });
   }
-  items.length = 0;
-  render();
 });
 
-dlAll.addEventListener('click', async () => {
-  const ready = items.filter((i) => i.result);
-  if (ready.length === 1) {
-    downloadBlob(ready[0].result.blob, ready[0].result.filename);
-    return;
+function formatSize(bytes) {
+  if (!bytes && bytes !== 0) return '';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function layoutPositions(n) {
+  const cx = 50;
+  const cy = 50;
+  const r = 41;
+  if (n === 1) return [{ x: cx, y: cy - r }];
+  const start = -210;
+  const end = 30;
+  const step = (end - start) / (n - 1);
+  return Array.from({ length: n }, (_, i) => {
+    const a = ((start + step * i) * Math.PI) / 180;
+    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+  });
+}
+
+function setQualityVisible(on) {
+  qualityRow?.classList.toggle('is-visible', !!on);
+}
+
+function setRangeVisible(on) {
+  rangeRow?.classList.toggle('is-visible', !!on);
+}
+
+function showIdle() {
+  converting = false;
+  lastResult = null;
+  activeTarget = null;
+  convertGen++;
+  clearTimeout(qualityTimer);
+  drop.classList.remove('hidden', 'is-dragover');
+  idleHero?.classList.remove('hidden');
+  tree.classList.remove('is-open', 'mobile-list');
+  hint.classList.remove('hidden');
+  actions.classList.remove('is-visible');
+  setQualityVisible(false);
+  setRangeVisible(false);
+  dropError.hidden = true;
+  dropError.textContent = '';
+  targetsEl.innerHTML = '';
+  treeSvg.innerHTML = '';
+  files = [];
+  targets = [];
+}
+
+function showDropMessage(msg) {
+  dropError.textContent = msg;
+  dropError.hidden = false;
+  drop.classList.add('is-dragover');
+  setTimeout(() => drop.classList.remove('is-dragover'), 240);
+  setTimeout(() => {
+    if (dropError.textContent === msg) {
+      dropError.hidden = true;
+      dropError.textContent = '';
+    }
+  }, 2400);
+}
+
+async function openTree(fileList) {
+  files = fileList;
+  targets = await commonTargetsAsync(fileList);
+  drop.classList.add('hidden');
+  idleHero?.classList.add('hidden');
+  hint.classList.add('hidden');
+  dropError.hidden = true;
+  tree.classList.add('is-open');
+  tree.classList.toggle('mobile-list', isMobile());
+
+  if (fileList.length === 1) {
+    const ext = fileList[0].name.split('.').pop()?.toUpperCase() || 'FILE';
+    centerExt.textContent = ext === 'JPEG' ? 'JPG' : ext === 'TIF' ? 'TIFF' : ext;
+    centerSub.textContent = formatSize(fileList[0].size);
+    centerSub.style.display = 'block';
+  } else {
+    centerExt.textContent = `${fileList.length} 个文件`;
+    centerSub.textContent = '';
+    centerSub.style.display = 'none';
   }
-  const zip = new JSZip();
-  for (const i of ready) zip.file(i.result.filename, i.result.blob);
-  const blob = await zip.generateAsync({ type: 'blob' });
-  downloadBlob(blob, 'converted.zip');
-});
 
-function extOf(name) {
-  const m = name.match(/\.([^.]+)$/);
-  return (m ? m[1] : '?').toUpperCase().slice(0, 4);
+  setQualityVisible(false);
+  setRangeVisible(false);
+  renderTargets();
+  actions.classList.remove('is-visible');
+  converting = false;
+  lastResult = null;
+  activeTarget = null;
 }
 
-function formatSize(n) {
-  if (n >= 1024 * 1024) return `${(n / 1024 / 1024).toFixed(1)} MB`;
-  if (n >= 1024) return `${(n / 1024).toFixed(1)} KB`;
-  return `${n} B`;
-}
+function renderTargets() {
+  targetsEl.innerHTML = '';
+  treeSvg.innerHTML = '';
+  const mobile = isMobile();
+  const positions = mobile ? targets.map(() => ({ x: 50, y: 50 })) : layoutPositions(targets.length);
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => (
-    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-  ));
-}
+  targets.forEach((key, i) => {
+    const pos = positions[i];
+    const label = labelFor(key);
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('class', 'tree-line');
+    line.setAttribute('data-format', key);
+    line.setAttribute('x1', '50%');
+    line.setAttribute('y1', '50%');
+    line.setAttribute('x2', `${pos.x}%`);
+    line.setAttribute('y2', `${pos.y}%`);
+    treeSvg.appendChild(line);
 
-function addFiles(fileList) {
-  if (!fileList?.length) return;
-  for (const file of fileList) {
-    const kind = classify(file);
-    const targets = targetsFor(kind);
-    const item = {
-      id: `f${++seq}`,
-      file,
-      kind,
-      targets,
-      status: targets.length ? 'ready' : 'unsupported',
-      pct: 0,
-    };
-    if (kind === 'image' && !/\.heic$/i.test(file.name)) {
-      try { item.thumbUrl = URL.createObjectURL(file); } catch (_) {}
-    }
-    items.push(item);
-  }
-  render();
-}
-
-function render() {
-  const has = items.length > 0;
-  drop.classList.toggle('is-compact', has);
-  panel.hidden = !has;
-  const doneCount = items.filter((i) => i.result).length;
-  dlAll.hidden = doneCount < 1;
-  const hasImageLike = items.some((i) => i.kind === 'image' || i.kind === 'pdf');
-  qualityRow.hidden = !hasImageLike;
-
-  listEl.innerHTML = '';
-  for (const item of items) {
-    const card = document.createElement('article');
-    card.className = 'file-card';
-    card.dataset.id = item.id;
-
-    const nameLabel = item.target
-      ? `${item.file.name} → ${item.target.toUpperCase()}`
-      : item.file.name;
-
-    const thumbInner = item.thumbUrl
-      ? `<img src="${item.thumbUrl}" alt="" />`
-      : `<span class="ext">${escapeHtml(extOf(item.file.name))}</span>`;
-
-    let statusHtml = '';
-    if (item.status === 'unsupported' || item.status === 'error') {
-      statusHtml = `<span class="status-error">${escapeHtml(item.error || '这个文件暂时转不了')}</span>`;
-    } else if (item.status === 'converting' || item.status === 'loading') {
-      statusHtml = `<span class="status-progress">转换中 · ${item.pct}%</span>`;
-    } else if (item.status === 'done' && item.result) {
-      statusHtml = `<button class="btn btn-download" type="button" data-act="dl">下载</button>`;
-    }
-
-    let convertHtml = '';
-    if (item.status === 'ready' || (item.status === 'done') || item.status === 'error') {
-      if (item.status !== 'done' || !item.result) {
-        const chips = item.targets.map((t) => {
-          const sel = item.target === t ? ' is-selected' : '';
-          return `<button class="chip${sel}" type="button" data-target="${t}">${t.toUpperCase()}</button>`;
-        }).join('');
-        convertHtml = `<div class="convert-row"><span class="convert-label">转成</span><div class="chips">${chips}</div></div>`;
-      }
-    }
-
-    let progressHtml = '';
-    if (item.status === 'converting' || item.status === 'loading') {
-      progressHtml = `<div class="progress-track"><div class="progress-fill" style="width:${item.pct}%"></div></div>`;
-    }
-
-    card.innerHTML = `
-      <div class="file-row">
-        <div class="file-thumb" aria-hidden="true">${thumbInner}</div>
-        <div class="file-meta">
-          <div class="file-name">${escapeHtml(nameLabel)}</div>
-          <div class="file-size">${formatSize(item.file.size)}</div>
-        </div>
-        <div class="file-status">${statusHtml}</div>
-      </div>
-      ${convertHtml}
-      ${progressHtml}
+    const node = document.createElement('button');
+    node.type = 'button';
+    node.className = 'target-node';
+    node.dataset.format = key;
+    node.style.left = `${pos.x}%`;
+    node.style.top = `${pos.y}%`;
+    node.style.transitionDelay = reduceMotion() ? '0ms' : `${i * 30}ms`;
+    const r = 36;
+    node.innerHTML = `
+      <svg class="progress-ring" viewBox="0 0 80 80" aria-hidden="true">
+        <circle class="track" cx="40" cy="40" r="${r}"></circle>
+        <circle class="fill" cx="40" cy="40" r="${r}"
+          stroke-dasharray="${2 * Math.PI * r}"
+          stroke-dashoffset="${2 * Math.PI * r}"></circle>
+      </svg>
+      <span class="ext">${label}</span>
+      <span class="download-label">下载</span>
+      <span class="progress-label">转换中 · 0%</span>
     `;
-
-    card.querySelectorAll('.chip').forEach((btn) => {
-      btn.addEventListener('click', () => startConvert(item, btn.dataset.target));
+    node.addEventListener('pointerenter', () => setHover(key, true));
+    node.addEventListener('pointerleave', () => setHover(key, false));
+    node.addEventListener('click', () => {
+      if (converting && !node.classList.contains('is-done')) return;
+      if (node.classList.contains('is-done') && lastResult && activeTarget === key) {
+        if (lastResult.blob) downloadBlob(lastResult.blob, lastResult.filename);
+        return;
+      }
+      startConvert(key);
     });
-    const dl = card.querySelector('[data-act="dl"]');
-    if (dl) {
-      dl.addEventListener('click', () => downloadBlob(item.result.blob, item.result.filename));
-    }
-    listEl.appendChild(card);
-  }
+    targetsEl.appendChild(node);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => node.classList.add('is-shown'));
+    });
+  });
 }
 
-async function startConvert(item, target) {
-  item.target = target;
-  item.status = 'loading';
-  item.pct = 0;
-  item.error = undefined;
-  item.result = undefined;
-  render();
-  const q = Number(qualityInput?.value || 90) / 100;
-  const bump = (pct) => {
-    item.pct = Math.max(0, Math.min(100, Math.round(pct)));
-    item.status = 'converting';
-    const card = listEl.querySelector(`[data-id="${item.id}"]`);
-    if (!card) return;
-    const st = card.querySelector('.status-progress');
-    if (st) st.textContent = `转换中 · ${item.pct}%`;
-    let fill = card.querySelector('.progress-fill');
-    if (!fill) {
-      const track = document.createElement('div');
-      track.className = 'progress-track';
-      track.innerHTML = `<div class="progress-fill" style="width:${item.pct}%"></div>`;
-      card.appendChild(track);
-      fill = track.querySelector('.progress-fill');
-      const cr = card.querySelector('.convert-row');
-      if (cr) cr.remove();
-      const status = card.querySelector('.file-status');
-      if (status) status.innerHTML = `<span class="status-progress">转换中 · ${item.pct}%</span>`;
-    } else {
-      fill.style.width = `${item.pct}%`;
-    }
-  };
+function setHover(fmt, on) {
+  if (converting) return;
+  $$('.target-node').forEach((n) => {
+    n.classList.toggle('is-hover', on && n.dataset.format === fmt);
+  });
+  $$('.tree-line').forEach((l) => {
+    l.classList.toggle('is-active', on && l.dataset.format === fmt);
+  });
+}
+
+function setProgress(fmt, pct) {
+  const circumference = 2 * Math.PI * 36;
+  const node = $(`.target-node[data-format="${fmt}"]`);
+  if (!node) return;
+  const fill = $('.fill', node);
+  const label = $('.progress-label', node);
+  const p = Math.max(0, Math.min(100, Math.round(pct)));
+  if (fill) fill.style.strokeDashoffset = String(circumference * (1 - p / 100));
+  if (label) label.textContent = isMobile() ? `${p}%` : `转换中 · ${p}%`;
+  node.dataset.progress = String(p);
+  node.style.setProperty('--p', `${p}%`);
+}
+
+async function convertOne(file, target, quality, onProgress, opts = {}) {
+  const kind = classify(file);
+  if (kind === 'image') {
+    return convertImage(file, target, quality, onProgress);
+  }
+  if (kind === 'pdf') {
+    return convertPdf(file, target, quality, onProgress, opts);
+  }
+  throw new Error(MSG_FAIL);
+}
+
+async function startConvert(fmt, opts = {}) {
+  if (!targets.includes(fmt)) return;
+  if (converting && !opts.fromQuality && !opts.fromRange) return;
+
+  // Extract: show range first; convert when range present
+  if (fmt === 'extract' && !opts.fromRange && !opts.fromQuality) {
+    activeTarget = fmt;
+    setRangeVisible(true);
+    setQualityVisible(false);
+    if (!rangeInput.value.trim()) rangeInput.value = '1';
+    rangeInput.focus();
+    // proceed immediately with current/default range
+  }
+
+  const myGen = ++convertGen;
+  converting = true;
+  activeTarget = fmt;
+  lastResult = null;
+  setQualityVisible(needsQuality(fmt));
+  setRangeVisible(needsRange(fmt));
+
+  $$('.target-node').forEach((n) => {
+    const match = n.dataset.format === fmt;
+    n.classList.toggle('is-converting', match);
+    n.classList.toggle('is-faded', !match);
+    n.classList.remove('is-hover', 'is-done', 'is-status');
+    const dl = $('.download-label', n);
+    if (dl) dl.textContent = '下载';
+  });
+  $$('.tree-line').forEach((l) => {
+    const match = l.dataset.format === fmt;
+    l.classList.toggle('is-active', match);
+    l.classList.toggle('is-faded', !match);
+  });
+  setProgress(fmt, 0);
+  actions.classList.remove('is-visible');
+
+  const quality = Number(qualityInput?.value || 90) / 100;
+  const rangeText = rangeInput?.value || '';
+
   try {
     let result;
-    if (item.kind === 'image' && target === 'pdf') {
-      result = await imagesToPdf([item.file], bump);
-    } else if (item.kind === 'image') {
-      result = await convertImage(item.file, target, q, bump);
-    } else if (item.kind === 'pdf') {
-      result = await pdfToImages(item.file, target, q, bump);
+    if (fmt === 'merge') {
+      result = await mergePdfs(files, (pct) => {
+        if (myGen !== convertGen) return;
+        setProgress(fmt, pct);
+      });
+    } else if (files.length === 1) {
+      result = await convertOne(files[0], fmt, quality, (pct) => {
+        if (myGen !== convertGen) return;
+        setProgress(fmt, pct);
+      }, { rangeText });
+    } else if (fmt === 'pdf' && files.every((f) => classify(f) === 'image')) {
+      result = await imagesToPdf(files, (pct) => {
+        if (myGen !== convertGen) return;
+        setProgress(fmt, pct);
+      });
+    } else if (files.every((f) => classify(f) === 'image')) {
+      const zip = new JSZip();
+      for (let i = 0; i < files.length; i++) {
+        if (myGen !== convertGen) return;
+        const base = Math.round((i / files.length) * 100);
+        const span = Math.round(100 / files.length);
+        const one = await convertOne(files[i], fmt, quality, (pct) => {
+          if (myGen !== convertGen) return;
+          setProgress(fmt, base + (pct / 100) * span);
+        });
+        if (one.blob) zip.file(one.filename, one.blob);
+      }
+      const zblob = await zip.generateAsync({ type: 'blob' });
+      result = { blob: zblob, filename: `converted.zip` };
+      setProgress(fmt, 100);
     } else {
-      throw new Error('这个文件暂时转不了');
+      throw new Error(MSG_FAIL);
     }
-    item.result = result;
-    item.status = 'done';
-    item.pct = 100;
+    if (myGen !== convertGen) return;
+    lastResult = result;
+    finishConvert(fmt, result);
   } catch (err) {
+    if (myGen !== convertGen) return;
     console.error(err);
-    item.status = 'error';
-    item.error = '这个文件暂时转不了';
+    converting = false;
+    activeTarget = null;
+    setQualityVisible(false);
+    setRangeVisible(false);
+    $$('.target-node').forEach((n) => n.classList.remove('is-converting', 'is-faded', 'is-done', 'is-status'));
+    $$('.tree-line').forEach((l) => l.classList.remove('is-active', 'is-faded'));
+    const msg = (err && err.message === '页码无效') ? MSG_RANGE : MSG_FAIL;
+    showIdle();
+    showDropMessage(msg);
   }
-  render();
 }
 
-render();
+function finishConvert(fmt, result) {
+  const node = $(`.target-node[data-format="${fmt}"]`);
+  if (!node) return;
+  node.classList.remove('is-converting');
+  node.classList.add('is-done');
+  delete node.dataset.progress;
+  const label = $('.progress-label', node);
+  if (label) label.textContent = '';
+  const dl = $('.download-label', node);
+  if (result && result.skipped) {
+    node.classList.add('is-status');
+    if (dl) dl.textContent = result.status || '已经很小了';
+  } else if (dl) {
+    dl.textContent = '下载';
+  }
+  setProgress(fmt, 100);
+  actions.classList.add('is-visible');
+  converting = false;
+  setQualityVisible(needsQuality(fmt));
+  setRangeVisible(needsRange(fmt));
+}
+
+async function ingestFiles(fileList) {
+  const list = [...fileList].filter(Boolean);
+  if (!list.length) return;
+  const formats = await commonTargetsAsync(list);
+  if (!formats.length) {
+    if (tree.classList.contains('is-open')) showIdle();
+    showDropMessage(list.length > 1 ? MSG_MULTI : MSG_SINGLE);
+    return;
+  }
+  await openTree(list);
+}
+
+$('#btn-pick').addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', () => {
+  ingestFiles(fileInput.files);
+  fileInput.value = '';
+});
+btnAgain.addEventListener('click', showIdle);
+
+let dragDepth = 0;
+function hasFiles(e) {
+  return e.dataTransfer && [...(e.dataTransfer.types || [])].includes('Files');
+}
+
+window.addEventListener('dragenter', (e) => {
+  if (!hasFiles(e) || converting) return;
+  e.preventDefault();
+  dragDepth++;
+  if (!tree.classList.contains('is-open')) drop.classList.add('is-dragover');
+});
+window.addEventListener('dragleave', (e) => {
+  if (!hasFiles(e)) return;
+  dragDepth = Math.max(0, dragDepth - 1);
+  if (dragDepth === 0) drop.classList.remove('is-dragover');
+});
+window.addEventListener('dragover', (e) => {
+  if (!hasFiles(e)) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'copy';
+  if (tree.classList.contains('is-open') && !converting) {
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    const node = el && el.closest('.target-node');
+    const fmt = node && node.dataset.format;
+    $$('.target-node').forEach((n) => n.classList.toggle('is-hover', !!fmt && n.dataset.format === fmt));
+    $$('.tree-line').forEach((l) => l.classList.toggle('is-active', !!fmt && l.dataset.format === fmt));
+  }
+});
+window.addEventListener('drop', async (e) => {
+  if (!hasFiles(e)) return;
+  e.preventDefault();
+  dragDepth = 0;
+  drop.classList.remove('is-dragover');
+  const dropped = [...e.dataTransfer.files];
+  if (!dropped.length || converting) return;
+
+  if (tree.classList.contains('is-open')) {
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    const node = el && el.closest('.target-node');
+    await ingestFiles(dropped);
+    const formats = await commonTargetsAsync(dropped);
+    if (node && node.dataset.format && formats.includes(node.dataset.format)) {
+      requestAnimationFrame(() => startConvert(node.dataset.format));
+    }
+    return;
+  }
+  await ingestFiles(dropped);
+});
+
+window.addEventListener('resize', () => {
+  if (!tree.classList.contains('is-open') || converting) return;
+  const fmtHover = $('.target-node.is-hover')?.dataset.format;
+  tree.classList.toggle('mobile-list', isMobile());
+  renderTargets();
+  if (fmtHover) setHover(fmtHover, true);
+});
+
+window.ConvertTree = {
+  showIdle,
+  openTree,
+  startConvert,
+  getTargets: () => targets.slice(),
+  getFiles: () => files.slice(),
+  isConverting: () => converting,
+  getLastResult: () => lastResult,
+  getActiveTarget: () => activeTarget,
+};
+
+showIdle();
