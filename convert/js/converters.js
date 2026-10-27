@@ -178,12 +178,21 @@ export const TARGET_LABELS = {
   avif: 'AVIF',
   merge: '合并',
   split: '拆页',
-  extract: '抽页',
+  extract: '提取页',
   compress: '压缩',
-  gray: '灰度',
-  edge1920: '1920',
-  edge1280: '1280',
-  edge800: '800',
+  gray: '黑白',
+  edge1920: '宽 1920',
+  edge1280: '宽 1280',
+  edge800: '宽 800',
+  adjust: '调整',
+  pages: '页面',
+  mp3: 'MP3',
+  m4a: 'M4A',
+  wav: 'WAV',
+  ogg: 'OGG',
+  flac: 'FLAC',
+  webm: 'WEBM',
+  mp4: 'MP4',
 };
 
 export function labelFor(target) {
@@ -210,6 +219,18 @@ export function classify(file) {
   ) {
     return 'image';
   }
+  if (
+    type.startsWith('video/') ||
+    /\.(mp4|webm|mov|mkv|avi|m4v|ogv)$/i.test(name)
+  ) {
+    return 'video';
+  }
+  if (
+    type.startsWith('audio/') ||
+    /\.(mp3|m4a|wav|ogg|opus|flac|aac|wma)$/i.test(name)
+  ) {
+    return 'audio';
+  }
   return 'unknown';
 }
 
@@ -223,8 +244,10 @@ export function sourceFormat(file) {
 }
 
 function imageFormatTargets(avif) {
-  const t = ['jpg', 'png', 'webp', 'gif', 'bmp', 'tiff', 'ico', 'pdf'];
-  if (avif) t.splice(3, 0, 'avif');
+  // Designer order; AVIF appended before PDF when supported
+  const t = ['jpg', 'png', 'webp', 'gif', 'bmp', 'tiff', 'ico'];
+  if (avif) t.push('avif');
+  t.push('pdf');
   return t;
 }
 
@@ -232,27 +255,107 @@ function imageActionTargets() {
   return ['gray', 'edge1920', 'edge1280', 'edge800'];
 }
 
+function videoTargets() {
+  return ['webm', 'gif', 'mp3', 'm4a', 'mp4'];
+}
+
+function audioTargets() {
+  return ['mp3', 'm4a', 'wav', 'ogg', 'flac'];
+}
+
+/** Flat target list (back-compat / e2e). */
 export function commonTargets(files) {
+  const plan = treePlanSync(files);
+  if (!plan) return [];
+  const out = [...plan.ring];
+  if (plan.group) out.push(...plan.group.children);
+  return out;
+}
+
+export function treePlanSync(files) {
   const kinds = files.map(classify);
-  if (kinds.includes('unknown')) return [];
+  if (!files.length || kinds.includes('unknown')) return null;
   const allPdf = kinds.every((k) => k === 'pdf');
   const allImage = kinds.every((k) => k === 'image');
+  const allVideo = kinds.every((k) => k === 'video');
+  const allAudio = kinds.every((k) => k === 'audio');
+  const allAV = kinds.every((k) => k === 'audio' || k === 'video');
+
   if (allPdf) {
-    if (files.length === 1) return ['png', 'jpg', 'split', 'extract', 'compress'];
-    return ['merge'];
+    if (files.length === 1) {
+      return {
+        ring: ['png', 'jpg'],
+        group: { key: 'pages', label: '页面', children: ['split', 'extract', 'compress'] },
+      };
+    }
+    return { ring: ['merge'], group: null };
   }
+
   if (allImage) {
-    const formats = imageFormatTargets(!!avifSupported);
+    let formats = imageFormatTargets(!!avifSupported);
     const src = files.length === 1 ? sourceFormat(files[0]) : null;
-    const filtered = src ? formats.filter((f) => f !== src) : formats;
-    return [...filtered, ...imageActionTargets()];
+    if (src) formats = formats.filter((f) => f !== src);
+    // Multi: 合并 + batch formats only (no per-file ops group)
+    if (files.length > 1) {
+      let ring = ['merge', ...formats];
+      // keep ring reasonable; drop avif first if over 8
+      if (ring.length > 8 && ring.includes('avif')) {
+        ring = ring.filter((f) => f !== 'avif');
+      }
+      while (ring.length > 8) ring.pop();
+      return { ring, group: null };
+    }
+    const ops = imageActionTargets(); // gray, edge*
+    let ring = formats.slice();
+    let groupChildren = ops.slice();
+    // formats max 8; if >8 move AVIF into 调整
+    if (ring.length > 8 && ring.includes('avif')) {
+      ring = ring.filter((f) => f !== 'avif');
+      if (!groupChildren.includes('avif')) groupChildren.unshift('avif');
+    }
+    while (ring.length > 8) {
+      const moved = ring.pop();
+      groupChildren.unshift(moved);
+    }
+    return {
+      ring,
+      group: { key: 'adjust', label: '调整', children: groupChildren },
+    };
   }
-  return [];
+
+  if (allVideo && files.length >= 1) {
+    const src = files.length === 1 ? sourceFormat(files[0]) : null;
+    let ring = videoTargets().filter((t) => t !== src);
+    if (!ring.length) ring = videoTargets().slice();
+    return { ring, group: null };
+  }
+
+  if (allAudio) {
+    const src = files.length === 1 ? sourceFormat(files[0]) : null;
+    let ring = audioTargets().filter((t) => t !== src);
+    if (!ring.length) ring = audioTargets().slice();
+    return { ring, group: null };
+  }
+
+  // mixed audio+video → intersection of targets
+  if (allAV) {
+    const sets = kinds.map((k) => new Set(k === 'video' ? videoTargets() : audioTargets()));
+    let inter = [...sets[0]].filter((t) => sets.every((s) => s.has(t)));
+    if (!inter.length) return null;
+    return { ring: inter, group: null };
+  }
+
+  return null;
 }
 
 export async function commonTargetsAsync(files) {
   await probeAvif();
   return commonTargets(files);
+}
+
+export async function treePlanAsync(files) {
+  await probeAvif();
+  return treePlanSync(files);
 }
 
 function imageDataToCanvas(imageData) {
@@ -511,28 +614,55 @@ export async function splitPdf(file, onProgress) {
   return { blob: zblob, filename: `${basename(file.name)}-pages.zip` };
 }
 
-export function parsePageRange(text, maxPages) {
+/**
+ * Parse page range. Accepts ASCII/Chinese commas and dashes (－—–-~).
+ * Returns { pages, error } where error is 'format' | 'missing' | null.
+ * missingPages lists out-of-range numbers when error==='missing'.
+ */
+export function parsePageRangeDetailed(text, maxPages) {
   const s = String(text || '').trim();
-  if (!s) return [];
+  if (!s) return { pages: [], error: 'format', missingPages: [] };
+  const normalized = s
+    .replace(/[，]/g, ',')
+    .replace(/[－—–~]/g, '-')
+    .replace(/\s+/g, '');
   const set = new Set();
-  for (const part of s.split(/[,，\s]+/)) {
+  const missing = new Set();
+  let formatBad = false;
+  for (const part of normalized.split(',')) {
     if (!part) continue;
-    const m = part.match(/^(\d+)\s*[-–—~]\s*(\d+)$/);
+    const m = part.match(/^(\d+)-(\d+)$/);
     if (m) {
       let a = parseInt(m[1], 10);
       let b = parseInt(m[2], 10);
+      if (!Number.isFinite(a) || !Number.isFinite(b) || a < 1 || b < 1) {
+        formatBad = true;
+        break;
+      }
       if (a > b) [a, b] = [b, a];
       for (let i = a; i <= b; i++) {
         if (i >= 1 && i <= maxPages) set.add(i);
+        else missing.add(i);
       }
     } else if (/^\d+$/.test(part)) {
       const n = parseInt(part, 10);
       if (n >= 1 && n <= maxPages) set.add(n);
+      else missing.add(n);
     } else {
-      return [];
+      formatBad = true;
+      break;
     }
   }
-  return [...set].sort((a, b) => a - b);
+  if (formatBad) return { pages: [], error: 'format', missingPages: [] };
+  if (!set.size && missing.size) {
+    return { pages: [], error: 'missing', missingPages: [...missing].sort((a, b) => a - b) };
+  }
+  if (!set.size) return { pages: [], error: 'format', missingPages: [] };
+  return { pages: [...set].sort((a, b) => a - b), error: null, missingPages: [...missing].sort((a, b) => a - b) };
+}
+
+export function parsePageRange(text, maxPages) {
+  return parsePageRangeDetailed(text, maxPages).pages;
 }
 
 export async function extractPdfPages(file, rangeText, onProgress) {
@@ -541,8 +671,20 @@ export async function extractPdfPages(file, rangeText, onProgress) {
   const bytes = await file.arrayBuffer();
   const src = await PDFDocument.load(bytes);
   const max = src.getPageCount();
-  const pages = parsePageRange(rangeText, max);
-  if (!pages.length) throw new Error('页码无效');
+  const parsed = parsePageRangeDetailed(rangeText, max);
+  if (parsed.error === 'format') {
+    const err = new Error('页码格式不对，如 1-3,5');
+    err.code = 'RANGE_FORMAT';
+    throw err;
+  }
+  if (parsed.error === 'missing') {
+    const x = parsed.missingPages[0];
+    const err = new Error(`没有第 ${x} 页`);
+    err.code = 'RANGE_MISSING';
+    err.page = x;
+    throw err;
+  }
+  const pages = parsed.pages;
   const doc = await PDFDocument.create();
   const copied = await doc.copyPages(src, pages.map((p) => p - 1));
   copied.forEach((p) => doc.addPage(p));
@@ -575,7 +717,7 @@ export async function compressPdf(file, quality, onProgress) {
   const blob = new Blob([bytes], { type: 'application/pdf' });
   onProgress?.(100);
   if (blob.size >= file.size) {
-    return { blob: null, skipped: true, status: '已经很小了', filename: null };
+    return { blob: null, skipped: true, status: '已经很小，不用再压缩', filename: null };
   }
   return { blob, filename: `${basename(file.name)}-small.pdf` };
 }
@@ -589,4 +731,10 @@ export async function convertPdf(file, target, quality, onProgress, opts = {}) {
     return pdfToImages(file, t === 'jpeg' ? 'jpg' : t, quality, onProgress);
   }
   throw new Error('不支持的格式');
+}
+
+
+export async function convertAV(file, target, onProgress) {
+  const { convertAV: run } = await import('./ffmpeg-convert.js');
+  return run(file, target, onProgress);
 }

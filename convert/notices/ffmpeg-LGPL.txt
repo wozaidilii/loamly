@@ -1,0 +1,16 @@
+This product includes FFmpeg compiled to WebAssembly under the
+GNU Lesser General Public License version 2.1 (LGPLv2.1).
+
+Our build is LGPL-only: it does not include GPL-licensed libraries
+(no libx264, no libx265, no fdk-aac) and is configured with
+--disable-gpl --disable-nonfree.
+
+Source offer (LGPLv2.1 §6): the complete corresponding source used to
+build vendor/ffmpeg-core/ (FFmpeg n5.1.4, libvpx, lame, opus, vorbis,
+ogg, zlib, libwebp, and the modified Dockerfile.lgpl / build scripts)
+is available on request for at least three years from the date of this
+release. Contact: 栖于垄上（上海）网络科技有限公司 — convert.loamly.cn
+about page. Build recipe also kept in the project's private build tree
+as Dockerfile.lgpl (ffmpegwasm/ffmpeg.wasm v0.12.10 based, Emscripten 3.1.40).
+
+Full LGPL text: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
