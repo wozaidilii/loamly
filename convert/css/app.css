@@ -911,3 +911,126 @@ body[data-shot="tree-hover"] .target-node[data-format="WEBP"].is-active-hover {
   font-size: 12px;
   letter-spacing: 0;
 }
+
+
+/* === v0.3 regroup: desktop second ring + done === */
+.target-node.is-second {
+  width: 64px;
+  height: 64px;
+  margin-left: -32px;
+  margin-top: -32px;
+  font-size: 13px;
+  z-index: 3;
+}
+.target-node.is-second .progress-ring { width: 64px; height: 64px; }
+.target-node.is-second-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.6);
+}
+.tree-line-second { opacity: 0; stroke-width: 1.5; }
+.tree-line-second.is-second-visible { opacity: 0.55; }
+.target-node.is-group .ext { letter-spacing: 0.06em; }
+
+/* Done: solid moss fill, white text */
+.target-node.is-done:not(.is-status) {
+  background: #3F6B4F !important;
+  border-color: #3F6B4F !important;
+}
+.target-node.is-done:not(.is-status) .download-label {
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
+.target-node.is-done:not(.is-status) .ext { display: none; }
+.tree.is-open .tree-line.is-done-active {
+  stroke: #3F6B4F;
+  opacity: 0.4;
+}
+
+@media (max-width: 640px) {
+  .mobile-grids {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 8px 4px 12px;
+    z-index: 2;
+  }
+  .pill-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+  }
+  .mobile-divider {
+    height: 1px;
+    background: #E8E4DA;
+    margin: 24px 0;
+    border: 0;
+    width: 100%;
+  }
+  /* Override one-per-row list for pill grid children */
+  .tree.is-open.mobile-list .mobile-grids .target-node {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    height: 48px !important;
+    margin: 0 !important;
+    transform: none !important;
+    border-radius: 999px;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .tree.is-open.mobile-list .mobile-grids .target-node .ext,
+  .tree.is-open.mobile-list .mobile-grids .target-node .download-label,
+  .tree.is-open.mobile-list .mobile-grids .target-node .progress-label {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: auto !important;
+    margin: 0 !important;
+    text-align: center !important;
+  }
+  .tree.is-open.mobile-list .mobile-grids .target-node:not(.is-converting):not(.is-done) .download-label,
+  .tree.is-open.mobile-list .mobile-grids .target-node:not(.is-converting):not(.is-done) .progress-label {
+    display: none !important;
+  }
+  .tree.is-open.mobile-list .mobile-grids .target-node.is-converting .progress-label {
+    position: absolute !important;
+    right: 16px !important;
+    left: auto !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+  .tree.is-open.mobile-list .mobile-grids .target-node.is-converting .ext {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  .tree.is-open.mobile-list .mobile-grids .target-node::before,
+  .tree.is-open.mobile-list .mobile-grids .target-node::after {
+    display: none !important;
+  }
+  .tree.is-open.mobile-list .mobile-grids .target-node .progress-ring {
+    display: none;
+  }
+  .tree.is-open.mobile-list .mobile-grids .target-node .ext {
+    font-size: 14px;
+  }
+  .tree.is-open.mobile-list .mobile-grids .target-node.is-done {
+    background: #3F6B4F !important;
+  }
+  .tree.is-open.mobile-list .mobile-grids .target-node.is-done .download-label {
+    color: #fff !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+  }
+}

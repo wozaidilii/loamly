@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="./logo.svg" type="image/svg+xml" />
   <title>文件转换</title>
-  <link rel="stylesheet" href="./css/app.css?v=20261027c" />
+  <link rel="stylesheet" href="./css/app.css?v=20261027f" />
 </head>
 <body>
   <div class="shell">
@@ -30,7 +30,7 @@
         </div>
         <div class="drop-label">拖文件到这里</div>
         <button class="btn btn-primary" type="button" id="btn-pick">选文件</button>
-        <input id="file-input" type="file" multiple accept="image/*,.heic,.heif,.bmp,.tif,.tiff,.ico,.avif,application/pdf" hidden />
+        <input id="file-input" type="file" multiple accept="image/*,.heic,.heif,.bmp,.tif,.tiff,.ico,.avif,application/pdf,audio/*,video/*,.mp3,.m4a,.wav,.ogg,.opus,.flac,.webm,.mp4,.mov,.mkv" hidden />
         <p class="drop-error" id="drop-error" hidden></p>
       </div>
 
@@ -53,7 +53,7 @@
 
       <div class="range-row" id="range-row">
         <label for="page-range">页码</label>
-        <input type="text" id="page-range" inputmode="numeric" placeholder="1-3,5" autocomplete="off" />
+        <input type="text" id="page-range" inputmode="numeric" placeholder="如 1-3,5" autocomplete="off" />
       </div>
 
       <div class="tree-actions" id="tree-actions">
@@ -66,10 +66,10 @@
     </footer>
   </div>
 
-  <script src="./js/config.js?v=20261027c"></script>
+  <script src="./js/config.js?v=20261027f"></script>
   <script src="./vendor/jszip/jszip.min.js"></script>
   <script src="./vendor/pdf-lib/pdf-lib.min.js"></script>
   <script src="./vendor/heic2any/heic2any.min.js"></script>
-  <script type="module" src="./js/app.js?v=20261027c"></script>
+  <script type="module" src="./js/app.js?v=20261027f"></script>
 </body>
 </html>
