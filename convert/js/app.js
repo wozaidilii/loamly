@@ -2,7 +2,7 @@ import {
   convertImage, imagesToPdf, convertPdf, mergePdfs, convertAV,
   classify, treePlanAsync, downloadBlob,
   labelFor, needsQuality, needsRange,
-} from './converters.js?v=20261027h';
+} from './converters.js?v=20261027i';
 
 const cfg = window.LOAMLY_CONVERT || {
   name: '文件转换',
@@ -55,8 +55,8 @@ const MSG_MULTI = '这几个文件没有共同可转的格式';
 const MSG_FAIL = '转换失败，再试一次';
 const MSG_TOO_LARGE = '文件太大';
 
-const SECOND_ANGLES = [100, 130, 160, 190]; // 0°=right, clockwise
-const SECOND_R_PX = 110;
+const SECOND_ANGLES = [75, 105, 135, 165]; // 0°=right, clockwise; 调整: 黑白/1920/1280/800; 页面: first 3
+const SECOND_R_PX = 116;
 const SECOND_D_PX = 52;
 
 let files = [];
@@ -127,8 +127,8 @@ function layoutArc(n, r = 41, startDeg = -180, endDeg = 0) {
   });
 }
 
-/** Second layer: downward from parent.
- * Angles 100/130/160/190° (0°=+x right, clockwise). Centres exactly SECOND_R_PX from parent.
+/** Second layer from group parent.
+ * Angles 75/105/135/165° (0°=+x right, clockwise). Centres exactly SECOND_R_PX (116) from parent.
  * Returns pixel centres relative to .tree, plus % for lines.
  */
 function layoutSecondDown(parentPos, n) {
@@ -391,6 +391,8 @@ function renderTargets() {
       node.style.top = `${pos.topPx}px`;
       node.style.width = `${SECOND_D_PX}px`;
       node.style.height = `${SECOND_D_PX}px`;
+      // No scale in final state — diameter must stay 52 CSS px (translate only)
+      node.style.transform = 'translate(-50%, -50%)';
       node.classList.add('is-second-hidden');
       node.addEventListener('pointerenter', () => {
         clearTimeout(groupCollapseTimer);
@@ -481,7 +483,11 @@ function expandGroup(on) {
   tree.classList.toggle('group-open', groupExpanded);
   $$('.target-node.is-second').forEach((n) => {
     n.classList.toggle('is-second-hidden', !groupExpanded);
-    if (groupExpanded) n.classList.add('is-shown');
+    if (groupExpanded) {
+      n.classList.add('is-shown');
+      // Snap: kill any leftover scale from hidden state / transition
+      n.style.transform = 'translate(-50%, -50%)';
+    }
   });
   $$('.tree-line-second').forEach((l) => {
     l.classList.toggle('is-second-visible', groupExpanded);

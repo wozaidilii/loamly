@@ -995,34 +995,37 @@ body[data-shot="tree-hover"] .target-node[data-format="WEBP"].is-active-hover {
   background: rgba(63, 107, 79, 0.08);
 }
 
-/* Second layer: 52px, expand down, full opacity */
+/* Second layer: exactly 52 CSS px, opacity-only show (no scale — scale shrunk painted circle) */
 .target-node.is-second {
-  width: 52px;
-  height: 52px;
-  margin-left: 0;
-  margin-top: 0;
-  font-size: 13px;
+  width: 52px !important;
+  height: 52px !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+  font-size: 12px;
   z-index: 5;
+  transform: translate(-50%, -50%) !important;
 }
 .target-node.is-second .ext {
-  font-size: 13px;
-  font-weight: 600;
-  opacity: 1;
-  color: var(--text);
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  opacity: 1 !important;
+  color: var(--text) !important;
+  letter-spacing: 0.02em;
 }
 .target-node.is-second .progress-ring {
-  width: calc(100% + 8px);
-  height: calc(100% + 8px);
+  width: 100%;
+  height: 100%;
 }
 .target-node.is-second-hidden {
   opacity: 0 !important;
   pointer-events: none;
-  transform: translate(-50%, -50%) scale(0.6);
+  /* opacity only — do NOT scale(0.6); that was leaving painted diameter ~36px in some paths */
+  transform: translate(-50%, -50%) !important;
 }
 .tree.group-open .target-node.is-second:not(.is-second-hidden) {
   opacity: 1 !important;
-  transform: translate(-50%, -50%) scale(1) !important;
-  transition: opacity 150ms ease-out, transform 150ms ease-out;
+  transform: translate(-50%, -50%) !important;
+  transition: opacity 150ms ease-out;
   pointer-events: auto;
   width: 52px !important;
   height: 52px !important;
@@ -1102,23 +1105,23 @@ body[data-shot="tree-hover"] .target-node[data-format="WEBP"].is-active-hover {
   pointer-events: auto;
 }
 
-/* Drag overlay while tree open */
+/* Drag: no explanatory text — dashed outline on content + centre scale */
 body.is-file-drag .drop {
-  /* keep drop hidden under tree; use stage overlay */
+  /* keep drop hidden under tree */
+}
+body.is-file-drag .shell {
+  outline: 2px dashed #3F6B4F;
+  outline-offset: -2px;
+}
+body.is-file-drag .center-node {
+  transform: translate(-50%, -50%) scale(1.05) !important;
+  background: #EDE9E0 !important; /* darker than --surface #FAF8F4 */
+  border-color: #3F6B4F !important;
+  transition: none !important; /* snap — no mid-scale screenshot */
 }
 body.is-file-drag::after {
-  content: "松开以替换文件";
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(250, 248, 244, 0.82);
-  color: #3F6B4F;
-  font-size: 18px;
-  font-weight: 600;
-  pointer-events: none;
+  content: none !important;
+  display: none !important;
 }
 
 .mobile-change-file {
@@ -1310,26 +1313,6 @@ body.is-file-drag::after {
 .target-node.is-done .progress-ring,
 .target-node.is-done .retry-label { display: none !important; opacity: 0 !important; }
 
-/* Second layer hard size */
-.target-node.is-second {
-  width: 52px !important;
-  height: 52px !important;
-  margin: 0 !important;
-  box-sizing: border-box;
-}
-.target-node.is-second .ext {
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  opacity: 1 !important;
-  color: var(--text) !important;
-}
-.tree.group-open .target-node.is-second:not(.is-second-hidden) {
-  opacity: 1 !important;
-  width: 52px !important;
-  height: 52px !important;
-  transform: translate(-50%, -50%) scale(1) !important;
-  transition: opacity 150ms ease-out, transform 150ms ease-out;
-}
 
 /* Quality label moss value already; ensure label readable */
 .tree-controls .quality-row label { color: var(--text); }
