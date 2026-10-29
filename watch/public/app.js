@@ -316,8 +316,8 @@
 
   function loadingWaitText(etaSec) {
     return etaSec > 0
-      ? `这段影片还在装入 · 大约 ${etaSec} 秒后两边一起继续`
-      : '这段影片还在装入 · 好了会自动继续';
+      ? `这段视频还在装入 · 大约 ${etaSec} 秒后两边一起继续`
+      : '这段视频还在装入 · 好了会自动继续';
   }
 
   function formatBytes(bytes) {
@@ -448,7 +448,7 @@
 
     if (state.peerCount < 2) {
       liveSyncBadge.classList.add('is-waiting');
-      liveSyncText.textContent = '等待入座';
+      liveSyncText.textContent = '等 TA 进来';
       liveSyncBadge.title = 'TA 进来后开始同步';
       return;
     }
@@ -657,7 +657,7 @@
 
       let mainLabel = '';
       if (bothSidesReady) {
-        mainLabel = '可以开场了 · 放映中会自动装完剩余影片';
+        mainLabel = '可以开始了 · 播放中会自动装完剩余部分';
       } else if (fivePctStreamReady) {
         mainLabel = !state.localFilmReady ? '正在准备画面…' : '正在为 TA 准备画面…';
       } else if (isUploaderSide) {
@@ -666,8 +666,8 @@
         const remainBytes = Math.max(0, (ftStart || 0) - contig);
         const remainSec = speed > 0 && ftStart > 0 ? Math.max(1, Math.ceil(remainBytes / speed)) : 0;
         mainLabel = remainSec > 0
-          ? `正在装入影片 · 开头还差 ${remainSec} 秒就能先开映`
-          : '正在装入影片 · 开头装好就能先开映';
+          ? `正在装入视频 · 开头还差 ${remainSec} 秒就能先播放`
+          : '正在装入视频 · 开头装好就能先播放';
       } else {
         mainLabel = '正在为 TA 准备画面…';
       }
@@ -724,11 +724,11 @@
       if (!hasFilmMeta) {
         startScreeningBtn.disabled = false;
         startScreeningBtn.classList.remove('is-locked');
-        startScreeningBtnText.textContent = '选择本地影片';
+        startScreeningBtnText.textContent = '选择本地视频';
       } else if (state.instantSyncOverride || state.sameFileMatched || isDemo) {
         startScreeningBtn.disabled = false;
         startScreeningBtn.classList.remove('is-locked');
-        startScreeningBtnText.textContent = '一起开始放映';
+        startScreeningBtnText.textContent = '一起开始播放';
       } else if (transferring && !fivePctStreamReady) {
         startScreeningBtn.disabled = true;
         startScreeningBtn.classList.add('is-locked');
@@ -740,7 +740,7 @@
       } else if (!state.localFilmReady) {
         startScreeningBtn.disabled = false;
         startScreeningBtn.classList.remove('is-locked');
-        startScreeningBtnText.textContent = '选择本地影片';
+        startScreeningBtnText.textContent = '选择本地视频';
       } else if (state.peerCount >= 2 && !state.peerFilmReady) {
         startScreeningBtn.disabled = true;
         startScreeningBtn.classList.add('is-locked');
@@ -748,7 +748,7 @@
       } else {
         startScreeningBtn.disabled = false;
         startScreeningBtn.classList.remove('is-locked');
-        startScreeningBtnText.textContent = '一起开始放映';
+        startScreeningBtnText.textContent = '一起开始播放';
       }
     }
   }
@@ -1175,7 +1175,7 @@
           let resumedBytes = 0;
           for (const i of done) resumedBytes += chunkLen(i);
           const p = Math.min(99, Math.floor((resumedBytes / total) * 100));
-          showSharePlayActionToast('↻', `这部影片之前装到了 ${p}%，接着装`, { durationMs: 3600 });
+          showSharePlayActionToast('↻', `这个视频之前装到了 ${p}%，接着装`, { durationMs: 3600 });
         }
       }
 
@@ -1476,7 +1476,7 @@
         ft.ranges = [[0, total]];
         ft.streamUrl = activeStreamUrl;
         announce(true);
-        p2pProgressText.textContent = `影片已全部装好 (${formatBytes(total)})`;
+        p2pProgressText.textContent = `视频已全部装好 (${formatBytes(total)})`;
         updateCurtainAndReadinessUI();
         refreshTimelineTrack();
       }
@@ -1488,8 +1488,8 @@
     if (!streamUrl || state.selectedFile || state.sameFileMatched) return;
     if (fileMeta) {
       state.fileMeta = fileMeta;
-      currentFileName.textContent = fileMeta.name || '房主放映影片';
-      if (curtainFilmTitle) curtainFilmTitle.textContent = fileMeta.name || '房主放映影片';
+      currentFileName.textContent = fileMeta.name || '房主的视频';
+      if (curtainFilmTitle) curtainFilmTitle.textContent = fileMeta.name || '房主的视频';
     }
 
     const fullUrl = streamUrl;
@@ -1509,7 +1509,7 @@
     mainMovieVideo.setAttribute('data-stream-url', fullUrl);
     mainMovieVideo.src = fullUrl;
     mainMovieVideo.load();
-    p2pProgressText.textContent = `影片已同步就绪 (${formatBytes((fileMeta && fileMeta.size) || 0)})`;
+    p2pProgressText.textContent = `视频已同步就绪 (${formatBytes((fileMeta && fileMeta.size) || 0)})`;
     updateCurtainAndReadinessUI();
 
     if (playback && playback.playing) {
@@ -1736,7 +1736,7 @@
               state.currentUploadId = msg.fileMeta.uploadId || null;
               setCurtainVisible(true);
               if ((hadFilm || state.hasStartedScreening) && Date.now() - (state.queueSwitchedAt || 0) > 6000) {
-                showSharePlayActionToast('🎞', 'TA 换了一部影片，正在重新为你准备画面…', { durationMs: 3600 });
+                showSharePlayActionToast('🎞', 'TA 换了视频，正在重新准备画面…', { durationMs: 3600 });
               }
             }
           }
@@ -1834,9 +1834,9 @@
           setCurtainVisible(false);
           safePlayMovieVideo();
           updatePlayButtonUI(true);
-          showSharePlayActionToast('✨', `画面已对齐至 ${formatCinemaTime(targetTime)} · 继续放映`, { durationMs: 2200 });
+          showSharePlayActionToast('✨', `画面已对齐至 ${formatCinemaTime(targetTime)} · 继续播放`, { durationMs: 2200 });
         } else {
-          showScreenPauseOverlay('已暂停放映', formatCinemaTime(targetTime));
+          showScreenPauseOverlay('已暂停播放', formatCinemaTime(targetTime));
           showSharePlayActionToast('✨', `画面已对齐至 ${formatCinemaTime(targetTime)}`, { durationMs: 2000 });
         }
         setTimeout(() => { state.suppressSyncEmit = false; }, 100);
@@ -2059,7 +2059,7 @@
     stopMyUpload();
     state.localFilmReady = true;
     state.peerFilmReady = true;
-    p2pProgressText.textContent = `已匹配同一部本地影片 (${formatBytes(meta?.size || 0)})`;
+    p2pProgressText.textContent = `已匹配同一个本地视频 (${formatBytes(meta?.size || 0)})`;
     updateCurtainAndReadinessUI();
   }
 
@@ -2268,7 +2268,7 @@
         playbackRateSelect.value = String(msg.playbackRate);
         if (msg.type === 'sync_rate') {
           mainMovieVideo.playbackRate = msg.playbackRate;
-          showSharePlayActionToast('⚡', `TA 将放映倍速调为 ${msg.playbackRate}x`, { durationMs: 2400 });
+          showSharePlayActionToast('⚡', `TA 将播放倍速调为 ${msg.playbackRate}x`, { durationMs: 2400 });
         }
       }
 
@@ -2316,7 +2316,7 @@
           updateSliderProgressTrack(pct);
           timeReadout.textContent = `${formatCinemaTime(targetTime)} / ${formatCinemaTime(dur)}`;
         }
-        showScreenPauseOverlay('TA 调整了放映进度', `正在跳至 ${formatCinemaTime(targetTime)} · 画面对齐后自动继续`);
+        showScreenPauseOverlay('TA 调整了播放进度', `正在跳至 ${formatCinemaTime(targetTime)} · 画面对齐后自动继续`);
         showSharePlayActionToast('⏳', `TA 调整了进度至 ${formatCinemaTime(targetTime)} · 正在对齐画面…`, { persistent: true });
         if (timelineSlider) {
           timelineSlider.classList.add('pulse-gold');
@@ -2337,12 +2337,12 @@
           // 上传方那边还没装到这里：两边一起停下，装好后上传方会自动一起继续
           state.peerLoadingPause = true;
           const text = loadingWaitText(Number(msg.etaSec) || 0);
-          showScreenPauseOverlay('影片还在装入', text);
+          showScreenPauseOverlay('视频还在装入', text);
           showSharePlayActionToast('⏳', text, { persistent: true });
         } else {
           state.peerLoadingPause = false;
-          showScreenPauseOverlay('TA 暂停了放映', formatCinemaTime(expectedTime));
-          showSharePlayActionToast('⏸', `TA 暂停了放映 · ${formatCinemaTime(expectedTime)}`, { persistent: true });
+          showScreenPauseOverlay('TA 暂停了播放', formatCinemaTime(expectedTime));
+          showSharePlayActionToast('⏸', `TA 暂停了播放 · ${formatCinemaTime(expectedTime)}`, { persistent: true });
         }
       } else if (msg.type === 'sync_play') {
         // TA 明确继续放映：之前任何「对齐中 / 等 TA / 等装入」的状态都结束
@@ -2358,7 +2358,7 @@
         }
         hideScreenPauseOverlay();
         clearPersistentActionToast();
-        showSharePlayActionToast('▶', wasLoadingPause ? `影片装好了 · 一起继续 ${formatCinemaTime(expectedTime)}` : `TA 继续了放映 · ${formatCinemaTime(expectedTime)}`, { durationMs: 2200 });
+        showSharePlayActionToast('▶', wasLoadingPause ? `视频装好了 · 一起继续 ${formatCinemaTime(expectedTime)}` : `TA 继续了播放 · ${formatCinemaTime(expectedTime)}`, { durationMs: 2200 });
         if (state.localFilmReady) {
           setCurtainVisible(false);
           if (!isVideoBusyBuffering && drift > 1.5) {
@@ -2408,7 +2408,7 @@
           } else if (msg.playing === false && !mainMovieVideo.paused) {
             mainMovieVideo.pause();
             updatePlayButtonUI(false);
-            showScreenPauseOverlay('TA 暂停了放映', formatCinemaTime(expectedTime));
+            showScreenPauseOverlay('TA 暂停了播放', formatCinemaTime(expectedTime));
           }
         }
       }
@@ -2492,7 +2492,7 @@
       movieMuteBtn.innerHTML = state.movieMuted ? SPEAKER_MUTED_ICON : SPEAKER_ICON;
       movieMuteBtn.classList.toggle('is-muted', state.movieMuted);
       movieMuteBtn.setAttribute('aria-pressed', state.movieMuted ? 'true' : 'false');
-      const t = state.movieMuted ? '打开影片声音（M）' : '静音影片声音（M）';
+      const t = state.movieMuted ? '打开视频声音（M）' : '静音视频声音（M）';
       movieMuteBtn.setAttribute('aria-label', t);
       movieMuteBtn.title = t;
     }
@@ -2516,7 +2516,7 @@
       }
       if (volumeMixerDot) volumeMixerDot.classList.toggle('hidden', !one);
       volumeMixerBtn.classList.toggle('is-all-muted', both);
-      const label = both ? '影片声音和 TA 的声音都已静音' : (state.movieMuted ? '影片声音已静音' : (state.peerMuted ? 'TA 的声音已静音' : '调节影片声音与 TA 的声音'));
+      const label = both ? '视频声音和 TA 的声音都已静音' : (state.movieMuted ? '视频声音已静音' : (state.peerMuted ? 'TA 的声音已静音' : '调节视频声音与 TA 的声音'));
       volumeMixerBtn.title = label;
       volumeMixerBtn.setAttribute('aria-label', label);
     }
@@ -2642,7 +2642,7 @@
       const k = (e.key || '').toLowerCase();
       if (k === 'm') {
         toggleMovieMute();
-        showSharePlayActionToast(state.movieMuted ? '🔇' : '🔊', state.movieMuted ? '影片声音已静音' : '影片声音已打开', { durationMs: 1400 });
+        showSharePlayActionToast(state.movieMuted ? '🔇' : '🔊', state.movieMuted ? '视频声音已静音' : '视频声音已打开', { durationMs: 1400 });
       } else if (k === 'n') {
         togglePeerMute();
         showSharePlayActionToast(state.peerMuted ? '🔇' : '🔊', state.peerMuted ? 'TA 的声音已静音' : 'TA 的声音已打开', { durationMs: 2000 });
@@ -2864,7 +2864,7 @@
       updatePlayButtonUI(false);
       if (!state.suppressSyncEmit) {
         if (state.hasStartedScreening && !mainMovieVideo.ended) {
-          showScreenPauseOverlay('已暂停放映', formatCinemaTime(mainMovieVideo.currentTime));
+          showScreenPauseOverlay('已暂停播放', formatCinemaTime(mainMovieVideo.currentTime));
         }
         sendSignal({
           type: 'sync_pause',
@@ -3191,7 +3191,7 @@
       });
     }
     updatePlayButtonUI(true);
-    showSharePlayActionToast('▶', source === 'auto' ? '等了一会儿，先继续放映 · TA 那边好了会自动跟上' : '不等了 · 继续放映', { durationMs: 2600 });
+    showSharePlayActionToast('▶', source === 'auto' ? '等了一会儿，先继续播放 · TA 那边好了会自动跟上' : '不等了 · 继续播放', { durationMs: 2600 });
     updateLiveSyncUI();
   }
 
@@ -3284,7 +3284,7 @@
           sendLoadingPause(eta);
           requestFilmPriorityAt(cur, 'edge');
           const text = loadingWaitText(eta);
-          showScreenPauseOverlay('影片还在装入', text);
+          showScreenPauseOverlay('视频还在装入', text);
           showSharePlayActionToast('⏳', text, { persistent: true });
         }
       } else if (ahead >= 20 || ahead === Infinity || (v.duration > 0 && cur + ahead >= v.duration - 0.5)) {
@@ -3299,7 +3299,7 @@
         const eta = estimateLoadEtaSec(cur);
         sendLoadingPause(eta);
         const text = loadingWaitText(eta);
-        showScreenPauseOverlay('影片还在装入', text);
+        showScreenPauseOverlay('视频还在装入', text);
         showSharePlayActionToast('⏳', text, { persistent: true });
       }
     } else if (state.autoPausedForLoading && (ft.ready || !state.myUploadId)) {
@@ -3409,7 +3409,7 @@
       selfSeatCard.classList.remove('is-speaking');
       if (seatPartnerWave) seatPartnerWave.classList.add('hidden');
       pipPeerLabel.textContent = state.peerCount >= 2 ? '' : '';
-      movieVolumeText.textContent = '100% (银幕原声 · 说话自动压至 25%)';
+      movieVolumeText.textContent = '100% (视频原声 · 说话自动压至 25%)';
     }
   }
 
@@ -3602,14 +3602,14 @@
     } else if (isDemo) {
       state.selectedFile = null;
       state.fileMeta = {
-        name: '试看短片',
+        name: '示例视频',
         size: 6165240,
         type: 'video/mp4',
         isDemo: true
       };
       state.localFilmReady = true;
-      currentFileName.textContent = '试看短片';
-      if (curtainFilmTitle) curtainFilmTitle.textContent = '试看短片';
+      currentFileName.textContent = '示例视频';
+      if (curtainFilmTitle) curtainFilmTitle.textContent = '示例视频';
       mainMovieVideo.removeAttribute('data-stream-url');
       mainMovieVideo.src = '/demo-clip.mp4';
     } else {
@@ -3617,8 +3617,8 @@
       state.selectedFile = null;
       state.fileMeta = null;
       state.localFilmReady = false;
-      currentFileName.textContent = '正在同步房间片源…';
-      if (curtainFilmTitle) curtainFilmTitle.textContent = '正在同步房主的放映画面…';
+      currentFileName.textContent = '正在同步房间视频…';
+      if (curtainFilmTitle) curtainFilmTitle.textContent = '正在同步房主的画面…';
       mainMovieVideo.removeAttribute('src');
       mainMovieVideo.removeAttribute('data-stream-url');
       mainMovieVideo.load();
@@ -3665,18 +3665,18 @@
   }
 
   // ==================== 本场待放映（v0.7）====================
-  const WEB_VERSION = '0.7.2';
+  const WEB_VERSION = '0.7.3';
   const QUEUE_MAX_ITEMS = 3;
   const QUEUE_MAX_FILM_BYTES = 4 * 1024 * 1024 * 1024;
   const QUEUE_MAX_TOTAL_BYTES = 8 * 1024 * 1024 * 1024;
   const QUEUE_COPY = {
-    tooBig: '这部影片超过 4GB · 换个小一点的文件试试',
-    full: '最多放 3 部 · 先移出一部再加',
-    total: '加上这部会超过本场 8GB · 先移出一部再加',
+    tooBig: '这个视频超过 4GB · 换个小一点的文件试试',
+    full: '最多 3 个视频 · 先移出一个再加',
+    total: '加上这个会超过房间上限 8GB · 先移出一个再加',
     declined: 'TA 想先看完这段',
-    notReadyMine: '这部还没装进来 · 重新选一下这个文件就能接着装',
-    notReadyTa: 'TA 加的这部还没装进来 · 等 TA 回来就接着装',
-    older: '页面有新版本 · 刷新一下再开场',
+    notReadyMine: '这个视频还没装进来 · 重新选一下这个文件就能接着装',
+    notReadyTa: 'TA 加的视频还没装进来 · 等 TA 回来就接着装',
+    older: '页面有新版本 · 刷新一下再开始',
     peerOlder: 'TA 的页面不是最新版 · 让 TA 刷新一下'
   };
 
@@ -3741,7 +3741,7 @@
 
   function queueItemStatus(it) {
     const q = state.queue;
-    if (it.id === q.nowPlayingId) return { text: '放映中', cls: 'gold', dot: true };
+    if (it.id === q.nowPlayingId) return { text: '播放中', cls: 'gold', dot: true };
     if (it.ready) return { text: '已装好', cls: 'gold' };
     if (it.streamReady) return { text: '可以先开始', cls: 'gold' };
     if (it.id === q.uploadTurn && (it.pct > 0 || (state.bgUpload && state.bgUpload.itemId === it.id))) {
@@ -3817,7 +3817,7 @@
             const b = document.createElement('button');
             b.type = 'button';
             b.className = 'queue-play';
-            b.textContent = '放这部 →';
+            b.textContent = '播放这个 →';
             b.addEventListener('click', (e) => { e.stopPropagation(); requestQueueSwitch(it.id); });
             acts.appendChild(b);
           } else {
@@ -3827,7 +3827,7 @@
             const r = document.createElement('button');
             r.type = 'button';
             r.className = 'queue-remove';
-            r.textContent = '移出待放映';
+            r.textContent = '移出待播';
             r.addEventListener('click', (e) => { e.stopPropagation(); removeQueueItem(it.id); });
             acts.appendChild(r);
           }
@@ -3881,7 +3881,7 @@
     const existing = findMyQueueItemForFile(file);
     if (existing) {
       registerQueueFile(existing.id, file);
-      showSharePlayActionToast('↻', existing.ready ? '这部已经在待放映里了' : '这部已经在待放映里 · 接着装', { durationMs: 2600 });
+      showSharePlayActionToast('↻', existing.ready ? '这个视频已经在待播里了' : '这个视频已经在待播里 · 接着装', { durationMs: 2600 });
       return;
     }
     const err = checkQueueLimits(file);
@@ -4116,7 +4116,7 @@
     });
   }
   const APP_RELEASE_LABEL = '10-29';
-  const APP_BUILD_TIME_ISO = '2026-10-29T03:10:00.000Z';
+  const APP_BUILD_TIME_ISO = '2026-10-29T03:40:00.000Z';
 
   // ---------- 后台装入（只在轮到它、正在放的那部不卡的时候装）----------
   function stopBackgroundUpload() {
@@ -4349,7 +4349,7 @@
         if (queued) {
           registerQueueFile(queued.id, file);
           if (queued.id !== state.queue.nowPlayingId) {
-            showSharePlayActionToast('↻', '这部已经在待放映里了', { durationMs: 2600 });
+            showSharePlayActionToast('↻', '这个视频已经在待播里了', { durationMs: 2600 });
             setQueuePanelOpen(true);
             return;
           }
@@ -4376,7 +4376,7 @@
         // 1) 正在装的就是这一部：接着装，什么都不重来
         if (state.myUploadId && state.uploadEngine && fileMatchesUploadRecord(file, state.myUploadInfo)) {
           const pctNow = Math.max(0, Math.min(100, Math.round(state.filmTransfer.pct || 0)));
-          showSharePlayActionToast('↻', state.filmTransfer.ready ? '这部影片已经装好了' : `这部影片之前装到了 ${pctNow}%，接着装`, { durationMs: 3000 });
+          showSharePlayActionToast('↻', state.filmTransfer.ready ? '这个视频已经装好了' : `这个视频之前装到了 ${pctNow}%，接着装`, { durationMs: 3000 });
           return;
         }
         // 2) 之前装过一部分（例如刷新了页面）：复用原来的 uploadId，跳过已经装好的部分
@@ -4524,9 +4524,9 @@
       try {
         await navigator.clipboard.writeText(inviteUrl);
       } catch {}
-      copyInviteText.textContent = '已复制入场券链接';
+      copyInviteText.textContent = '已复制邀请链接';
       setTimeout(() => {
-        copyInviteText.textContent = '复制入场券链接';
+        copyInviteText.textContent = '复制邀请链接';
       }, 2200);
     });
 

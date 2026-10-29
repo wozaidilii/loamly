@@ -26,13 +26,13 @@
   <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="300x300" href="/icon-300.png" />
-  <link rel="stylesheet" href="/styles.css?v=0.7.2" />
+  <link rel="stylesheet" href="/styles.css?v=0.7.3" />
 </head>
 <body>
   <!-- 微信内置浏览器引导浮层 (仅在 MicroMessenger UA 时自动显现) -->
   <div id="wxGuideBanner" class="wx-guide-banner hidden" role="alert">
     <div>
-      请点击右上角 <span class="wx-dots-badge">···</span> 选择「<strong>在浏览器中打开</strong>」，即可正常选片与开启语音
+      请点击右上角 <span class="wx-dots-badge">···</span> 选择「<strong>在浏览器中打开</strong>」，即可正常选择视频与开启语音
     </div>
     <button id="wxGuideCloseBtn" class="wx-guide-close" type="button">知道了</button>
   </div>
@@ -42,7 +42,7 @@
     <header class="cinema-topbar">
       <a href="/" class="brand-mark" id="brandHomeLink">
         <img src="/favicon.svg" alt="Loamly" class="brand-sprout-icon" />
-        <span class="brand-wordmark">LOAMLY CINEMA</span>
+        <span class="brand-wordmark">LOAMLY</span>
       </a>
 
       <div class="topbar-right">
@@ -54,9 +54,9 @@
           <button id="copyInviteLinkBtn" class="screening-pass-chip" type="button" title="复制房间邀请链接">
             <span id="roomCodeBadge">NO. 3G6H</span>
             <span class="divider-dot">·</span>
-            <span class="copy-text" id="copyInviteText">复制入场券链接</span>
+            <span class="copy-text" id="copyInviteText">复制邀请链接</span>
           </button>
-          <button id="openSettingsDrawerBtn" class="more-drawer-btn" type="button" aria-label="放映设置" title="放映设置">
+          <button id="openSettingsDrawerBtn" class="more-drawer-btn" type="button" aria-label="播放设置" title="播放设置">
             ⋯
           </button>
         </div>
@@ -70,11 +70,11 @@
 
       <div class="lobby-hero-header">
         <div class="cinema-crest"></div>
-        <h1 class="lobby-serif-title">两个人的私人放映厅</h1>
+        <h1 class="lobby-serif-title">一起看视频</h1>
       </div>
 
       <!-- 高定纸质/金属质感「双人放映厅入场券 Screening Pass」 -->
-      <section class="screening-pass-card" aria-label="入场">
+      <section class="screening-pass-card" aria-label="创建或加入房间">
         <input
           type="file"
           id="localVideoFileInput"
@@ -90,7 +90,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="6 4 20 12 6 20 6 4" fill="currentColor"></polygon>
             </svg>
-            <span>选视频开场</span>
+            <span>选择视频</span>
           </button>
 
           <div>
@@ -129,7 +129,7 @@
           </form>
         </div>
       </section>
-      <div class="version-tag home-version-tag" data-version-tag>v0.7.2 · 10-29</div>
+      <div class="version-tag home-version-tag" data-version-tag>v0.7.3 · 10-29</div>
     </main>
 
     <!-- ==================== 2. 放映厅内页 ==================== -->
@@ -162,10 +162,10 @@
                 <div id="curtainProgressWrap" class="curtain-progress-wrap hidden">
                   <div class="curtain-progress-track">
                     <div id="curtainProgressFill" class="curtain-progress-fill" style="width: 0%;"></div>
-                    <div class="curtain-progress-tick hidden" style="left: 5%;" title="装到这里就能先开映"></div>
+                    <div class="curtain-progress-tick hidden" style="left: 5%;" title="装到这里就能先播放"></div>
                   </div>
                   <div class="curtain-progress-meta">
-                    <span id="curtainProgressMain" class="curtain-progress-main">正在装入影片 · 0%</span>
+                    <span id="curtainProgressMain" class="curtain-progress-main">正在装入视频 · 0%</span>
                     <span id="curtainProgressDetail" class="curtain-progress-detail">0 MB</span>
                   </div>
                 </div>
@@ -182,16 +182,16 @@
                   <svg viewBox="0 0 24 24" fill="currentColor">
                     <polygon points="6 4 20 12 6 20 6 4"></polygon>
                   </svg>
-                  <span id="startScreeningBtnText">一起开始放映</span>
+                  <span id="startScreeningBtnText">一起开始播放</span>
                 </button>
 
                 <p id="versionNotice" class="curtain-version-notice hidden" role="status"></p>
 
                 <div id="curtainOtherWays" class="curtain-other-ways hidden">
                   <button id="otherWaysLink" class="curtain-other-link" type="button" aria-expanded="false">其他方式</button>
-                  <button id="guestQuickMatchBtn" class="curtain-quick-match-btn hidden" type="button">用我自己电脑里的同一部片</button>
+                  <button id="guestQuickMatchBtn" class="curtain-quick-match-btn hidden" type="button">用我电脑里的同一个视频</button>
                 </div>
-                <div class="version-tag curtain-version-tag" data-version-tag>v0.7.2 · 10-29</div>
+                <div class="version-tag curtain-version-tag" data-version-tag>v0.7.3 · 10-29</div>
               </div>
             </div>
 
@@ -205,13 +205,13 @@
                     <rect x="13.5" y="4" width="4.5" height="16" rx="1.5"></rect>
                   </svg>
                 </div>
-                <div class="pause-overlay-title" id="pauseOverlayTitle">TA 暂停了放映</div>
+                <div class="pause-overlay-title" id="pauseOverlayTitle">TA 暂停了播放</div>
                 <div class="pause-overlay-sub" id="pauseOverlaySub">00:00</div>
                 <button id="resumeFromPauseBtn" class="pause-overlay-resume-btn" type="button">
                   <svg viewBox="0 0 24 24" fill="currentColor">
                     <polygon points="7 5 19 12 7 19 7 5"></polygon>
                   </svg>
-                  <span>继续放映</span>
+                  <span>继续播放</span>
                 </button>
               </div>
             </div>
@@ -229,7 +229,7 @@
 
         <!-- 双人包厢坐席（视频连麦窗）：
              手机竖屏在银幕下方左右并排 2 列；桌面横屏在右下角悬浮双席位毛玻璃小窗 -->
-        <div id="pipFloatingWindow" class="private-booth-seats" aria-label="座位">
+        <div id="pipFloatingWindow" class="private-booth-seats" aria-label="视频通话">
           <!-- 左席（伴侣 · TA） -->
           <div id="partnerSeatCard" class="booth-seat-card">
             <img id="remotePortraitImg" src="/seat-ta.jpg" alt="TA" class="seat-portrait-img" />
@@ -277,7 +277,7 @@
                 max="100"
                 step="0.1"
                 value="0"
-                aria-label="放映进度"
+                aria-label="播放进度"
               />
               <span id="timelineLoadEdge" class="timeline-load-edge hidden" aria-hidden="true"></span>
               <span id="peerTimelineCursor" class="peer-timeline-cursor hidden" title="TA 的播放位置"></span>
@@ -294,7 +294,7 @@
           <div class="dock-right-controls">
             <!-- 双路独立音量控制（影片声音 + TA 的声音） -->
             <div class="dock-volume-mixer-wrap" id="volumeMixerWrap">
-              <button id="volumeMixerBtn" class="dock-icon-btn" type="button" title="调节影片声音与 TA 的声音" aria-label="调节影片声音与 TA 的声音">
+              <button id="volumeMixerBtn" class="dock-icon-btn" type="button" title="调节视频声音与 TA 的声音" aria-label="调节视频声音与 TA 的声音">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
                   <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
@@ -302,16 +302,16 @@
                 </svg>
                 <span id="volumeMixerDot" class="volume-mixer-dot hidden" aria-hidden="true"></span>
               </button>
-              <div id="volumeMixerPopover" class="volume-mixer-popover hidden" role="dialog" aria-label="影片声音与 TA 的声音">
+              <div id="volumeMixerPopover" class="volume-mixer-popover hidden" role="dialog" aria-label="视频声音与 TA 的声音">
                 <div class="volume-mixer-row">
                   <div class="volume-mixer-head">
                     <span class="volume-mixer-label-group">
-                      <button id="movieMuteBtn" class="volume-mute-btn" type="button" aria-pressed="false" aria-label="静音影片声音（M）" title="静音影片声音（M）"></button>
-                      <span class="volume-mixer-label">影片声音</span>
+                      <button id="movieMuteBtn" class="volume-mute-btn" type="button" aria-pressed="false" aria-label="静音视频声音（M）" title="静音视频声音（M）"></button>
+                      <span class="volume-mixer-label">视频声音</span>
                     </span>
                     <span class="volume-mixer-val" id="movieVolVal">100%</span>
                   </div>
-                  <input type="range" id="movieVolumeSlider" class="volume-mixer-slider" min="0" max="100" step="1" value="100" aria-label="影片声音" />
+                  <input type="range" id="movieVolumeSlider" class="volume-mixer-slider" min="0" max="100" step="1" value="100" aria-label="视频声音" />
                 </div>
                 <div class="volume-mixer-row">
                   <div class="volume-mixer-head">
@@ -324,7 +324,7 @@
                   <input type="range" id="peerVolumeSlider" class="volume-mixer-slider" min="0" max="200" step="5" value="100" aria-label="TA 的声音" />
                   <p id="peerMuteHint" class="volume-mixer-hint hidden" hidden aria-hidden="true"></p>
                 </div>
-                <div class="version-tag panel-version-line" data-version-tag>v0.7.2 · 10-29</div>
+                <div class="version-tag panel-version-line" data-version-tag>v0.7.3 · 10-29</div>
               </div>
             </div>
 
@@ -336,7 +336,7 @@
               </svg>
             </button>
 
-            <button id="queueToggleBtn" class="dock-pill-btn queue-toggle-btn" type="button" title="本场待放映" aria-expanded="false" aria-controls="queuePanel">
+            <button id="queueToggleBtn" class="dock-pill-btn queue-toggle-btn" type="button" title="待播列表" aria-expanded="false" aria-controls="queuePanel">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="8" y1="6" x2="21" y2="6"></line>
                 <line x1="8" y1="12" x2="21" y2="12"></line>
@@ -345,7 +345,7 @@
                 <circle cx="3.5" cy="12" r="1"></circle>
                 <circle cx="3.5" cy="18" r="1"></circle>
               </svg>
-              <span>待放映</span>
+              <span>待播</span>
               <span id="queueBadge" class="queue-badge hidden">0</span>
             </button>
 
@@ -361,14 +361,14 @@
         </div>
       </div>
       <!-- 本场待放映：桌面右侧抽屉 / 手机底部抽屉 -->
-      <aside id="queuePanel" class="queue-panel hidden" role="dialog" aria-label="本场待放映">
+      <aside id="queuePanel" class="queue-panel hidden" role="dialog" aria-label="待播列表">
         <div class="queue-grab" id="queueGrab" aria-hidden="true"></div>
         <div class="queue-head">
-          <h2 class="queue-title">本场待放映<span id="queueCount" class="queue-count">0 / 3</span></h2>
+          <h2 class="queue-title">待播列表<span id="queueCount" class="queue-count">0 / 3</span></h2>
           <button id="queueCloseBtn" class="queue-close" type="button" aria-label="收起">✕</button>
         </div>
         <div id="queueList" class="queue-list"></div>
-        <button id="queueAddBtn" class="queue-add" type="button">＋ 加入待放映</button>
+        <button id="queueAddBtn" class="queue-add" type="button">＋ 加入待播</button>
         <p id="queueCaption" class="queue-cap hidden"></p>
         <div class="queue-foot">仅两人可见 · 离开 15 分钟后自动清除</div>
         <input type="file" id="queueFileInput" accept="video/mp4,video/webm,video/quicktime,video/*,.mp4,.webm,.mov,.mkv" hidden />
@@ -389,9 +389,9 @@
 
     <!-- 隐藏式「放映设置 ⋯」抽屉菜单（底层状态、翻转镜头、倍速与调试全收纳于此，主界面零干扰） -->
     <div id="settingsDrawerBackdrop" class="settings-drawer-backdrop hidden">
-      <div class="settings-drawer-panel" role="dialog" aria-label="放映设置">
+      <div class="settings-drawer-panel" role="dialog" aria-label="播放设置">
         <div class="drawer-header">
-          <span class="drawer-title">放映设置</span>
+          <span class="drawer-title">播放设置</span>
           <button id="closeSettingsDrawerBtn" class="drawer-close-btn" type="button">×</button>
         </div>
         <div class="drawer-item">
@@ -402,7 +402,7 @@
         </div>
         <div class="drawer-item">
           <span>正在播放</span>
-          <span class="drawer-item-val" id="currentFileName">试看短片</span>
+          <span class="drawer-item-val" id="currentFileName">示例视频</span>
         </div>
         <div class="drawer-item">
           <span>状态</span>
@@ -427,7 +427,7 @@
           <button id="flipCamBtn" class="drawer-action-btn" type="button" style="grid-column: span 2;">切换前后摄像头</button>
           <button id="leaveRoomBtn" class="drawer-action-btn" type="button" style="grid-column: span 2;">退出房间</button>
         </div>
-        <div class="version-tag panel-version-line" data-version-tag>v0.7.2 · 10-29</div>
+        <div class="version-tag panel-version-line" data-version-tag>v0.7.3 · 10-29</div>
       </div>
     </div>
 
@@ -441,12 +441,12 @@
       <div class="switch-film-card">
         <p id="switchFilmConfirmTitle" class="switch-film-title">换了之后 TA 要重新装</p>
         <div class="switch-film-actions">
-          <button id="switchFilmConfirmCancel" type="button" class="switch-film-btn is-ghost">继续当前这部</button>
-          <button id="switchFilmConfirmOk" type="button" class="switch-film-btn is-primary">换片</button>
+          <button id="switchFilmConfirmCancel" type="button" class="switch-film-btn is-ghost">继续当前视频</button>
+          <button id="switchFilmConfirmOk" type="button" class="switch-film-btn is-primary">换视频</button>
         </div>
       </div>
     </div>
 
-    <script src="/app.js?v=0.7.2"></script>
+    <script src="/app.js?v=0.7.3"></script>
 </body>
 </html>

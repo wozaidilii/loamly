@@ -3,7 +3,7 @@ const p = require('puppeteer-core');
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 const BASE = 'http://127.0.0.1:3081';
 const F = (n) => `/tmp/v06films/${n}.mp4`;
-const SHOTS = '/workspace/watch-loamly/shots-v072';
+const SHOTS = '/workspace/watch-loamly/shots-v073';
 const results = [];
 const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok ? 'PASS' : 'FAIL', name, extra !== undefined ? JSON.stringify(extra) : ''); };
 (async () => {
@@ -20,7 +20,7 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
     }, 'http://127.0.0.1:8788', old);
     if (fakeNewer) {
       await pg.setRequestInterception(true);
-      pg.on('request', (r) => { if (r.url().includes('/api/version')) r.respond({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, web: '0.7.2', server: '0.7.2', buildTime: '2026-10-26T00:00:00+09:00' }) }); else r.continue(); });
+      pg.on('request', (r) => { if (r.url().includes('/api/version')) r.respond({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, web: '0.7.3', server: '0.7.3', buildTime: '2026-10-26T00:00:00+09:00' }) }); else r.continue(); });
     }
     pg.on('pageerror', e => console.log(who, 'PAGEERR', e.message));
     pg.on('console', (m) => { const t = m.text(); if (/rror|\[upload\]/i.test(t) && !/Failed to load resource/.test(t)) console.log(who, 'CONSOLE', t.slice(0, 200)); });
@@ -39,7 +39,7 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
   const host = await mk('host', { up: 12e6 });
   await host.goto(BASE + '/', { waitUntil: 'networkidle2' });
   const homeTag = await host.evaluate(() => { const e = document.querySelector('.home-version-tag'); const r = e.getBoundingClientRect(); const cs = getComputedStyle(e); return { text: e.textContent, title: e.title, right: innerWidth - r.right, bottom: innerHeight - r.bottom, color: cs.color, font: cs.fontFamily }; });
-  check('home version label 「v0.7.2 · 10-29」 bottom-right with hover time', homeTag.text === 'v0.7.2 · 10-29' && /更新于/.test(homeTag.title) && homeTag.right < 40 && homeTag.bottom < 30 && /D-DIN/.test(homeTag.font), homeTag);
+  check('home version label 「v0.7.3 · 10-29」 bottom-right with hover time', homeTag.text === 'v0.7.3 · 10-29' && /更新于/.test(homeTag.title) && homeTag.right < 40 && homeTag.bottom < 30 && /D-DIN/.test(homeTag.font), homeTag);
   await host.screenshot({ path: `${SHOTS}/01-home-version-tag.png` });
 
   // ---------- 2. 房主选片进房，TA 进房 ----------
@@ -54,17 +54,17 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
   const gCurtain = await guest.evaluate(() => ({ other: !document.getElementById('curtainOtherWays').classList.contains('hidden'), link: document.getElementById('otherWaysLink').textContent, optHidden: document.getElementById('guestQuickMatchBtn').classList.contains('hidden'), tag: document.querySelector('.curtain-version-tag').textContent, bodyHas: document.body.innerText }));
   check('curtain shows only gray 「其他方式」 link, option hidden', gCurtain.other && gCurtain.link === '其他方式' && gCurtain.optHidden, { other: gCurtain.other, optHidden: gCurtain.optHidden });
   check('no 「我电脑里也有这部片」 / 「秒开」 anywhere on page', !/我电脑里也有这部片|秒开/.test(gCurtain.bodyHas) && !/我电脑里也有这部片|秒开/.test(await guest.content()));
-  check('curtain card version label', gCurtain.tag === 'v0.7.2 · 10-29');
+  check('curtain card version label', gCurtain.tag === 'v0.7.3 · 10-29');
   await guest.screenshot({ path: `${SHOTS}/02-guest-curtain-other-ways.png` });
   await guest.click('#otherWaysLink'); await sleep(300);
   const reveal = await guest.evaluate(() => ({ shown: !document.getElementById('guestQuickMatchBtn').classList.contains('hidden'), text: document.getElementById('guestQuickMatchBtn').textContent, link: !document.getElementById('otherWaysLink').classList.contains('hidden') }));
-  check('「其他方式」 reveals 「用我自己电脑里的同一部片」', reveal.shown && reveal.text === '用我自己电脑里的同一部片' && !reveal.link, reveal);
+  check('「其他方式」 reveals 「用我电脑里的同一个视频」', reveal.shown && reveal.text === '用我电脑里的同一个视频' && !reveal.link, reveal);
   await guest.screenshot({ path: `${SHOTS}/03-guest-other-ways-revealed.png` });
 
   // queue has host's film playing
   await openPanel(guest);
   let gi = await items(guest);
-  check('host film auto-listed, 放映中, 「TA 加入的」 on guest', gi.length === 1 && gi[0].name === '千与千寻' && gi[0].status === '放映中' && /^TA 加入的/.test(gi[0].who), gi);
+  check('host film auto-listed, 播放中, 「TA 加入的」 on guest', gi.length === 1 && gi[0].name === '千与千寻' && gi[0].status === '播放中' && /^TA 加入的/.test(gi[0].who), gi);
   await guest.click('#queueCloseBtn');
 
   // start screening when ready
@@ -97,13 +97,13 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
   await (await host.$('#queueFileInput')).uploadFile(F('超大影片'));
   await sleep(800);
   const capBig = await host.evaluate(() => document.getElementById('queueCaption').textContent);
-  check('over 4GB copy', capBig === '这部影片超过 4GB · 换个小一点的文件试试', capBig);
+  check('over 4GB copy', capBig === '这个视频超过 4GB · 换个小一点的文件试试', capBig);
   await host.screenshot({ path: `${SHOTS}/05-limit-over-4gb.png` });
   await (await host.$('#queueFileInput')).uploadFile(F('海街日记'));
   await waitFor(host, () => document.querySelectorAll('#queueList .queue-item').length === 3, 15000);
   await host.click('#queueAddBtn'); await sleep(400);
   const capFull = await host.evaluate(() => ({ cap: document.getElementById('queueCaption').textContent, full: document.getElementById('queueAddBtn').classList.contains('is-full'), op: getComputedStyle(document.getElementById('queueAddBtn')).opacity, cnt: document.getElementById('queueCount').textContent, badge: document.getElementById('queueBadge').textContent }));
-  check('list full copy + dimmed add + 3 / 3 + badge', capFull.cap === '最多放 3 部 · 先移出一部再加' && capFull.full && capFull.op === '0.4' && capFull.cnt === '3 / 3' && capFull.badge === '3', capFull);
+  check('list full copy + dimmed add + 3 / 3 + badge', capFull.cap === '最多 3 个视频 · 先移出一个再加' && capFull.full && capFull.op === '0.4' && capFull.cnt === '3 / 3' && capFull.badge === '3', capFull);
   // server also enforces full
   const srvFull = await host.evaluate(() => new Promise((res) => { const s = window.__watchState; const orig = s.ws.onmessage; const h = (ev) => { const m = JSON.parse(ev.data); if (m.type === 'queue_error') { s.ws.removeEventListener('message', h); res(m.code); } }; s.ws.addEventListener('message', h); s.ws.send(JSON.stringify({ type: 'queue_add', uploadId: 'x-full-test', name: 'x.mp4', size: 1000 })); setTimeout(() => res('timeout'), 3000); }));
   check('server rejects 4th film (full)', srvFull === 'full', srvFull);
@@ -189,7 +189,7 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
   await host.evaluate(() => document.getElementById('volumeMixerBtn').click());
   await sleep(300);
   const volLine = await host.evaluate(() => document.querySelector('#volumeMixerPopover .panel-version-line').textContent);
-  check('volume panel bottom version line', volLine === 'v0.7.2 · 10-29');
+  check('volume panel bottom version line', volLine === 'v0.7.3 · 10-29');
   await host.screenshot({ path: `${SHOTS}/13-volume-panel-version.png` });
   await host.evaluate(() => document.getElementById('volumeMixerBtn').click());
 
@@ -224,15 +224,15 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
   await oldG.evaluate(() => {
     // Queue copy older path: server > WEB_VERSION
     const st = window.__watchState;
-    st.versionInfo.server = '0.7.2';
+    st.versionInfo.server = '0.7.3';
     st.versionInfo.peerVersion = '';
     // Monkey-patch compare by writing notice via same string Marketing approved
     const el = document.getElementById('versionNotice');
-    el.textContent = '页面有新版本 · 刷新一下再开场';
+    el.textContent = '页面有新版本 · 刷新一下再开始';
     el.classList.remove('hidden');
   });
   const n2 = await oldG.evaluate(() => document.getElementById('versionNotice').textContent);
-  check('older side: 「页面有新版本 · 刷新一下再开场」', n2 === '页面有新版本 · 刷新一下再开场', n2);
+  check('older side: 「页面有新版本 · 刷新一下再开始」', n2 === '页面有新版本 · 刷新一下再开始', n2);
   await h2.screenshot({ path: `${SHOTS}/16-version-peer-older.png` });
   await oldG.screenshot({ path: `${SHOTS}/17-version-page-outdated.png` });
 
@@ -240,7 +240,7 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
   const tot = await h2.evaluate(() => new Promise((res) => {
     const ws = new WebSocket(location.origin.replace('http', 'ws') + '/ws');
     const out = [];
-    ws.onopen = () => ws.send(JSON.stringify({ type: 'create_room', roomCode: 'TOTL', peerKey: 'ktest', webVersion: '0.7.2' }));
+    ws.onopen = () => ws.send(JSON.stringify({ type: 'create_room', roomCode: 'TOTL', peerKey: 'ktest', webVersion: '0.7.3' }));
     ws.onmessage = (ev) => {
       const m = JSON.parse(ev.data);
       if (m.type === 'room_joined') {
@@ -263,17 +263,17 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
     window.__loamlyWatch.handleSignalingMessage({ type: 'queue_error', code: 'not_ready', name: '自测.mp4', mine: true });
   });
   await sleep(200);
-  check('not_ready mine copy', (await toast(host)) === '这部还没装进来 · 重新选一下这个文件就能接着装', await toast(host));
+  check('not_ready mine copy', (await toast(host)) === '这个视频还没装进来 · 重新选一下这个文件就能接着装', await toast(host));
   await host.evaluate(() => {
     window.__loamlyWatch.handleSignalingMessage({ type: 'queue_error', code: 'not_ready', name: 'TA片.mp4', mine: false });
   });
   await sleep(200);
-  check('not_ready TA copy', (await toast(host)) === 'TA 加的这部还没装进来 · 等 TA 回来就接着装', await toast(host));
+  check('not_ready TA copy', (await toast(host)) === 'TA 加的视频还没装进来 · 等 TA 回来就接着装', await toast(host));
   await host.screenshot({ path: `${SHOTS}/18-not-ready-copy.png` });
 
   // ---------- 12. /api/version ----------
   const ver = await (await fetch(BASE + '/api/version')).json();
-  check('/api/version JSON', ver.web === '0.7.2' && ver.server === '0.7.2' && !!ver.buildTime, ver);
+  check('/api/version JSON', ver.web === '0.7.3' && ver.server === '0.7.3' && !!ver.buildTime, ver);
 
   console.log('SUMMARY', results.filter(r => r[1]).length, '/', results.length, 'passed');
   console.log('ROOM', room);

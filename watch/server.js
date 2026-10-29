@@ -25,9 +25,9 @@ try { fs.mkdirSync(ROOM_FILM_DIR, { recursive: true }); } catch (e) { console.er
 try { fs.mkdirSync(ROOM_STATE_DIR, { recursive: true }); } catch (e) { console.error('[Loamly Watch] mkdir ROOM_STATE_DIR failed', e.message); }
 
 // ===== 版本号（每次更新 +0.1）=====
-const APP_VERSION = '0.7.2';
+const APP_VERSION = '0.7.3';
 const APP_RELEASE = '10-29';
-const APP_BUILD_TIME = '2026-10-29T03:10:00.000Z';
+const APP_BUILD_TIME = '2026-10-29T03:40:00.000Z';
 
 // ===== 本场待放映 =====
 const EDGE_BASE = process.env.EDGE_BASE || 'https://edge-watch.loamly.net';
@@ -979,7 +979,7 @@ function handleWsMessage(client, rawText) {
         sendWsJson(client, {
           type: 'room_full',
           roomCode: code,
-          message: '该私密放映室已满员（仅限 2 人同屏）'
+          message: '房间已满（最多 2 人）'
         });
         return;
       }

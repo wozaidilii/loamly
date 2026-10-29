@@ -1,6 +1,6 @@
 {
   "name": "loamly-watch",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Loamly 双人同屏室 · 异地连麦同步播放器 (watch.loamly.cn)",
   "main": "server.js",
   "scripts": {
