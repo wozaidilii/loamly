@@ -2,7 +2,7 @@ import {
   convertImage, imagesToPdf, convertPdf, mergePdfs, convertAV,
   classify, treePlanAsync, downloadBlob,
   labelFor, needsQuality, needsRange,
-} from './converters.js?v=20261029a';
+} from './converters.js?v=20261029b';
 
 const cfg = window.LOAMLY_CONVERT || {
   name: '文件转换',

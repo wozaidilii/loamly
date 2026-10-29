@@ -11,7 +11,7 @@ Dockerfile.lgpl / build scripts, based on ffmpegwasm/ffmpeg.wasm v0.12.10,
 Emscripten 3.1.40):
 
   https://convert.loamly.cn/source/loamly-ffmpeg-lgpl-src.tar.gz
-  sha256 d3bac34c5ce5ff422f0838ac83b21870e8976b0e909d5857c17dc1dbe5e4055e
+  sha256 01d60bb23d59c56cb4102743a1104fb4c3fbfe771d3e1051e22b4444d91c2d05
 
 Contact: 栖于垄上（上海）网络科技有限公司 — contact@loamly.net
 

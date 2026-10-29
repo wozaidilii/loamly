@@ -22,8 +22,8 @@ export async function ensureFFmpeg(onProgress) {
       const p = Math.max(0, Math.min(1, progress || 0));
       onProgress?.(Math.round(10 + p * 85));
     });
-    const coreURL = await toBlobURL(`${CORE_BASE}ffmpeg-core.js`, 'text/javascript');
-    const wasmURL = await toBlobURL(`${CORE_BASE}ffmpeg-core.wasm`, 'application/wasm');
+    const coreURL = await toBlobURL(`${CORE_BASE}ffmpeg-core.js?v=20261029b`, 'text/javascript');
+    const wasmURL = await toBlobURL(`${CORE_BASE}ffmpeg-core.wasm?v=20261029b`, 'application/wasm');
     await ff.load({ coreURL, wasmURL });
     ffmpeg = ff;
     return ff;

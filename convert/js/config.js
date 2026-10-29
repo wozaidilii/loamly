@@ -4,6 +4,6 @@ window.LOAMLY_CONVERT = {
   title: '文件转换',
   tagline: '图片、PDF 格式转换，在浏览器里完成，文件不上传。',
   tags: ['免费使用'],
-  version: '0.3e',
+  version: '0.3f',
   ADS_ENABLED: false,
 };
