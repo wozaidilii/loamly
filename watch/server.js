@@ -25,9 +25,9 @@ try { fs.mkdirSync(ROOM_FILM_DIR, { recursive: true }); } catch (e) { console.er
 try { fs.mkdirSync(ROOM_STATE_DIR, { recursive: true }); } catch (e) { console.error('[Loamly Watch] mkdir ROOM_STATE_DIR failed', e.message); }
 
 // ===== 版本号（每次更新 +0.1）=====
-const APP_VERSION = '0.7';
-const APP_RELEASE = '10-27';
-const APP_BUILD_TIME = '2026-10-27T04:26:43.000Z';
+const APP_VERSION = '0.7.1';
+const APP_RELEASE = '10-29';
+const APP_BUILD_TIME = '2026-10-29T02:35:00.000Z';
 
 // ===== 本场待放映 =====
 const EDGE_BASE = process.env.EDGE_BASE || 'https://edge-watch.loamly.net';
@@ -51,7 +51,8 @@ const MIME_TYPES = {
   '.webm': 'video/webm',
   '.mov': 'video/quicktime',
   '.m4v': 'video/mp4',
-  '.txt': 'text/plain; charset=utf-8'
+  '.txt': 'text/plain; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8'
 };
 
 // 房间状态表: roomCode -> { code, createdAt, fileMeta, filmUpload, playback, peers: Map<clientId, Client> }

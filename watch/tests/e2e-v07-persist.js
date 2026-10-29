@@ -87,7 +87,7 @@ function wsClient() {
   let child = startServer();
   check('server A started', await waitPort());
   let c = await wsClient();
-  c.send({ type: 'create_room', roomCode: 'PERS', peerKey: 'owner-a', webVersion: '0.7', hasLocalFile: false });
+  c.send({ type: 'create_room', roomCode: 'PERS', peerKey: 'owner-a', webVersion: '0.7.1', hasLocalFile: false });
   let joined = await c.wait((m) => m.type === 'room_joined');
   check('created room PERS', !!joined && joined.roomCode === 'PERS', joined && joined.roomCode);
 
@@ -133,7 +133,7 @@ function wsClient() {
   child = startServer();
   check('server B started', await waitPort());
   c = await wsClient();
-  c.send({ type: 'join_room', roomCode: 'PERS', peerKey: 'owner-a', webVersion: '0.7', queueHave: ['film-a', 'film-b'] });
+  c.send({ type: 'join_room', roomCode: 'PERS', peerKey: 'owner-a', webVersion: '0.7.1', queueHave: ['film-a', 'film-b'] });
   joined = await c.wait((m) => m.type === 'room_joined');
   qs = await c.wait((m) => m.type === 'queue_state' && m.items && m.items.length >= 1, 5000);
   qs = [...c.inbox].reverse().find((m) => m.type === 'queue_state');
@@ -205,7 +205,7 @@ function wsClient() {
 
   // runtime: join fresh and confirm queue
   c = await wsClient();
-  c.send({ type: 'join_room', roomCode: 'FRSH', peerKey: 'y', webVersion: '0.7', queueHave: ['new1'] });
+  c.send({ type: 'join_room', roomCode: 'FRSH', peerKey: 'y', webVersion: '0.7.1', queueHave: ['new1'] });
   qs = await c.wait((m) => m.type === 'queue_state', 5000);
   qs = [...c.inbox].reverse().find((m) => m.type === 'queue_state');
   check('restored fresh queue has 1 film with resumeTime', qs && qs.items.length === 1 && qs.items[0].resumeTime === 3, qs && qs.items);
@@ -214,7 +214,7 @@ function wsClient() {
   const ver = await new Promise((res) => http.get(`http://127.0.0.1:${PORT}/api/version`, (r) => {
     let b = ''; r.on('data', (d) => b += d); r.on('end', () => res(JSON.parse(b)));
   }));
-  check('/api/version is 0.7', ver.web === '0.7' && ver.server === '0.7' && /v0\.7 · 10-27/.test(ver.label), ver);
+  check('/api/version is 0.7.1', ver.web === '0.7.1' && ver.server === '0.7.1' && /v0\.7\.1 · 10-29/.test(ver.label), ver);
 
   c.ws.close();
   await stopServer(child);
