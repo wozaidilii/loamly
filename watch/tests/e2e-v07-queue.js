@@ -3,7 +3,7 @@ const p = require('puppeteer-core');
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 const BASE = 'http://127.0.0.1:3081';
 const F = (n) => `/tmp/v06films/${n}.mp4`;
-const SHOTS = '/workspace/watch-loamly/shots-v071';
+const SHOTS = '/workspace/watch-loamly/shots-v072';
 const results = [];
 const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok ? 'PASS' : 'FAIL', name, extra !== undefined ? JSON.stringify(extra) : ''); };
 (async () => {
@@ -20,7 +20,7 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
     }, 'http://127.0.0.1:8788', old);
     if (fakeNewer) {
       await pg.setRequestInterception(true);
-      pg.on('request', (r) => { if (r.url().includes('/api/version')) r.respond({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, web: '0.7.1', server: '0.7.1', buildTime: '2026-10-26T00:00:00+09:00' }) }); else r.continue(); });
+      pg.on('request', (r) => { if (r.url().includes('/api/version')) r.respond({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, web: '0.7.2', server: '0.7.2', buildTime: '2026-10-26T00:00:00+09:00' }) }); else r.continue(); });
     }
     pg.on('pageerror', e => console.log(who, 'PAGEERR', e.message));
     pg.on('console', (m) => { const t = m.text(); if (/rror|\[upload\]/i.test(t) && !/Failed to load resource/.test(t)) console.log(who, 'CONSOLE', t.slice(0, 200)); });
@@ -39,7 +39,7 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
   const host = await mk('host', { up: 12e6 });
   await host.goto(BASE + '/', { waitUntil: 'networkidle2' });
   const homeTag = await host.evaluate(() => { const e = document.querySelector('.home-version-tag'); const r = e.getBoundingClientRect(); const cs = getComputedStyle(e); return { text: e.textContent, title: e.title, right: innerWidth - r.right, bottom: innerHeight - r.bottom, color: cs.color, font: cs.fontFamily }; });
-  check('home version label 「v0.7.1 · 10-29」 bottom-right with hover time', homeTag.text === 'v0.7.1 · 10-29' && /更新于/.test(homeTag.title) && homeTag.right < 40 && homeTag.bottom < 30 && /D-DIN/.test(homeTag.font), homeTag);
+  check('home version label 「v0.7.2 · 10-29」 bottom-right with hover time', homeTag.text === 'v0.7.2 · 10-29' && /更新于/.test(homeTag.title) && homeTag.right < 40 && homeTag.bottom < 30 && /D-DIN/.test(homeTag.font), homeTag);
   await host.screenshot({ path: `${SHOTS}/01-home-version-tag.png` });
 
   // ---------- 2. 房主选片进房，TA 进房 ----------
@@ -54,7 +54,7 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
   const gCurtain = await guest.evaluate(() => ({ other: !document.getElementById('curtainOtherWays').classList.contains('hidden'), link: document.getElementById('otherWaysLink').textContent, optHidden: document.getElementById('guestQuickMatchBtn').classList.contains('hidden'), tag: document.querySelector('.curtain-version-tag').textContent, bodyHas: document.body.innerText }));
   check('curtain shows only gray 「其他方式」 link, option hidden', gCurtain.other && gCurtain.link === '其他方式' && gCurtain.optHidden, { other: gCurtain.other, optHidden: gCurtain.optHidden });
   check('no 「我电脑里也有这部片」 / 「秒开」 anywhere on page', !/我电脑里也有这部片|秒开/.test(gCurtain.bodyHas) && !/我电脑里也有这部片|秒开/.test(await guest.content()));
-  check('curtain card version label', gCurtain.tag === 'v0.7.1 · 10-29');
+  check('curtain card version label', gCurtain.tag === 'v0.7.2 · 10-29');
   await guest.screenshot({ path: `${SHOTS}/02-guest-curtain-other-ways.png` });
   await guest.click('#otherWaysLink'); await sleep(300);
   const reveal = await guest.evaluate(() => ({ shown: !document.getElementById('guestQuickMatchBtn').classList.contains('hidden'), text: document.getElementById('guestQuickMatchBtn').textContent, link: !document.getElementById('otherWaysLink').classList.contains('hidden') }));
@@ -189,7 +189,7 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
   await host.evaluate(() => document.getElementById('volumeMixerBtn').click());
   await sleep(300);
   const volLine = await host.evaluate(() => document.querySelector('#volumeMixerPopover .panel-version-line').textContent);
-  check('volume panel bottom version line', volLine === 'v0.7.1 · 10-29');
+  check('volume panel bottom version line', volLine === 'v0.7.2 · 10-29');
   await host.screenshot({ path: `${SHOTS}/13-volume-panel-version.png` });
   await host.evaluate(() => document.getElementById('volumeMixerBtn').click());
 
@@ -224,7 +224,7 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
   await oldG.evaluate(() => {
     // Queue copy older path: server > WEB_VERSION
     const st = window.__watchState;
-    st.versionInfo.server = '0.7.1';
+    st.versionInfo.server = '0.7.2';
     st.versionInfo.peerVersion = '';
     // Monkey-patch compare by writing notice via same string Marketing approved
     const el = document.getElementById('versionNotice');
@@ -240,7 +240,7 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
   const tot = await h2.evaluate(() => new Promise((res) => {
     const ws = new WebSocket(location.origin.replace('http', 'ws') + '/ws');
     const out = [];
-    ws.onopen = () => ws.send(JSON.stringify({ type: 'create_room', roomCode: 'TOTL', peerKey: 'ktest', webVersion: '0.7.1' }));
+    ws.onopen = () => ws.send(JSON.stringify({ type: 'create_room', roomCode: 'TOTL', peerKey: 'ktest', webVersion: '0.7.2' }));
     ws.onmessage = (ev) => {
       const m = JSON.parse(ev.data);
       if (m.type === 'room_joined') {
@@ -273,7 +273,7 @@ const check = (name, ok, extra) => { results.push([name, !!ok]); console.log(ok 
 
   // ---------- 12. /api/version ----------
   const ver = await (await fetch(BASE + '/api/version')).json();
-  check('/api/version JSON', ver.web === '0.7.1' && ver.server === '0.7.1' && !!ver.buildTime, ver);
+  check('/api/version JSON', ver.web === '0.7.2' && ver.server === '0.7.2' && !!ver.buildTime, ver);
 
   console.log('SUMMARY', results.filter(r => r[1]).length, '/', results.length, 'passed');
   console.log('ROOM', room);

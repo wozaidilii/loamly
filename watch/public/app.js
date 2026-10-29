@@ -3665,7 +3665,7 @@
   }
 
   // ==================== 本场待放映（v0.7）====================
-  const WEB_VERSION = '0.7.1';
+  const WEB_VERSION = '0.7.2';
   const QUEUE_MAX_ITEMS = 3;
   const QUEUE_MAX_FILM_BYTES = 4 * 1024 * 1024 * 1024;
   const QUEUE_MAX_TOTAL_BYTES = 8 * 1024 * 1024 * 1024;
@@ -4116,7 +4116,7 @@
     });
   }
   const APP_RELEASE_LABEL = '10-29';
-  const APP_BUILD_TIME_ISO = '2026-10-29T02:35:00.000Z';
+  const APP_BUILD_TIME_ISO = '2026-10-29T03:10:00.000Z';
 
   // ---------- 后台装入（只在轮到它、正在放的那部不卡的时候装）----------
   function stopBackgroundUpload() {
