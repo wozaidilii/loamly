@@ -3,9 +3,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Loamly 栖于垄上 · 栖于垄上（上海）网络科技有限公司</title>
-<meta name="description" content="栖于垄上（上海）网络科技有限公司，位于上海市金山区。">
-<!-- Photos: Willian Justen de Vasconcellos / Unsplash (06QpKIYxWe4), wang binghua / Unsplash (Hf1SVeHgNgg) — Unsplash License.
-     Fonts: D-DIN (SIL OFL 1.1), Noto Sans SC (SIL OFL 1.1), subset in assets/. -->
+<meta name="description" content="栖于垄上（上海）网络科技有限公司官网。产品：一起看视频，一个人选视频，TA 打开链接就能同步看；文件转换，图片、PDF 格式转换，在浏览器里完成，文件不上传。">
+<link rel="canonical" href="https://www.loamly.cn/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Loamly 栖于垄上">
+<meta property="og:title" content="Loamly 栖于垄上">
+<meta property="og:description" content="栖于垄上（上海）网络科技有限公司官网。产品：一起看视频，一个人选视频，TA 打开链接就能同步看；文件转换，图片、PDF 格式转换，在浏览器里完成，文件不上传。">
+<meta property="og:url" content="https://www.loamly.cn/">
+<meta property="og:image" content="https://www.loamly.cn/assets/icon-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"栖于垄上（上海）网络科技有限公司","alternateName":"Loamly","url":"https://www.loamly.cn/","logo":"https://www.loamly.cn/assets/icon-512.png","email":"contact@loamly.net","address":{"@type":"PostalAddress","addressRegion":"上海市","addressLocality":"金山区","addressCountry":"CN"},"makesOffer":[{"@type":"Offer","price":"0","priceCurrency":"CNY","itemOffered":{"@type":"WebApplication","name":"一起看视频","url":"https://watch.loamly.cn/","applicationCategory":"MultimediaApplication","operatingSystem":"Web"}},{"@type":"Offer","price":"0","priceCurrency":"CNY","itemOffered":{"@type":"WebApplication","name":"文件转换","url":"https://convert.loamly.cn/","applicationCategory":"UtilitiesApplication","operatingSystem":"Web"}}]}</script>
+<!-- Photos: Willian Justen de Vasconcellos / Unsplash (06QpKIYxWe4), wang binghua / Unsplash (Hf1SVeHgNgg, uQIzDDWACBw) — Unsplash License.
+     Fonts: D-DIN (SIL OFL 1.1), Noto Sans SC (SIL OFL 1.1), Source Han Sans CN Light (SIL OFL 1.1), subset in assets/. -->
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -130,6 +142,39 @@ footer .lat{font-family:var(--lat);letter-spacing:.12em}
  footer{font-size:10.5px;flex-direction:column;align-items:flex-start;gap:4px;padding-top:12px;letter-spacing:.03em}
  footer .md{display:none} footer .mailf{flex-basis:100%}
 }
+/* products */
+@font-face{font-family:"LPSC";font-weight:300;src:url(assets/shs-light-products.woff2) format("woff2");font-display:swap}
+#products{--moss:#3F6B4F;--moss-d:#2C4A37;--pcjk:"LPSC","Source Han Sans SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;--plat:"DDIN","Arial Narrow",Arial,sans-serif;--ppad:clamp(20px,3.4vw,48px);
+ position:relative;min-height:100vh;min-height:100svh;overflow:hidden;display:flex;flex-direction:column;color:#fff;background:#14120F}
+#products *{box-sizing:border-box;margin:0;padding:0}
+#products .p-bg{position:absolute;inset:0;z-index:0}
+#products .p-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 42%;display:block}
+#products .p-shade{position:absolute;inset:0;z-index:1;pointer-events:none;
+ background:linear-gradient(180deg,rgba(10,8,5,.5) 0%,rgba(10,8,5,.1) 22%,rgba(10,8,5,.24) 38%,rgba(10,8,5,.7) 58%,rgba(10,8,5,.86) 100%)}
+#products .p-inner{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:96px var(--ppad) 12vh}
+#products .p-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:1120px;width:100%;margin:0 auto;border-top:1px solid rgba(255,255,255,.3)}
+#products .p-item{padding:44px 48px 0 0;display:flex;flex-direction:column;align-items:flex-start}
+#products .p-item+.p-item{padding-left:56px;border-left:1px solid rgba(255,255,255,.2)}
+#products .p-item::before{content:"";width:8px;height:8px;background:var(--moss);margin-bottom:28px;box-shadow:0 0 0 1px rgba(255,255,255,.18)}
+#products h3{font-family:var(--pcjk);font-weight:300;font-size:clamp(36px,3.9vw,56px);line-height:1.15;letter-spacing:.16em;margin-right:-.16em;text-shadow:0 2px 24px rgba(0,0,0,.35)}
+#products .p-line{font-family:var(--pcjk);font-weight:300;font-size:16px;line-height:1.6;letter-spacing:.32em;color:rgba(255,255,255,.86);margin-top:18px;text-shadow:0 1px 12px rgba(0,0,0,.55)}
+#products .p-cta{display:inline-flex;align-items:center;justify-content:center;min-width:132px;min-height:50px;margin-top:36px;padding:0 34px;border:2px solid #fff;font-family:var(--pcjk);font-weight:300;font-size:15px;letter-spacing:.42em;text-indent:.42em;color:#fff;text-decoration:none;background:rgba(10,8,5,.18);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);transition:background-color .3s,border-color .3s}
+#products .p-cta:hover,#products .p-cta:focus-visible{background:var(--moss);border-color:var(--moss)}
+#products .p-cta:active{background:var(--moss-d);border-color:var(--moss-d)}
+#products .p-cta:focus-visible{outline:2px solid #fff;outline-offset:4px}
+@media (prefers-reduced-motion:reduce){#products .p-cta{transition:none}}
+@media (max-width:760px){
+ #products .p-bg img{object-position:50% 40%}
+ #products .p-shade{background:linear-gradient(180deg,rgba(10,8,5,.55) 0%,rgba(10,8,5,.2) 20%,rgba(10,8,5,.5) 42%,rgba(10,8,5,.78) 60%,rgba(10,8,5,.88) 100%)}
+ #products .p-inner{padding:88px var(--ppad) calc(48px + env(safe-area-inset-bottom))}
+ #products .p-grid{grid-template-columns:1fr;border-top:0}
+ #products .p-item,#products .p-item+.p-item{padding:28px 0 32px;border-left:0;border-top:1px solid rgba(255,255,255,.3)}
+ #products .p-item+.p-item{padding-bottom:0}
+ #products .p-item::before{margin-bottom:18px}
+ #products h3{font-size:34px;letter-spacing:.14em;margin-right:-.14em}
+ #products .p-line{font-size:14px;letter-spacing:.24em;margin-top:10px}
+ #products .p-cta{margin-top:22px;min-height:46px;min-width:116px;font-size:14px}
+}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 </head>
@@ -174,6 +219,28 @@ footer .lat{font-family:var(--lat);letter-spacing:.12em}
    <li><b>PARTNERS</b><strong>合作</strong><span>与品牌及机构共创项目</span></li>
   </ul>
  </div></div>
+</section>
+
+<section class="sec" id="products" aria-label="产品">
+ <div class="p-bg"><picture>
+  <source media="(max-aspect-ratio:1/1)" srcset="assets/products-m.webp" type="image/webp">
+  <img src="assets/products-2400.webp" srcset="assets/products-1200.webp 1200w, assets/products-2400.webp 2400w" sizes="100vw" alt="喀斯特山下的稻田与村落" loading="lazy">
+ </picture></div>
+ <div class="p-shade"></div>
+ <div class="p-inner">
+  <div class="p-grid">
+   <div class="p-item rv d1">
+    <h3>一起看视频</h3>
+    <p class="p-line">同步放映，连麦一起看</p>
+    <a class="p-cta" href="https://watch.loamly.cn" aria-label="打开 一起看视频">打开</a>
+   </div>
+   <div class="p-item rv d2">
+    <h3>文件转换</h3>
+    <p class="p-line">图片、PDF 格式转换</p>
+    <a class="p-cta" href="https://convert.loamly.cn" aria-label="打开 文件转换">打开</a>
+   </div>
+  </div>
+ </div>
 </section>
 
 <section class="sec" id="contact">
