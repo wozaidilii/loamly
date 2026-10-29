@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="./logo.svg" type="image/svg+xml" />
     <title>关于与许可证 · 文件转换</title>
-  <link rel="stylesheet" href="./css/app.css" />
+  <link rel="stylesheet" href="./css/app.css?v=20261029a" />
 </head>
 <body>
   <div class="shell">
@@ -44,10 +44,15 @@
             <td style="border:1px solid var(--divider);padding:8px">HEIC → JPG</td>
             <td style="border:1px solid var(--divider);padding:8px">LGPL-3.0 · <a href="https://github.com/alexcorvi/heic2any" target="_blank" rel="noopener">源码</a> · <a href="./notices/heic2any-LICENSE">许可证</a></td>
           </tr>
-                  <tr>
+          <tr>
             <td style="border:1px solid var(--divider);padding:8px">ffmpeg.wasm（自编译 LGPL）</td>
             <td style="border:1px solid var(--divider);padding:8px">音视频转换</td>
-            <td style="border:1px solid var(--divider);padding:8px">LGPL-2.1 · <a href="./notices/ffmpeg-LGPL.txt">声明与源码要约</a></td>
+            <td style="border:1px solid var(--divider);padding:8px">LGPL-2.1 · <a href="./notices/ffmpeg-LGPL.txt">声明</a> · <a href="./notices/ffmpeg-COPYING.LGPLv2.1.txt">许可证</a> · <a href="./source/loamly-ffmpeg-lgpl-src.tar.gz" download>源码</a></td>
+          </tr>
+          <tr>
+            <td style="border:1px solid var(--divider);padding:8px">ffmpeg 依赖库</td>
+            <td style="border:1px solid var(--divider);padding:8px">libvpx · LAME · libopus · libvorbis · libogg · zlib · libwebp · SDL2</td>
+            <td style="border:1px solid var(--divider);padding:8px">BSD-3-Clause · Zlib · LGPL-2.0 · <a href="./notices/ffmpeg-libs-LICENSES.txt">许可证</a></td>
           </tr>
           <tr>
             <td style="border:1px solid var(--divider);padding:8px">@ffmpeg/ffmpeg · @ffmpeg/util</td>
@@ -59,13 +64,14 @@
 
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:20px;line-height:1.6">BMP / ICO / TIFF 编解码为本站自研小实现，无额外第三方库。</p>
       <p style="font-size:13px;color:var(--text-secondary)">文件只在你的浏览器里处理，不会上传。</p>
+      <p style="font-size:13px;color:var(--text-secondary)">联系：<a href="mailto:contact@loamly.net">contact@loamly.net</a></p>
 
       <footer class="footer">
-        <span id="footer-version">v0.3</span><span class="sep">·</span>基于开源项目 Filee（MIT）<span class="sep">·</span>栖于垄上（上海）网络科技有限公司<span class="sep">·</span><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">沪ICP备2026030604号</a>
+        <span id="footer-version">v0.3e</span><span class="sep">·</span>基于开源项目 Filee（MIT）<span class="sep">·</span>栖于垄上（上海）网络科技有限公司<span class="sep">·</span><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">沪ICP备2026030604号</a>
       </footer>
     </main>
   </div>
-  <script src="./js/config.js"></script>
+  <script src="./js/config.js?v=20261029a"></script>
   <script>
     const cfg = window.LOAMLY_CONVERT;
     if (cfg) {
